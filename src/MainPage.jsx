@@ -275,7 +275,7 @@ class App extends Component {
           console.log('Payment Successful!');
           this.setState({ success: true, chargeAmount: 0 });
           setTimeout(
-            function() {
+            function () {
               this.setState({ success: false });
             }.bind(this),
             2000
@@ -360,6 +360,7 @@ class App extends Component {
           key={item.id}
           onClick={() => this.addItemToCart(item)}
         >
+          <img src={item.image} alt={item.label} />
           <p>{item.label}</p>
           <p>{item.price}</p>
         </div>

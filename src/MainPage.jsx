@@ -337,7 +337,7 @@ class App extends Component {
 
   removeQuantity = (index) => {
     const cart = this.state.cart;
-    if (cart[index].quantity - 1 >= 1) {
+    if (cart[index].quantity - 1 >= 0) {
       cart[index].quantity = cart[index].quantity - 1;
     }
     this.setState({ cart })

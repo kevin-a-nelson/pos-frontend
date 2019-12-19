@@ -366,6 +366,8 @@ code {
 /* Products
    ========================================================================== */
 .product-grid {
+  min-width: 450px;
+  width: 100%;
   border-radius: 5px;
   overflow: hidden;
   font-size: 13px;
@@ -385,6 +387,7 @@ code {
 
 .item-option-elem {
   width: 25%;
+  max-width: 100px;
 }
 
 /* Product Image */
@@ -405,6 +408,7 @@ code {
 
 /* Product Quantity Selector */
 .item-option-quantity-selector {
+  max-width: 100px;
   padding-top: 25px;
   justify-content: space-evenly;
   display: flex;

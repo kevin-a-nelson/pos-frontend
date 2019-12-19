@@ -366,6 +366,11 @@ class App extends Component {
           <div className="item-option-label">
             <p>{item.label}</p>
           </div>
+          <div className="item-option-quantity-selector">
+            <Button>+</Button>
+            <span className="item-option-quantity-selector-amount">3</span>
+            <Button>-</Button>
+          </div>
           <div className="item-option-price">
             <p>${item.price}</p>
           </div>

@@ -362,12 +362,16 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }
 
+
+/* Products
+   ========================================================================== */
 .product-grid {
   border-radius: 5px;
   background: blue;
   overflow: hidden;
 }
 
+/* Product Option */
 .item-option {
   width: 100px;
   height: 100px;
@@ -376,11 +380,10 @@ code {
   padding: 10px;
   display: flex;
   justify-content: space-evenly;
-  
-  /* Kevin Styling */
   width: 100%;
 }
 
+/* Product Image */
 .item-option-img-container {
   width: 100px;
   height: 75px;
@@ -391,13 +394,27 @@ code {
   height: 100%;
 }
 
+/* Product Label */
 .item-option-label {
   line-height: 75px;
   text-align: center;
   width: 100px;
-
 }
 
+/* Product Quantity Selector */
+.item-option-quantity-selector {
+  margin-top: 22px;
+  width: 100px;
+  justify-content: space-evenly;
+  display: flex;
+}
+
+.item-option-quantity-selector-amount {
+  line-height: 30px;
+}
+
+
+/* Product Price */
 .item-option-price {
   line-height: 75px;
   text-align: center;

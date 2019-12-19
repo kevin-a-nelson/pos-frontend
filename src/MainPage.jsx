@@ -363,11 +363,11 @@ class App extends Component {
           <div className="item-option-img-container">
             <img className="item-option-img" src={item.image} alt={item.label} />
           </div>
-          <div>
+          <div className="item-option-label">
             <p>{item.label}</p>
           </div>
-          <div>
-            <p>{item.price}</p>
+          <div className="item-option-price">
+            <p>${item.price}</p>
           </div>
         </div>
       ));

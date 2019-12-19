@@ -32,12 +32,13 @@ class App extends Component {
       cancelablePayment: false,
       chargeAmount: 0,
       itemDescription: 'Red t-shirt',
+      itemQuantitys: {},
       taxAmount: 0,
       currency: 'usd',
       workFlowInProgress: null,
       showFinish: false,
       success: false,
-      cart: []
+      cart: Products
     };
   }
 
@@ -318,17 +319,37 @@ class App extends Component {
     }
   };
 
+  /* Functions used for products */
   addItemToCart = async item => {
     console.log(item);
     const cart = this.state.cart;
     cart.push(item);
     this.setState({ cart });
+    this.calculateTotal(cart)
   };
+
+  addQuantity = (index) => {
+    const cart = this.state.cart;
+    cart[index].quantity = cart[index].quantity + 1;
+    this.setState({ cart })
+    this.calculateTotal(cart)
+  }
+
+  removeQuantity = (index) => {
+    const cart = this.state.cart;
+    if (cart[index].quantity - 1 >= 1) {
+      cart[index].quantity = cart[index].quantity - 1;
+    }
+    this.setState({ cart })
+    this.calculateTotal(cart)
+  }
 
   calculateTotal(items) {
     let chargeAmount = 0;
-    items.forEach(item => (chargeAmount += item.price * item.quantity));
-    this.setState({ chargeAmount });
+    items.forEach((item) => {
+      chargeAmount += item.price * item.quantity
+    })
+    this.setState({ chargeAmount })
   }
 
   // 4. UI Methods
@@ -352,26 +373,26 @@ class App extends Component {
   };
 
   renderForm() {
+    const { cart } = this.state
     let ProductGrid;
-    if (Products && Products.length > 0) {
-      ProductGrid = Products.map(item => (
+    if (cart && cart.length > 0) {
+      ProductGrid = cart.map((item, index) => (
         <div
-          className={`item-option ${this.state.cart.find(cartItem => cartItem.id === item.id) ? 'added' : ''}`}
+          className={`item-option ${cart.find(cartItem => cartItem.id === item.id) ? 'added' : ''}`}
           key={item.id}
-          onClick={() => this.addItemToCart(item)}
         >
-          <div className="item-option-img-container">
+          <div className="item-option-img-container item-option-elem">
             <img className="item-option-img" src={item.image} alt={item.label} />
           </div>
-          <div className="item-option-label">
+          <div className="item-option-label item-option-elem">
             <p>{item.label}</p>
           </div>
-          <div className="item-option-quantity-selector">
-            <Button>+</Button>
-            <span className="item-option-quantity-selector-amount">3</span>
-            <Button>-</Button>
+          <div className="item-option-quantity-selector item-option-elem">
+            <Button onClick={() => this.addQuantity(index)}>+</Button>
+            <span className="item-option-quantity-selector-amount">{item.quantity}</span>
+            <Button onClick={() => this.removeQuantity(index)}>-</Button>
           </div>
-          <div className="item-option-price">
+          <div className="item-option-price item-option-elem">
             <p>${item.price}</p>
           </div>
         </div>

@@ -367,8 +367,8 @@ code {
    ========================================================================== */
 .product-grid {
   border-radius: 5px;
-  background: blue;
   overflow: hidden;
+  font-size: 13px;
 }
 
 /* Product Option */
@@ -377,15 +377,18 @@ code {
   height: 100px;
   border-top: 1px rgba(100, 100, 100, 0.5) solid;
   background: #fff;
-  padding: 10px;
   display: flex;
   justify-content: space-evenly;
   width: 100%;
+  padding: 10px;
+}
+
+.item-option-elem {
+  width: 25%;
 }
 
 /* Product Image */
 .item-option-img-container {
-  width: 100px;
   height: 75px;
 }
 
@@ -398,13 +401,11 @@ code {
 .item-option-label {
   line-height: 75px;
   text-align: center;
-  width: 100px;
 }
 
 /* Product Quantity Selector */
 .item-option-quantity-selector {
-  margin-top: 22px;
-  width: 100px;
+  padding-top: 25px;
   justify-content: space-evenly;
   display: flex;
 }
@@ -418,5 +419,4 @@ code {
 .item-option-price {
   line-height: 75px;
   text-align: center;
-  width :100px;
 }

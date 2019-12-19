@@ -360,9 +360,15 @@ class App extends Component {
           key={item.id}
           onClick={() => this.addItemToCart(item)}
         >
-          <img src={item.image} alt={item.label} />
-          <p>{item.label}</p>
-          <p>{item.price}</p>
+          <div className="item-option-img-container">
+            <img className="item-option-img" src={item.image} alt={item.label} />
+          </div>
+          <div>
+            <p>{item.label}</p>
+          </div>
+          <div>
+            <p>{item.price}</p>
+          </div>
         </div>
       ));
     }
@@ -451,7 +457,7 @@ class App extends Component {
       return (
         <>
           {buttonArea}
-          <div className="grid">{ProductGrid}</div>
+          <div className="grid product-grid">{ProductGrid}</div>
         </>
       );
     }

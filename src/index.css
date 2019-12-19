@@ -367,4 +367,8 @@ code {
   height: 100px;
   border: 2px #fff solid;
   border-radius: 10px;
+
+  /* Kevin Styling */
+  width: 100%;
+  margin-bottom: 10px;
 }

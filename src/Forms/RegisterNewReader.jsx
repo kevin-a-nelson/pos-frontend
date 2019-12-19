@@ -26,7 +26,7 @@ class RegisterNewReader extends React.Component {
     this.setState({ readerLabel: str });
   };
 
-  onSubmitRegister = (event) => {
+  onSubmitRegister = event => {
     event.preventDefault();
     const { readerCode, readerLabel } = this.state;
     this.props.onSubmitRegister(readerLabel, readerCode);

@@ -380,10 +380,11 @@ code {
 /* Products
    ========================================================================== */
 .product-grid {
-  width: 100%;
+  width: 500px;
   border-radius: 5px;
   overflow: hidden;
   font-size: 13px;
+  margin-top: 15px;
 }
 
 /* Product Option */

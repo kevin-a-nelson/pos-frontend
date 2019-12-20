@@ -14,9 +14,11 @@ import Group from './components/Group/Group.jsx';
 import Icon from './components/Icon/Icon.jsx';
 import Section from './components/Section/Section.jsx';
 import Text from './components/Text/Text.jsx';
+
 import Products from './static/Products';
 
 import { css } from 'emotion';
+import EventSelector from './components/EventSelector/EventSelector';
 
 class App extends Component {
   constructor(props) {
@@ -38,7 +40,8 @@ class App extends Component {
       workFlowInProgress: null,
       showFinish: false,
       success: false,
-      cart: Products
+      cart: Products,
+      showEvents: false,
     };
   }
 
@@ -224,7 +227,7 @@ class App extends Component {
       if (item.quantity > 0) {
         let displayItem = {
           "description": item.label,
-          "amount": item.price,
+          "amount": item.price * 100,
           "quantity": item.quantity
         }
         lineItems.push(displayItem)
@@ -258,7 +261,6 @@ class App extends Component {
       try {
         let createIntentResponse = await this.client.createPaymentIntent({
           amount: this.state.chargeAmount + this.state.taxAmount,
-          metadata: { 'order_id': '6735' },
           currency: this.state.currency,
           description,
         });
@@ -499,36 +501,45 @@ class App extends Component {
       } else {
         buttonArea = <div>SUCCESS</div>;
       }
+      const { showEvents } = this.state;
       return (
         <>
-          {buttonArea}
-          <div className="grid product-grid">{ProductGrid}</div>
+          {showEvents ?
+            <EventSelector />
+            :
+            <div>
+              {buttonArea}
+              <div className="grid product-grid">{ProductGrid}</div>
+            </div>
+          }
         </>
       );
     }
   }
 
   render() {
-    const { backendURL, reader } = this.state;
+    const { backendURL, reader, showEvents } = this.state;
     return (
-      <div
-        className="main-page"
-      >
-        <Group direction="column" spacing={30}>
-          <Group direction="row" spacing={30} responsive>
-            <Group direction="column" spacing={16} responsive>
-              {backendURL && (
-                <ConnectionInfo
-                  backendURL={backendURL}
-                  reader={reader}
-                  onSetBackendURL={this.onSetBackendURL}
-                  onClickDisconnect={this.disconnectReader}
-                />
-              )}
-              {this.renderForm()}
+      <div>
+        <div
+          className="main-page"
+        >
+          <Group direction="column" spacing={30}>
+            <Group direction="row" spacing={30} responsive>
+              <Group direction="column" spacing={16} responsive>
+                {backendURL && (
+                  <ConnectionInfo
+                    backendURL={backendURL}
+                    reader={reader}
+                    onSetBackendURL={this.onSetBackendURL}
+                    onClickDisconnect={this.disconnectReader}
+                  />
+                )}
+                {this.renderForm()}
+              </Group>
             </Group>
           </Group>
-        </Group>
+        </div>
       </div>
     );
   }

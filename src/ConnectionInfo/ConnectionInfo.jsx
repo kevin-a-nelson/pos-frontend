@@ -9,6 +9,13 @@ import Section from "../components/Section/Section.jsx";
 import Text from "../components/Text/Text.jsx";
 
 class ConnectionInfo extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      selectedEvent: "Hello World"
+    }
+  }
+
   onChangeBackendURL = () => {
     this.props.onClickDisconnect();
     this.props.onSetBackendURL(null);
@@ -18,70 +25,72 @@ class ConnectionInfo extends React.Component {
     const { backendURL, reader, onClickDisconnect } = this.props;
 
     return (
-      <Group direction="column" spacing={0}>
-        <Section position="first">
-          {backendURL ? (
-            <Group
-              direction="row"
-              alignment={{
-                justifyContent: "space-between",
-                alignItems: "center"
-              }}
-            >
-              <Group direction="row">
-                <Icon icon="lock" />
-                <div
-                  className={css`
-                    width: 130px;
-                  `}
-                >
-                  <Text truncate nowrap color="dark" size={14}>
-                    {backendURL}
-                  </Text>
-                </div>
+      <div>
+        <Group direction="column" spacing={0}>
+          <Section position="first">
+            {backendURL ? (
+              <Group
+                direction="row"
+                alignment={{
+                  justifyContent: "space-between",
+                  alignItems: "center"
+                }}
+              >
+                <Group direction="row">
+                  <Icon icon="lock" />
+                  <div
+                    className={css`
+                      width: 130px;
+                    `}
+                  >
+                    <Text truncate nowrap color="dark" size={14}>
+                      {backendURL}
+                    </Text>
+                  </div>
+                </Group>
+                <Button color="text" onClick={this.onChangeBackendURL}>
+                  Change
+                </Button>
               </Group>
-              <Button color="text" onClick={this.onChangeBackendURL}>
-                Change
-              </Button>
-            </Group>
-          ) : (
-            <Group direction="row">
-              <Icon icon="lock" />
-              <Text color="lightGrey" size={14}>
-                Connect to backend server
-              </Text>
-            </Group>
-          )}
-        </Section>
-        <Section position="last">
-          {reader ? (
-            <Group
-              direction="row"
-              alignment={{
-                justifyContent: "space-between",
-                alignItems: "center"
-              }}
-            >
-              <Group direction="row">
-                <Icon icon="keypad" />
-                <Text truncate color="dark" size={14}>
-                  {reader.label}
+            ) : (
+                <Group direction="row">
+                  <Icon icon="lock" />
+                  <Text color="lightGrey" size={14}>
+                    Connect to backend server
                 </Text>
+                </Group>
+              )}
+          </Section>
+          <Section position="last">
+            {reader ? (
+              <Group
+                direction="row"
+                alignment={{
+                  justifyContent: "space-between",
+                  alignItems: "center"
+                }}
+              >
+                <Group direction="row">
+                  <Icon icon="keypad" />
+                  <Text truncate color="dark" size={14}>
+                    {reader.label}
+                  </Text>
+                </Group>
+                <Button color="text" onClick={onClickDisconnect}>
+                  Disconnect
+                </Button>
               </Group>
-              <Button color="text" onClick={onClickDisconnect}>
-                Disconnect
-              </Button>
-            </Group>
-          ) : (
-            <Group direction="row">
-              <Icon icon="keypad" />
-              <Text color="lightGrey" size={14}>
-                No reader connected
-              </Text>
-            </Group>
-          )}
-        </Section>
-      </Group>
+            ) : (
+                <Group direction="row">
+                  <Icon icon="keypad" />
+                  <Text color="lightGrey" size={14}>
+                    No reader connected
+                </Text>
+                </Group>
+              )}
+          </Section>
+        </Group>
+      </div>
     );
   }
 }

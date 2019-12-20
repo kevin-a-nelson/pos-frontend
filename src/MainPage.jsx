@@ -41,7 +41,7 @@ class App extends Component {
       showFinish: false,
       success: false,
       cart: Products,
-      showEvents: false,
+      showEvents: true,
     };
   }
 

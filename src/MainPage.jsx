@@ -20,6 +20,8 @@ import Products from './static/Products';
 import { css } from 'emotion';
 import EventSelector from './components/EventSelector/EventSelector';
 
+import 'bootstrap/dist/css/bootstrap.min.css';
+
 class App extends Component {
   constructor(props) {
     super(props);
@@ -33,8 +35,6 @@ class App extends Component {
       registrationCode: '',
       cancelablePayment: false,
       chargeAmount: 0,
-      itemDescription: 'Red t-shirt',
-      itemQuantitys: {},
       taxAmount: 0,
       currency: 'usd',
       workFlowInProgress: null,
@@ -254,7 +254,8 @@ class App extends Component {
     // We want to reuse the same PaymentIntent object in the case of declined charges, so we
     // store the pending PaymentIntent's secret until the payment is complete.
 
-    let description = this.state.event.title
+    const { event } = this.state
+    let description = `${event.title} ${event.start_date} ${event.end_date} ${event.location_state} ${event.location_address_line_2}`
     if (!this.pendingPaymentIntentSecret) {
       try {
         let createIntentResponse = await this.client.createPaymentIntent({

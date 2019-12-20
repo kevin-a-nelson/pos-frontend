@@ -1,6 +1,5 @@
 import React from 'react'
 
-
 class Event extends React.Component {
     constructor(props) {
         super(props);
@@ -14,6 +13,9 @@ class Event extends React.Component {
             title: this.props.title,
             start_date: this.props.start_date,
             end_date: this.props.end_date,
+            location_state: this.props.location_state,
+            location_address_line_1: this.props.location_address_line_1,
+            location_address_line_2: this.props.location_address_line_2,
             bg_image_path: this.props.bg_image_path,
         }
         this.props.updateShowEvents(false)
@@ -22,7 +24,8 @@ class Event extends React.Component {
 
     render() {
         return (
-            <div onClick={this.handleClick.bind(this)}>
+            <div className="event" onClick={this.handleClick.bind(this)}>
+                <img src="https://via.placeholder.com/250x150" />
                 <h1>{this.props.title}</h1>
                 <p>{this.props.start_date}</p>
                 <p>{this.props.end_date}</p>

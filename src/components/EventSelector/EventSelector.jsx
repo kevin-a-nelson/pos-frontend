@@ -14,8 +14,7 @@ class EventSelector extends React.Component {
     componentWillMount() {
         axios.get("https://events.prephoops.com/event-list")
             .then(response => {
-                const events = response.data
-                this.setState({ events })
+                this.setState({ events: response.data })
             })
             .catch(error => console.log("There was an error loading the API"))
     }
@@ -33,6 +32,9 @@ class EventSelector extends React.Component {
                                 start_date={event.start_date}
                                 end_date={event.end_date}
                                 bg_image_path={event.bg_image_path}
+                                location_state={event.location_state}
+                                location_address_line_1={event.location_address_line_1}
+                                location_address_line_2={event.location_address_line_2}
                                 updateShowEvents={updateShowEvents}
                                 updateEvent={updateEvent}
                             />

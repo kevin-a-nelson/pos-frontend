@@ -196,6 +196,7 @@ class App extends Component {
       await this.connectToReader(reader);
       console.log('Registered and Connected Successfully!');
     } catch (e) {
+      console.log("Unable to Register and Connect");
       // Suppress backend errors since they will be shown in logs
     }
   };
@@ -220,12 +221,14 @@ class App extends Component {
     // set lineItems to label, price and quantity of items in cart
     let lineItems = []
     this.state.cart.forEach((item) => {
-      let displayItem = {
-        "description": item.label,
-        "amount": item.price,
-        "quantity": item.quantity
+      if (item.quantity > 0) {
+        let displayItem = {
+          "description": item.label,
+          "amount": item.price,
+          "quantity": item.quantity
+        }
+        lineItems.push(displayItem)
       }
-      lineItems.push(displayItem)
     })
 
     // 3a. Update the reader display to show cart contents to the customer
@@ -267,7 +270,6 @@ class App extends Component {
     }
     // Read a card from the customer
     const paymentMethodPromise = this.terminal.collectPaymentMethod(this.pendingPaymentIntentSecret);
-    console.log(paymentMethodPromise)
     this.setState({ cancelablePayment: true });
     const result = await paymentMethodPromise;
     if (result.error) {

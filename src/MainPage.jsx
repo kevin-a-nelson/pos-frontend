@@ -254,16 +254,13 @@ class App extends Component {
     // We want to reuse the same PaymentIntent object in the case of declined charges, so we
     // store the pending PaymentIntent's secret until the payment is complete.
 
-    let description = 'Charge';
-    if (localStorage.eventName) {
-      description = localStorage.eventName
-    }
+    let description = this.state.event.title
     if (!this.pendingPaymentIntentSecret) {
       try {
         let createIntentResponse = await this.client.createPaymentIntent({
           amount: this.state.chargeAmount + this.state.taxAmount,
           currency: this.state.currency,
-          description,
+          description: description,
         });
         this.pendingPaymentIntentSecret = createIntentResponse.secret;
       } catch (e) {
@@ -279,6 +276,7 @@ class App extends Component {
       console.log('Collect payment method failed:', result.error.message);
     } else {
       const confirmResult = await this.terminal.processPayment(result.paymentIntent);
+      console.log(confirmResult)
       // At this stage, the payment can no longer be canceled because we've sent the request to the network.
       this.setState({ cancelablePayment: false });
       if (confirmResult.error) {

@@ -362,6 +362,20 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }
 
+/* Main Page
+   ========================================================================== */
+.main-page {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  padding: 24px;
+  @media (max-width: 800px) {
+    height: auto;
+    padding: 24px;
+  }
+}
+
 
 /* Products
    ========================================================================== */

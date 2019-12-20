@@ -45,7 +45,6 @@ class App extends Component {
   isWorkflowDisabled = () => this.state.cancelablePayment || this.state.workFlowInProgress;
 
   runWorkflow = async (workflowName, workflowFn) => {
-    console.log(workflowName, workflowFn);
     this.setState({
       workFlowInProgress: workflowName
     });
@@ -220,7 +219,6 @@ class App extends Component {
 
     // set lineItems to label, price and quantity of items in cart
     let lineItems = []
-    console.table(this.state.cart)
     this.state.cart.forEach((item) => {
       let displayItem = {
         "description": item.label,
@@ -230,15 +228,13 @@ class App extends Component {
       lineItems.push(displayItem)
     })
 
-    console.table(lineItems)
-
     // 3a. Update the reader display to show cart contents to the customer
     await this.terminal.setReaderDisplay({
       type: 'cart',
       cart: {
         line_items: lineItems,
         tax: this.state.taxAmount,
-        total: this.state.chargeAmount + this.state.taxAmount,
+        total: this.state.chargeAmount * 100 + this.state.taxAmount,
         currency: this.state.currency
       }
     });
@@ -250,12 +246,18 @@ class App extends Component {
   collectCardPayment = async () => {
     // We want to reuse the same PaymentIntent object in the case of declined charges, so we
     // store the pending PaymentIntent's secret until the payment is complete.
+
+    let description = 'Charge';
+    if (localStorage.eventName) {
+      description = localStorage.eventName
+    }
     if (!this.pendingPaymentIntentSecret) {
       try {
         let createIntentResponse = await this.client.createPaymentIntent({
           amount: this.state.chargeAmount + this.state.taxAmount,
+          metadata: { 'order_id': '6735' },
           currency: this.state.currency,
-          description: 'Test Charge'
+          description,
         });
         this.pendingPaymentIntentSecret = createIntentResponse.secret;
       } catch (e) {
@@ -265,6 +267,7 @@ class App extends Component {
     }
     // Read a card from the customer
     const paymentMethodPromise = this.terminal.collectPaymentMethod(this.pendingPaymentIntentSecret);
+    console.log(paymentMethodPromise)
     this.setState({ cancelablePayment: true });
     const result = await paymentMethodPromise;
     if (result.error) {
@@ -507,17 +510,7 @@ class App extends Component {
     const { backendURL, reader } = this.state;
     return (
       <div
-        className={css`
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          height: 100vh;
-          padding: 24px;
-          @media (max-width: 800px) {
-            height: auto;
-            padding: 24px;
-          }
-        `}
+        className="main-page"
       >
         <Group direction="column" spacing={30}>
           <Group direction="row" spacing={30} responsive>
@@ -530,7 +523,6 @@ class App extends Component {
                   onClickDisconnect={this.disconnectReader}
                 />
               )}
-
               {this.renderForm()}
             </Group>
           </Group>

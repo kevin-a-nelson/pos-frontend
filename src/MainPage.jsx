@@ -283,6 +283,7 @@ class App extends Component {
           setTimeout(
             function () {
               this.setState({ success: false });
+              this.setState({ showFinish: false });
             }.bind(this),
             2000
           );

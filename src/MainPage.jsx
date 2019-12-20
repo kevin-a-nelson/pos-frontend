@@ -273,6 +273,11 @@ class App extends Component {
             paymentIntentId: confirmResult.paymentIntent.id
           });
           this.pendingPaymentIntentSecret = null;
+          // Reset all quantity of items to 0
+          const cart = this.state.cart
+          cart.forEach((item) => item.quantity = 0)
+          this.setState({ cart })
+          console.table(cart);
           console.log('Payment Successful!');
           this.setState({ success: true, chargeAmount: 0 });
           setTimeout(

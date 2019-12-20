@@ -366,7 +366,6 @@ code {
 /* Products
    ========================================================================== */
 .product-grid {
-  min-width: 450px;
   width: 100%;
   border-radius: 5px;
   overflow: hidden;

@@ -22,13 +22,21 @@ class EventSelector extends React.Component {
 
     render() {
         const { events } = this.state
+        const { updateShowEvents, updateEvent } = this.props
         return (
             <div>
                 {
-                    true ?
-                        <Event />
-                        :
-                        null
+                    events ?
+                        events.map((event) =>
+                            <Event
+                                title={event.title}
+                                start_date={event.start_date}
+                                end_date={event.end_date}
+                                bg_image_path={event.bg_image_path}
+                                updateShowEvents={updateShowEvents}
+                                updateEvent={updateEvent}
+                            />
+                        ) : null
                 }
             </div>
         );

@@ -42,6 +42,7 @@ class App extends Component {
       success: false,
       cart: Products,
       showEvents: true,
+      event: ""
     };
   }
 
@@ -502,10 +503,18 @@ class App extends Component {
         buttonArea = <div>SUCCESS</div>;
       }
       const { showEvents } = this.state;
+
+      const updateEvent = eventData => this.setState({ event: eventData })
+      const updateShowEvents = boolean => this.setState({ showEvents: boolean })
       return (
         <>
           {showEvents ?
-            <EventSelector />
+            <div>
+              <EventSelector
+                updateEvent={updateEvent}
+                updateShowEvents={updateShowEvents}
+              />
+            </div>
             :
             <div>
               {buttonArea}

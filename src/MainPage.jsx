@@ -217,17 +217,26 @@ class App extends Component {
 
   // 3. Terminal Workflows (Once connected to a reader)
   updateLineItems = async () => {
+
+    // set lineItems to label, price and quantity of items in cart
+    let lineItems = []
+    console.table(this.state.cart)
+    this.state.cart.forEach((item) => {
+      let displayItem = {
+        "description": item.label,
+        "amount": item.price,
+        "quantity": item.quantity
+      }
+      lineItems.push(displayItem)
+    })
+
+    console.table(lineItems)
+
     // 3a. Update the reader display to show cart contents to the customer
     await this.terminal.setReaderDisplay({
       type: 'cart',
       cart: {
-        line_items: [
-          {
-            description: this.state.itemDescription,
-            amount: this.state.chargeAmount,
-            quantity: 1
-          }
-        ],
+        line_items: lineItems,
         tax: this.state.taxAmount,
         total: this.state.chargeAmount + this.state.taxAmount,
         currency: this.state.currency
@@ -277,7 +286,6 @@ class App extends Component {
           const cart = this.state.cart
           cart.forEach((item) => item.quantity = 0)
           this.setState({ cart })
-          console.table(cart);
           console.log('Payment Successful!');
           this.setState({ success: true, chargeAmount: 0 });
           setTimeout(

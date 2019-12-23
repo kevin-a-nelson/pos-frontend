@@ -42,12 +42,13 @@ class App extends Component {
       success: false,
       cart: Products,
       showEvents: false,
-      selectedEvent: ""
+      selectedEvent: "",
+      lineItems: [],
     };
   }
 
   // isWorkflowDisabled = () => this.state.cancelablePayment || this.state.workFlowInProgress;
-  isWorkflowDisabled = () => false || this.state.workFlowInProgress;
+  isWorkflowDisabled = () => this.state.workFlowInProgress;
 
   runWorkflow = async (workflowName, workflowFn) => {
     this.setState({
@@ -239,6 +240,8 @@ class App extends Component {
       }
     })
 
+    this.setState({ lineItems })
+
     // 3a. Update the reader display to show cart contents to the customer
     await this.terminal.setReaderDisplay({
       type: 'cart',
@@ -258,8 +261,15 @@ class App extends Component {
     // We want to reuse the same PaymentIntent object in the case of declined charges, so we
     // store the pending PaymentIntent's secret until the payment is complete.
 
-    const { selectedEvent } = this.state
-    let description = `${selectedEvent.title} ${selectedEvent.start_date} ${selectedEvent.end_date} ${selectedEvent.location_state} ${selectedEvent.location_address_line_2}`
+    const { selectedEvent, lineItems } = this.state
+
+    let lineItemsStr = ""
+
+    lineItems.forEach((lineItem) => {
+      lineItemsStr += `${lineItem.description} (${lineItem.quantity}), `
+    })
+
+    let description = `${selectedEvent.title} ${lineItemsStr}`
     if (!this.pendingPaymentIntentSecret) {
       try {
         let createIntentResponse = await this.client.createPaymentIntent({
@@ -319,7 +329,7 @@ class App extends Component {
   // Note this can only be done before calling `processPayment`.
   cancelPendingPayment = async () => {
     this.setState({ showFinish: false });
-    await this.terminal.cancelCollectPaymentMethod();
+    // await this.terminal.cancelCollectPaymentMethod();
     this.pendingPaymentIntentSecret = null;
     this.setState({ cancelablePayment: false });
   };
@@ -473,7 +483,7 @@ class App extends Component {
                 <Group direction="row">
                   <Icon icon="cancel" />
                   <Text color="blue" size={14}>
-                    Cancel
+                    Back
                   </Text>
                 </Group>
               </Button>

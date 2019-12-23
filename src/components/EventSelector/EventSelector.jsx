@@ -21,7 +21,7 @@ class EventSelector extends React.Component {
 
     render() {
         const { events } = this.state
-        const { updateShowEvents, updateEvent } = this.props
+        const { updateShowEvents, updateSelectedEvent } = this.props
         return (
             <div>
                 {
@@ -36,7 +36,7 @@ class EventSelector extends React.Component {
                                 location_address_line_1={event.location_address_line_1}
                                 location_address_line_2={event.location_address_line_2}
                                 updateShowEvents={updateShowEvents}
-                                updateEvent={updateEvent}
+                                updateSelectedEvent={updateSelectedEvent}
                             />
                         ) : null
                 }

@@ -46,7 +46,8 @@ class App extends Component {
     };
   }
 
-  isWorkflowDisabled = () => this.state.cancelablePayment || this.state.workFlowInProgress;
+  // isWorkflowDisabled = () => this.state.cancelablePayment || this.state.workFlowInProgress;
+  isWorkflowDisabled = () => false || this.state.workFlowInProgress;
 
   runWorkflow = async (workflowName, workflowFn) => {
     this.setState({
@@ -187,7 +188,8 @@ class App extends Component {
     // 2c. Disconnect from the reader, in case the user wants to switch readers.
     await this.terminal.disconnectReader();
     this.setState({
-      reader: null
+      reader: null,
+      cart: Products
     });
   };
 
@@ -199,6 +201,7 @@ class App extends Component {
       });
       // After registering a new reader, we can connect immediately using the reader object returned from the server.
       await this.connectToReader(reader);
+      this.setState({ showEvents: true })
       console.log('Registered and Connected Successfully!');
     } catch (e) {
       console.log("Unable to Register and Connect");
@@ -315,6 +318,7 @@ class App extends Component {
   // 3c. Cancel a pending payment.
   // Note this can only be done before calling `processPayment`.
   cancelPendingPayment = async () => {
+    this.setState({ showFinish: false });
     await this.terminal.cancelCollectPaymentMethod();
     this.pendingPaymentIntentSecret = null;
     this.setState({ cancelablePayment: false });
@@ -391,7 +395,7 @@ class App extends Component {
 
   updateCart = async () => {
     this.runWorkflow('updateLineItems', this.updateLineItems);
-    this.setState({ showFinish: true });
+    this.setState({ showFinish: true })
   };
 
   renderForm() {
@@ -421,6 +425,14 @@ class App extends Component {
       ));
     }
     const { backendURL, cancelablePayment, reader, discoveredReaders } = this.state;
+
+    const resetCart = () => {
+      const cart = this.state.cart
+      cart.forEach((item) => item.quantity = 0)
+      this.setState({ cart })
+      this.setState({ chargeAmount: 0 })
+    }
+
     if (backendURL === null && reader === null) {
       return <BackendURLForm onSetBackendURL={this.onSetBackendURL} />;
     } else if (reader === null) {
@@ -438,19 +450,34 @@ class App extends Component {
       if (!this.state.success) {
         if (this.state.showFinish) {
           buttonArea = (
-            <Button
-              color="white"
-              onClick={() => this.runWorkflow('collectPayment', this.collectCardPayment)}
-              disabled={this.isWorkflowDisabled()}
-              justifyContent="left"
-            >
-              <Group direction="row">
-                <Icon icon="payments" />
-                <Text color="blue" size={14}>
-                  Collect card payment
-                </Text>
-              </Group>
-            </Button>
+            <Group>
+              <Button
+                color="white"
+                onClick={() => this.runWorkflow('collectPayment', this.collectCardPayment)}
+                disabled={this.isWorkflowDisabled()}
+                justifyContent="left"
+              >
+                <Group direction="row">
+                  <Icon icon="payments" />
+                  <Text color="blue" size={14}>
+                    Collect card payment
+                  </Text>
+                </Group>
+              </Button>
+              <Button
+                color="white"
+                onClick={this.cancelPendingPayment}
+                disabled={this.cancelablePayment}
+                justifyContent="left"
+              >
+                <Group direction="row">
+                  <Icon icon="cancel" />
+                  <Text color="blue" size={14}>
+                    Cancel
+                  </Text>
+                </Group>
+              </Button>
+            </Group>
           );
         } else {
           buttonArea = (
@@ -479,24 +506,23 @@ class App extends Component {
                 <Group direction="row">
                   <Icon icon="list" />
                   <Text color="blue" size={14}>
-                    Buy
+                    Purchase
                   </Text>
                 </Group>
               </Button>
               <Button
                 color="white"
-                onClick={this.cancelPendingPayment}
-                disabled={!cancelablePayment}
+                onClick={resetCart}
                 justifyContent="left"
               >
                 <Group direction="row">
-                  <Icon icon="cancel" />
+                  <Icon icon="list" />
                   <Text color="blue" size={14}>
-                    Cancel
+                    Reset
                   </Text>
                 </Group>
               </Button>
-            </Group>
+            </Group >
           );
         }
       } else {
@@ -514,7 +540,7 @@ class App extends Component {
   render() {
     const { backendURL, reader, showEvents } = this.state;
 
-    const updateEvent = eventData => this.setState({ selectedEvent: eventData })
+    const updateSelectedEvent = event => this.setState({ selectedEvent: event })
     const updateShowEvents = boolean => this.setState({ showEvents: boolean })
     return (
       <div>
@@ -535,7 +561,7 @@ class App extends Component {
                 {showEvents ?
                   <div>
                     <EventSelector
-                      updateEvent={updateEvent}
+                      updateSelectedEvent={updateSelectedEvent}
                       updateShowEvents={updateShowEvents}
                     />
                   </div>

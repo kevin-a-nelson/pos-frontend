@@ -11,7 +11,7 @@ class Event extends React.Component {
     }
 
     handleClick() {
-        const event = {
+        const selectedEvent = {
             title: this.props.title,
             start_date: this.props.start_date,
             end_date: this.props.end_date,
@@ -21,7 +21,7 @@ class Event extends React.Component {
             bg_image_path: this.props.bg_image_path,
         }
         this.props.updateShowEvents(false)
-        this.props.updateEvent(event)
+        this.props.updateSelectedEvent(selectedEvent)
     }
 
     render() {
@@ -33,7 +33,7 @@ class Event extends React.Component {
                     <Card.Text>
                         <p>{this.props.location_state}, {this.props.location_address_line_2}</p>
                     </Card.Text>
-                    <Button variant="primary" onClick={this.handleClick.bind(this)}>Go somewhere</Button>
+                    <Button variant="primary" onClick={this.handleClick.bind(this)}>Select Event</Button>
                 </Card.Body>
             </Card>
         )

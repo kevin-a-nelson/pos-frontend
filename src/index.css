@@ -383,7 +383,7 @@ code {
    ========================================================================== */
 .product-grid {
   width: 100%;
-  border-radius: 5px;
+  border-radius: 10px;
   overflow: hidden;
   font-size: 13px;
   margin-top: 15px;
@@ -393,7 +393,7 @@ code {
 .item-option {
   width: 100px;
   height: 100px;
-  border-top: 1px rgba(100, 100, 100, 0.5) solid;
+  border-top: 1px solid #e3e8ee;
   background: #fff;
   display: flex;
   justify-content: space-evenly;

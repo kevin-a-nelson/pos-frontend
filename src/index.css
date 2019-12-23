@@ -365,31 +365,24 @@ code {
 /* Main Page
    ========================================================================== */
 .main-page {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100vh;
-  padding: 24px;
-  @media (max-width: 800px) {
-    height: auto;
-    padding: 24px;
-  }
+  padding: 25px 10px;
+  margin: 0px auto;
+  max-width: 400px;
 }
 
 /* Events
    ========================================================================== */
 
 .event {
-  background: white;
-  border-radius: 5px;
-  max-width: 250px;
+  width: 100%;
+  margin-bottom: 20px;
 }
 
 
 /* Products
    ========================================================================== */
 .product-grid {
-  width: 500px;
+  width: 100%;
   border-radius: 5px;
   overflow: hidden;
   font-size: 13px;
@@ -410,7 +403,7 @@ code {
 
 .item-option-elem {
   width: 25%;
-  max-width: 100px;
+  /* max-width: 100px; */
 }
 
 /* Product Image */
@@ -425,7 +418,8 @@ code {
 
 /* Product Label */
 .item-option-label {
-  line-height: 75px;
+  padding: 0 10px;
+  margin-top: 9%;
   text-align: center;
 }
 

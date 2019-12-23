@@ -1,4 +1,6 @@
 import React from 'react'
+import Card from 'react-bootstrap/Card';
+import Button from 'react-bootstrap/Button';
 
 class Event extends React.Component {
     constructor(props) {
@@ -24,13 +26,16 @@ class Event extends React.Component {
 
     render() {
         return (
-            <div className="event" onClick={this.handleClick.bind(this)}>
-                <img src="https://via.placeholder.com/250x150" />
-                <h1>{this.props.title}</h1>
-                <p>{this.props.start_date}</p>
-                <p>{this.props.end_date}</p>
-                <p>{this.props.bg_image_path}</p>
-            </div>
+            <Card className="event">
+                <Card.Img variant="top" src="https://via.placeholder.com/250x150" />
+                <Card.Body>
+                    <Card.Title className="event-title">{this.props.title}</Card.Title>
+                    <Card.Text>
+                        <p>{this.props.location_state}, {this.props.location_address_line_2}</p>
+                    </Card.Text>
+                    <Button variant="primary" onClick={this.handleClick.bind(this)}>Go somewhere</Button>
+                </Card.Body>
+            </Card>
         )
     }
 }

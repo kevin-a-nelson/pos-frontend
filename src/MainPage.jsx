@@ -41,8 +41,8 @@ class App extends Component {
       showFinish: false,
       success: false,
       cart: Products,
-      showEvents: true,
-      event: ""
+      showEvents: false,
+      selectedEvent: ""
     };
   }
 
@@ -164,6 +164,7 @@ class App extends Component {
     const simulatedResult = await this.terminal.discoverReaders({
       simulated: true
     });
+    this.setState({ showEvents: true })
     await this.connectToReader(simulatedResult.discoveredReaders[0]);
   };
 
@@ -254,8 +255,8 @@ class App extends Component {
     // We want to reuse the same PaymentIntent object in the case of declined charges, so we
     // store the pending PaymentIntent's secret until the payment is complete.
 
-    const { event } = this.state
-    let description = `${event.title} ${event.start_date} ${event.end_date} ${event.location_state} ${event.location_address_line_2}`
+    const { selectedEvent } = this.state
+    let description = `${selectedEvent.title} ${selectedEvent.start_date} ${selectedEvent.end_date} ${selectedEvent.location_state} ${selectedEvent.location_address_line_2}`
     if (!this.pendingPaymentIntentSecret) {
       try {
         let createIntentResponse = await this.client.createPaymentIntent({
@@ -478,7 +479,7 @@ class App extends Component {
                 <Group direction="row">
                   <Icon icon="list" />
                   <Text color="blue" size={14}>
-                    Update Totals
+                    Buy
                   </Text>
                 </Group>
               </Button>
@@ -491,7 +492,7 @@ class App extends Component {
                 <Group direction="row">
                   <Icon icon="cancel" />
                   <Text color="blue" size={14}>
-                    Cancel payment
+                    Cancel
                   </Text>
                 </Group>
               </Button>
@@ -501,32 +502,20 @@ class App extends Component {
       } else {
         buttonArea = <div>SUCCESS</div>;
       }
-      const { showEvents } = this.state;
-
-      const updateEvent = eventData => this.setState({ event: eventData })
-      const updateShowEvents = boolean => this.setState({ showEvents: boolean })
       return (
-        <>
-          {showEvents ?
-            <div>
-              <EventSelector
-                updateEvent={updateEvent}
-                updateShowEvents={updateShowEvents}
-              />
-            </div>
-            :
-            <div>
-              {buttonArea}
-              <div className="grid product-grid">{ProductGrid}</div>
-            </div>
-          }
-        </>
+        <div>
+          {buttonArea}
+          <div className="grid product-grid">{ProductGrid}</div>
+        </div>
       );
     }
   }
 
   render() {
     const { backendURL, reader, showEvents } = this.state;
+
+    const updateEvent = eventData => this.setState({ selectedEvent: eventData })
+    const updateShowEvents = boolean => this.setState({ showEvents: boolean })
     return (
       <div>
         <div
@@ -543,7 +532,16 @@ class App extends Component {
                     onClickDisconnect={this.disconnectReader}
                   />
                 )}
-                {this.renderForm()}
+                {showEvents ?
+                  <div>
+                    <EventSelector
+                      updateEvent={updateEvent}
+                      updateShowEvents={updateShowEvents}
+                    />
+                  </div>
+                  :
+                  this.renderForm()
+                }
               </Group>
             </Group>
           </Group>

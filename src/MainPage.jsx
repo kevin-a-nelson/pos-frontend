@@ -46,7 +46,12 @@ class App extends Component {
       lineItems: [],
       loadingNewRegister: false,
       unableToConnect: false,
+      day: null,
     };
+  }
+
+  componentWillMount() {
+    this.setState({ day: "Monday" })
   }
 
   isWorkflowDisabled = () => this.state.cancelablePayment || this.state.workFlowInProgress;
@@ -284,7 +289,11 @@ class App extends Component {
     let lineItemsStr = ""
 
     lineItems.forEach((lineItem) => {
-      lineItemsStr += `${lineItem.description} (${lineItem.quantity}), `
+      lineItem.description === 'Weekend Pass'
+        ?
+        lineItemsStr += `${lineItem.description} (${lineItem.quantity}), `
+        :
+        lineItemsStr += `${lineItem.description} ${this.state.day} ${lineItem.quantity}`
     })
 
     let description = `${selectedEvent.title} - ${lineItemsStr}`

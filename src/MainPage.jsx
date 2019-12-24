@@ -45,6 +45,7 @@ class App extends Component {
       selectedEvent: "",
       lineItems: [],
       loadingNewRegister: false,
+      unableToConnect: false,
     };
   }
 
@@ -166,8 +167,17 @@ class App extends Component {
     const simulatedResult = await this.terminal.discoverReaders({
       simulated: true
     });
-    this.setState({ showEvents: true })
-    await this.connectToReader(simulatedResult.discoveredReaders[0]);
+    this.setState({ loadingNewRegister: true })
+    this.setState({ unableToConnect: false })
+    await this.connectToReader(simulatedResult.discoveredReaders[0])
+      .then(res => {
+        this.setState({ showEvents: true })
+      })
+      .catch(err => {
+        this.setState({ unableToConnect: true })
+      });
+
+    this.setState({ loadingNewRegister: false })
   };
 
   connectToReader = async selectedReader => {
@@ -552,7 +562,7 @@ class App extends Component {
   }
 
   render() {
-    const { backendURL, reader, showEvents, loadingNewRegister } = this.state;
+    const { backendURL, reader, showEvents, loadingNewRegister, unableToConnect } = this.state;
 
     const updateSelectedEvent = event => this.setState({ selectedEvent: event })
     const updateShowEvents = boolean => this.setState({ showEvents: boolean })
@@ -572,22 +582,21 @@ class App extends Component {
                     onClickDisconnect={this.disconnectReader}
                   />
                 )}
-                {loadingNewRegister ?
-                  <div class="loader"></div>
-                  :
-                  null
-                }
-                {/* {showEvents ?
+                {showEvents ?
                   <div>
                     <EventSelector
                       updateSelectedEvent={updateSelectedEvent}
                       updateShowEvents={updateShowEvents}
                     />
-                  </div>
-                  :
-                  null
-                } */}
+                  </div> : null
+                }
                 {this.renderForm()}
+                {unableToConnect ?
+                  <div>
+                    <h1>Unable to connect to PrepNetwork</h1>
+                  </div> : null
+                }
+                {loadingNewRegister ? <div className="loader"></div> : null}
               </Group>
             </Group>
           </Group>

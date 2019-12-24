@@ -155,13 +155,15 @@ class App extends Component {
     this.setState({ loadingNewRegister: true })
     if (discoverResult.error) {
       console.log('Failed to discover: ', discoverResult.error);
-      this.setState({ loadingNewRegister: false })
       this.setState({ unableToConnect: true })
+      this.setState({ loadingNewRegister: false })
       return discoverResult.error;
     } else {
+      console.log("Happening")
       this.setState({
         discoveredReaders: discoverResult.discoveredReaders
       });
+      this.setState({ loadingNewRegister: false })
       return discoverResult.discoveredReaders;
     }
   };
@@ -171,8 +173,9 @@ class App extends Component {
       simulated: true
     });
 
-
+    this.setState({ loadingNewRegister: true })
     await this.connectToReader(simulatedResult.discoveredReaders[0])
+    this.setState({ loadingNewRegister: false })
   };
 
   connectToReader = async selectedReader => {
@@ -186,7 +189,8 @@ class App extends Component {
       this.setState({
         status: 'workflows',
         discoveredReaders: [],
-        reader: connectResult.reader
+        reader: connectResult.reader,
+        showEvents: true
       });
       return connectResult;
     }
@@ -203,6 +207,7 @@ class App extends Component {
   };
 
   registerAndConnectNewReader = async (label, registrationCode) => {
+    this.cancelPendingPayment();
     this.setState({ loadingNewRegister: true })
     this.setState({ unableToConnect: false })
     try {
@@ -213,6 +218,7 @@ class App extends Component {
       // After registering a new reader, we can connect immediately using the reader object returned from the server.
       await this.connectToReader(reader);
       console.log('Registered and Connected Successfully!');
+      this.setState({ showEvents: true })
     } catch (e) {
       console.log("Unable to Register and Connect");
       this.setState({ unableToConnect: true })
@@ -341,6 +347,7 @@ class App extends Component {
   // 3c. Cancel a pending payment.
   // Note this can only be done before calling `processPayment`.
   cancelPendingPayment = async () => {
+    console.log("Canceling Payment")
     this.setState({ showFinish: false });
     await this.terminal.cancelCollectPaymentMethod();
     this.pendingPaymentIntentSecret = null;
@@ -426,25 +433,27 @@ class App extends Component {
     let ProductGrid;
     if (cart && cart.length > 0) {
       ProductGrid = cart.map((item, index) => (
-        <div
-          className={`item-option ${cart.find(cartItem => cartItem.id === item.id) ? 'added' : ''}`}
-          key={item.id}
-        >
-          <div className="item-option-img-container item-option-elem">
-            <img className="item-option-img" src={item.image} alt={item.label} />
+        <Group direction="row">
+          <div
+            className={`item-option ${cart.find(cartItem => cartItem.id === item.id) ? 'added' : ''}`}
+            key={item.id}
+          >
+            <div className="item-option-img-container item-option-elem">
+              <img className="item-option-img" src={item.image} alt={item.label} />
+            </div>
+            <div className="item-option-label item-option-elem">
+              <p>{item.label}</p>
+            </div>
+            <div className="item-option-quantity-selector item-option-elem">
+              <Button onClick={() => this.addQuantity(index)}>+</Button>
+              <span className="item-option-quantity-selector-amount">{item.quantity}</span>
+              <Button onClick={() => this.removeQuantity(index)}>-</Button>
+            </div>
+            <div className="item-option-price item-option-elem">
+              <p>${item.price}</p>
+            </div>
           </div>
-          <div className="item-option-label item-option-elem">
-            <p>{item.label}</p>
-          </div>
-          <div className="item-option-quantity-selector item-option-elem">
-            <Button onClick={() => this.addQuantity(index)}>+</Button>
-            <span className="item-option-quantity-selector-amount">{item.quantity}</span>
-            <Button onClick={() => this.removeQuantity(index)}>-</Button>
-          </div>
-          <div className="item-option-price item-option-elem">
-            <p>${item.price}</p>
-          </div>
-        </div>
+        </Group>
       ));
     }
     const { backendURL, cancelablePayment, reader, discoveredReaders } = this.state;
@@ -490,7 +499,7 @@ class App extends Component {
               <Button
                 color="white"
                 onClick={this.cancelPendingPayment}
-                disabled={!this.cancelablePayment}
+                disabled={false}
                 justifyContent="left"
               >
                 <Group direction="row">
@@ -523,7 +532,8 @@ class App extends Component {
               <Button
                 color="white"
                 onClick={this.updateCart}
-                disabled={this.isWorkflowDisabled()}
+                // disabled={this.isWorkflowDisabled()}
+                disabled={false}
                 justifyContent="left"
               >
                 <Group direction="row">
@@ -587,9 +597,8 @@ class App extends Component {
                       updateSelectedEvent={updateSelectedEvent}
                       updateShowEvents={updateShowEvents}
                     />
-                  </div> : null
+                  </div> : this.renderForm()
                 }
-                {this.renderForm()}
                 {unableToConnect ?
                   <div>
                     <h1>Unable to connect to PrepNetwork</h1>

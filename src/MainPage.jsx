@@ -151,9 +151,12 @@ class App extends Component {
   discoverReaders = async () => {
     // 2a. Discover registered readers to connect to.
     const discoverResult = await this.terminal.discoverReaders();
-
+    this.setState({ unableToConnect: false })
+    this.setState({ loadingNewRegister: true })
     if (discoverResult.error) {
       console.log('Failed to discover: ', discoverResult.error);
+      this.setState({ loadingNewRegister: false })
+      this.setState({ unableToConnect: true })
       return discoverResult.error;
     } else {
       this.setState({
@@ -167,24 +170,18 @@ class App extends Component {
     const simulatedResult = await this.terminal.discoverReaders({
       simulated: true
     });
-    this.setState({ loadingNewRegister: true })
-    this.setState({ unableToConnect: false })
-    await this.connectToReader(simulatedResult.discoveredReaders[0])
-      .then(res => {
-        this.setState({ showEvents: true })
-      })
-      .catch(err => {
-        this.setState({ unableToConnect: true })
-      });
 
-    this.setState({ loadingNewRegister: false })
+
+    await this.connectToReader(simulatedResult.discoveredReaders[0])
   };
 
   connectToReader = async selectedReader => {
     // 2b. Connect to a discovered reader.
     const connectResult = await this.terminal.connectReader(selectedReader);
+    this.setState({ loadingNewRegister: true });
     if (connectResult.error) {
       console.log('Failed to connect:', connectResult.error);
+      this.setState({ loadingNewRegister: false });
     } else {
       this.setState({
         status: 'workflows',
@@ -206,20 +203,22 @@ class App extends Component {
   };
 
   registerAndConnectNewReader = async (label, registrationCode) => {
+    this.setState({ loadingNewRegister: true })
+    this.setState({ unableToConnect: false })
     try {
       let reader = await this.client.registerDevice({
         label,
         registrationCode
       });
-      this.setState({ loadingNewRegister: true })
       // After registering a new reader, we can connect immediately using the reader object returned from the server.
       await this.connectToReader(reader);
-      this.setState({ loadingNewRegister: false })
-      this.setState({ showEvents: true })
       console.log('Registered and Connected Successfully!');
     } catch (e) {
       console.log("Unable to Register and Connect");
+      this.setState({ unableToConnect: true })
       // Suppress backend errors since they will be shown in logs
+    } finally {
+      this.setState({ loadingNewRegister: false })
     }
   };
 

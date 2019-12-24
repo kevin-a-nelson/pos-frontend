@@ -44,11 +44,11 @@ class App extends Component {
       showEvents: false,
       selectedEvent: "",
       lineItems: [],
+      loadingNewRegister: false,
     };
   }
 
-  // isWorkflowDisabled = () => this.state.cancelablePayment || this.state.workFlowInProgress;
-  isWorkflowDisabled = () => this.state.workFlowInProgress;
+  isWorkflowDisabled = () => this.state.cancelablePayment || this.state.workFlowInProgress;
 
   runWorkflow = async (workflowName, workflowFn) => {
     this.setState({
@@ -187,6 +187,7 @@ class App extends Component {
 
   disconnectReader = async () => {
     // 2c. Disconnect from the reader, in case the user wants to switch readers.
+    this.setState({ showEvents: false })
     await this.terminal.disconnectReader();
     this.setState({
       reader: null,
@@ -200,8 +201,10 @@ class App extends Component {
         label,
         registrationCode
       });
+      this.setState({ loadingNewRegister: true })
       // After registering a new reader, we can connect immediately using the reader object returned from the server.
       await this.connectToReader(reader);
+      this.setState({ loadingNewRegister: false })
       this.setState({ showEvents: true })
       console.log('Registered and Connected Successfully!');
     } catch (e) {
@@ -269,7 +272,7 @@ class App extends Component {
       lineItemsStr += `${lineItem.description} (${lineItem.quantity}), `
     })
 
-    let description = `${selectedEvent.title} ${lineItemsStr}`
+    let description = `${selectedEvent.title} - ${lineItemsStr}`
     if (!this.pendingPaymentIntentSecret) {
       try {
         let createIntentResponse = await this.client.createPaymentIntent({
@@ -286,6 +289,7 @@ class App extends Component {
     // Read a card from the customer
     const paymentMethodPromise = this.terminal.collectPaymentMethod(this.pendingPaymentIntentSecret);
     this.setState({ cancelablePayment: true });
+    console.log(this.state.cancelablePayment)
     const result = await paymentMethodPromise;
     if (result.error) {
       console.log('Collect payment method failed:', result.error.message);
@@ -329,7 +333,7 @@ class App extends Component {
   // Note this can only be done before calling `processPayment`.
   cancelPendingPayment = async () => {
     this.setState({ showFinish: false });
-    // await this.terminal.cancelCollectPaymentMethod();
+    await this.terminal.cancelCollectPaymentMethod();
     this.pendingPaymentIntentSecret = null;
     this.setState({ cancelablePayment: false });
   };
@@ -477,13 +481,13 @@ class App extends Component {
               <Button
                 color="white"
                 onClick={this.cancelPendingPayment}
-                disabled={this.cancelablePayment}
+                disabled={!this.cancelablePayment}
                 justifyContent="left"
               >
                 <Group direction="row">
                   <Icon icon="cancel" />
                   <Text color="blue" size={14}>
-                    Back
+                    Cancel
                   </Text>
                 </Group>
               </Button>
@@ -548,7 +552,7 @@ class App extends Component {
   }
 
   render() {
-    const { backendURL, reader, showEvents } = this.state;
+    const { backendURL, reader, showEvents, loadingNewRegister } = this.state;
 
     const updateSelectedEvent = event => this.setState({ selectedEvent: event })
     const updateShowEvents = boolean => this.setState({ showEvents: boolean })
@@ -568,7 +572,12 @@ class App extends Component {
                     onClickDisconnect={this.disconnectReader}
                   />
                 )}
-                {showEvents ?
+                {loadingNewRegister ?
+                  <div class="loader"></div>
+                  :
+                  null
+                }
+                {/* {showEvents ?
                   <div>
                     <EventSelector
                       updateSelectedEvent={updateSelectedEvent}
@@ -576,8 +585,9 @@ class App extends Component {
                     />
                   </div>
                   :
-                  this.renderForm()
-                }
+                  null
+                } */}
+                {this.renderForm()}
               </Group>
             </Group>
           </Group>

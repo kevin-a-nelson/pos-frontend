@@ -50,8 +50,51 @@ class App extends Component {
     };
   }
 
-  componentWillMount() {
-    this.setState({ day: "Monday" })
+
+
+  componentDidMount() {
+    let day = this.getDay()
+
+    let Weekend = ["Saturday, Sunday"]
+
+    Products.forEach((product, index) => {
+      if (product.weekDayOnly && day in Weekend) {
+        Products = Products.splice(index, 1);
+      }
+
+      if (product.dayInLabel) {
+        product.label = product.label.replace("{day}", day)
+      }
+    })
+
+    this.setState({ Products })
+  }
+
+  getDay() {
+    let day = "";
+    switch (new Date().getDay()) {
+      case 0:
+        day = "Sunday";
+        break;
+      case 1:
+        day = "Monday";
+        break;
+      case 2:
+        day = "Tuesday";
+        break;
+      case 3:
+        day = "Wednesday";
+        break;
+      case 4:
+        day = "Thursday";
+        break;
+      case 5:
+        day = "Friday";
+        break;
+      default:
+        day = "Saturday";
+    }
+    return day;
   }
 
   isWorkflowDisabled = () => this.state.cancelablePayment || this.state.workFlowInProgress;
@@ -289,11 +332,7 @@ class App extends Component {
     let lineItemsStr = ""
 
     lineItems.forEach((lineItem) => {
-      lineItem.description === 'Weekend Pass'
-        ?
-        lineItemsStr += `${lineItem.description} (${lineItem.quantity}), `
-        :
-        lineItemsStr += `${lineItem.description} ${this.state.day} ${lineItem.quantity}`
+      lineItemsStr += `${lineItem.description} (${lineItem.quantity}), `
     })
 
     let description = `${selectedEvent.title} - ${lineItemsStr}`

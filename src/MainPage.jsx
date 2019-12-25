@@ -1,7 +1,14 @@
 import React, { Component } from 'react';
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link
+} from "react-router-dom";
 
 import Client from './client';
 import Logger from './logger';
+
 
 import BackendURLForm from './Forms/BackendURLForm.jsx';
 import CommonWorkflows from './Forms/CommonWorkflows.jsx';
@@ -48,55 +55,7 @@ class App extends Component {
       lineItems: [],
       loadingNewRegister: false,
       unableToConnect: false,
-      day: null,
     };
-  }
-
-
-
-  componentDidMount() {
-    let day = this.getDay()
-
-    let Weekend = ["Saturday, Sunday"]
-
-    Products.forEach((product, index) => {
-      if (product.weekDayOnly && day in Weekend) {
-        Products = Products.splice(index, 1);
-      }
-
-      if (product.dayInLabel) {
-        product.label = product.label.replace("{day}", day)
-      }
-    })
-
-    this.setState({ Products })
-  }
-
-  getDay() {
-    let day = "";
-    switch (new Date().getDay()) {
-      case 0:
-        day = "Sunday";
-        break;
-      case 1:
-        day = "Monday";
-        break;
-      case 2:
-        day = "Tuesday";
-        break;
-      case 3:
-        day = "Wednesday";
-        break;
-      case 4:
-        day = "Thursday";
-        break;
-      case 5:
-        day = "Friday";
-        break;
-      default:
-        day = "Saturday";
-    }
-    return day;
   }
 
   isWorkflowDisabled = () => this.state.cancelablePayment || this.state.workFlowInProgress;
@@ -209,7 +168,6 @@ class App extends Component {
       this.setState({ loadingNewRegister: false })
       return discoverResult.error;
     } else {
-      console.log("Happening")
       this.setState({
         discoveredReaders: discoverResult.discoveredReaders
       });
@@ -231,10 +189,8 @@ class App extends Component {
   connectToReader = async selectedReader => {
     // 2b. Connect to a discovered reader.
     const connectResult = await this.terminal.connectReader(selectedReader);
-    this.setState({ loadingNewRegister: true });
     if (connectResult.error) {
       console.log('Failed to connect:', connectResult.error);
-      this.setState({ loadingNewRegister: false });
     } else {
       this.setState({
         status: 'workflows',
@@ -257,16 +213,18 @@ class App extends Component {
   };
 
   registerAndConnectNewReader = async (label, registrationCode) => {
-    this.setState({ loadingNewRegister: true })
-    this.setState({ unableToConnect: false })
+
     try {
       let reader = await this.client.registerDevice({
         label,
         registrationCode
       });
       // After registering a new reader, we can connect immediately using the reader object returned from the server.
+      this.setState({
+        loadingNewRegister: true,
+        unableToConnect: false
+      })
       await this.connectToReader(reader);
-      console.log('Registered and Connected Successfully!');
       this.setState({ showEvents: true })
     } catch (e) {
       console.log("Unable to Register and Connect");
@@ -623,28 +581,37 @@ class App extends Component {
           <Group direction="column" spacing={30}>
             <Group direction="row" spacing={30} responsive>
               <Group direction="column" spacing={16} responsive>
-                {backendURL && (
-                  <ConnectionInfo
-                    backendURL={backendURL}
-                    reader={reader}
-                    onSetBackendURL={this.onSetBackendURL}
-                    onClickDisconnect={this.disconnectReader}
-                  />
-                )}
-                {showEvents ?
-                  <div>
-                    <EventSelector
-                      updateSelectedEvent={updateSelectedEvent}
-                      updateShowEvents={updateShowEvents}
-                    />
-                  </div> : this.renderForm()
-                }
-                {unableToConnect ?
-                  <div>
-                    <h1>Unable to connect to PrepNetwork</h1>
-                  </div> : null
-                }
-                {loadingNewRegister ? <div className="loader"></div> : null}
+                <Router>
+                  <Switch>
+                    <Route path="/test">
+                      <h1>Test</h1>
+                    </Route>
+                    <Route path="/">
+                      {backendURL && (
+                        <ConnectionInfo
+                          backendURL={backendURL}
+                          reader={reader}
+                          onSetBackendURL={this.onSetBackendURL}
+                          onClickDisconnect={this.disconnectReader}
+                        />
+                      )}
+                      {showEvents ?
+                        <div>
+                          <EventSelector
+                            updateSelectedEvent={updateSelectedEvent}
+                            updateShowEvents={updateShowEvents}
+                          />
+                        </div> : this.renderForm()
+                      }
+                      {unableToConnect ?
+                        <div>
+                          <h1>Unable to connect to PrepNetwork</h1>
+                        </div> : null
+                      }
+                      {loadingNewRegister ? <div className="loader"></div> : null}
+                    </Route>
+                  </Switch>
+                </Router>
               </Group>
             </Group>
           </Group>

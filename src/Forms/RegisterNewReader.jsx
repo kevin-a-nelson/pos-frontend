@@ -2,6 +2,8 @@
 
 import * as React from "react";
 
+import { Redirect } from "react-router-dom";
+
 import Button from "../components/Button/Button.jsx";
 import Group from "../components/Group/Group.jsx";
 import Section from "../components/Section/Section.jsx";
@@ -14,7 +16,8 @@ class RegisterNewReader extends React.Component {
 
     this.state = {
       readerCode: null,
-      readerLabel: null
+      readerLabel: null,
+      submitted: false,
     };
   }
 
@@ -30,11 +33,17 @@ class RegisterNewReader extends React.Component {
     event.preventDefault();
     const { readerCode, readerLabel } = this.state;
     this.props.onSubmitRegister(readerLabel, readerCode);
+    this.setState({ submitted: true })
   };
 
   render() {
-    const { readerCode, readerLabel } = this.state;
+    const { readerCode, readerLabel, submitted } = this.state;
     const { onClickCancel } = this.props;
+
+    if (submitted) {
+      return < Redirect to="/events" />
+    }
+
     return (
       <Section>
         <form onSubmit={this.onSubmitRegister}>

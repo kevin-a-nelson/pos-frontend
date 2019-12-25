@@ -3,8 +3,11 @@ import {
   BrowserRouter as Router,
   Switch,
   Route,
-  Link
+  Link,
+  Redirect
 } from "react-router-dom";
+
+import ReactLoading from 'react-loading';
 
 import Client from './client';
 import Logger from './logger';
@@ -22,6 +25,8 @@ import Group from './components/Group/Group.jsx';
 import Icon from './components/Icon/Icon.jsx';
 import Section from './components/Section/Section.jsx';
 import Text from './components/Text/Text.jsx';
+import Connect from './components/Connect/Connect.jsx';
+import Cart from './components/Cart/Cart.jsx';
 
 import Products from './static/Products';
 
@@ -55,6 +60,7 @@ class App extends Component {
       lineItems: [],
       loadingNewRegister: false,
       unableToConnect: false,
+      client: new Client("https://prepnetwork-stripe.herokuapp.com/"),
     };
   }
 
@@ -76,7 +82,7 @@ class App extends Component {
   // 1. Stripe Terminal Initialization
   initializeBackendClientAndTerminal(url) {
     // 1a. Initialize Client class, which communicates with the example terminal backend
-    this.client = new Client(url);
+    this.client = this.state.client
 
     // 1b. Initialize the StripeTerminal object
     this.terminal = window.StripeTerminal.create({
@@ -187,6 +193,7 @@ class App extends Component {
   };
 
   connectToReader = async selectedReader => {
+    console.log("Connecting to reader")
     // 2b. Connect to a discovered reader.
     const connectResult = await this.terminal.connectReader(selectedReader);
     if (connectResult.error) {
@@ -213,7 +220,7 @@ class App extends Component {
   };
 
   registerAndConnectNewReader = async (label, registrationCode) => {
-
+    console.log(this.client)
     try {
       let reader = await this.client.registerDevice({
         label,
@@ -227,6 +234,7 @@ class App extends Component {
       await this.connectToReader(reader);
       this.setState({ showEvents: true })
     } catch (e) {
+      console.log(e)
       console.log("Unable to Register and Connect");
       this.setState({
         unableToConnect: true,
@@ -234,7 +242,10 @@ class App extends Component {
       })
       // Suppress backend errors since they will be shown in logs
     } finally {
-      this.setState({ loadingNewRegister: false })
+      this.setState({
+        loadingNewRegister: false,
+        route: "events",
+      })
     }
   };
 
@@ -384,22 +395,6 @@ class App extends Component {
     this.calculateTotal(cart)
   };
 
-  addQuantity = (index) => {
-    const cart = this.state.cart;
-    cart[index].quantity = cart[index].quantity + 1;
-    this.setState({ cart })
-    this.calculateTotal(cart)
-  }
-
-  removeQuantity = (index) => {
-    const cart = this.state.cart;
-    if (cart[index].quantity - 1 >= 0) {
-      cart[index].quantity = cart[index].quantity - 1;
-    }
-    this.setState({ cart })
-    this.calculateTotal(cart)
-  }
-
   calculateTotal(items) {
     let chargeAmount = 0;
     items.forEach((item) => {
@@ -415,10 +410,13 @@ class App extends Component {
     } else {
       window.localStorage.removeItem('terminal.backendUrl');
     }
+
     this.initializeBackendClientAndTerminal(url);
     this.setState({ backendURL: url });
-    console.log(this.state.backendURL)
+
+    console.log(this.client);
   };
+
   updateChargeAmount = amount => this.setState({ chargeAmount: parseInt(amount, 10) });
   updateItemDescription = description => this.setState({ itemDescription: description });
   updateTaxAmount = amount => this.setState({ taxAmount: parseInt(amount, 10) });
@@ -429,197 +427,41 @@ class App extends Component {
     this.setState({ showFinish: true })
   };
 
-  renderForm() {
-    const { cart } = this.state
-    let ProductGrid;
-    if (cart && cart.length > 0) {
-      ProductGrid = cart.map((item, index) => (
-        <div
-          className={`item-option ${cart.find(cartItem => cartItem.id === item.id) ? 'added' : ''}`}
-          key={item.id}
-        >
-          <div className="item-option-img-container item-option-elem">
-            <img className="item-option-img" src={item.image} alt={item.label} />
-          </div>
-          <div className="item-option-label item-option-elem">
-            <p>{item.label}</p>
-          </div>
-          <div className="item-option-quantity-selector item-option-elem">
-            <Button onClick={() => this.addQuantity(index)}>+</Button>
-            <span className="item-option-quantity-selector-amount">{item.quantity}</span>
-            <Button onClick={() => this.removeQuantity(index)}>-</Button>
-          </div>
-          <div className="item-option-price item-option-elem">
-            <p>${item.price}</p>
-          </div>
-        </div>
-      ));
-    }
-    const { backendURL, cancelablePayment, reader, discoveredReaders } = this.state;
-
-    const resetCart = () => {
-      const cart = this.state.cart
-      cart.forEach((item) => item.quantity = 0)
-      this.setState({ cart })
-      this.setState({ chargeAmount: 0 })
-    }
-
-    if (backendURL === null && reader === null) {
-      return <BackendURLForm onSetBackendURL={this.onSetBackendURL} />;
-    } else if (reader === null) {
-      return (
-        <Readers
-          onClickDiscover={() => this.discoverReaders(false)}
-          onSubmitRegister={this.registerAndConnectNewReader}
-          readers={discoveredReaders}
-          onConnectToReader={this.connectToReader}
-          handleUseSimulator={this.connectToSimulator}
-        />
-      );
-    } else {
-      let buttonArea;
-      if (!this.state.success) {
-        if (this.state.showFinish) {
-          buttonArea = (
-            <Group>
-              <Button
-                color="white"
-                onClick={() => this.runWorkflow('collectPayment', this.collectCardPayment)}
-                disabled={this.isWorkflowDisabled()}
-                justifyContent="left"
-              >
-                <Group direction="row">
-                  <Icon icon="payments" />
-                  <Text color="blue" size={14}>
-                    Collect card payment
-                  </Text>
-                </Group>
-              </Button>
-              <Button
-                color="white"
-                onClick={this.cancelPendingPayment}
-                disabled={false}
-                justifyContent="left"
-              >
-                <Group direction="row">
-                  <Icon icon="cancel" />
-                  <Text color="blue" size={14}>
-                    Cancel
-                  </Text>
-                </Group>
-              </Button>
-            </Group>
-          );
-        } else {
-          buttonArea = (
-            <Group>
-              <Group
-                direction="row"
-                alignment={{
-                  justifyContent: 'space-between',
-                  alignItems: 'center'
-                }}
-              >
-                <Text size={12} color="dark">
-                  Charge amount
-                </Text>
-                <Text size={18} color="dark">
-                  {this.state.chargeAmount}
-                </Text>
-              </Group>
-
-              <Button
-                color="white"
-                onClick={this.updateCart}
-                // disabled={this.isWorkflowDisabled()}
-                disabled={false}
-                justifyContent="left"
-              >
-                <Group direction="row">
-                  <Icon icon="list" />
-                  <Text color="blue" size={14}>
-                    Purchase
-                  </Text>
-                </Group>
-              </Button>
-              <Button
-                color="white"
-                onClick={resetCart}
-                justifyContent="left"
-              >
-                <Group direction="row">
-                  <Icon icon="list" />
-                  <Text color="blue" size={14}>
-                    Reset
-                  </Text>
-                </Group>
-              </Button>
-            </Group >
-          );
-        }
-      } else {
-        buttonArea = <Alert variant="info">SUCCESS</Alert>
-      }
-      return (
-        <div>
-          {buttonArea}
-          <div className="grid product-grid">{ProductGrid}</div>
-        </div>
-      );
-    }
-  }
-
   render() {
-    const { backendURL, reader, showEvents, loadingNewRegister, unableToConnect } = this.state;
+    const { backendURL, reader, showEvents, loadingNewRegister, unableToConnect, route, cart } = this.state;
 
     const updateSelectedEvent = event => this.setState({ selectedEvent: event })
     const updateShowEvents = boolean => this.setState({ showEvents: boolean })
+
+    const loadingType = loadingNewRegister ? 'spinningBubbles' : 'blank'
+
     return (
-      <div>
-        <div
-          className="main-page"
-        >
-          <Group direction="column" spacing={30}>
-            <Group direction="row" spacing={30} responsive>
-              <Group direction="column" spacing={16} responsive>
-                <Router>
-                  <Switch>
-                    <Route path="/connect">
-                      <ConnectionInfo
-                        backendURL={this.state.backendURL}
-                        reader={this.state.reader}
-                        onSetBackendURL={this.onSetBackendURL}
-                        onClickDisconnect={this.disconnectReader}
-                      />
-                      <Readers
-                        onClickDiscover={() => this.discoverReaders(false)}
-                        onSubmitRegister={this.registerAndConnectNewReader}
-                        readers={this.state.discoveredReaders}
-                        onConnectToReader={this.connectToReader}
-                        handleUseSimulator={this.connectToSimulator}
-                      />
-                    </Route>
-                    <Route path="/events">
-                      <EventSelector
-                        updateSelectedEvent={updateSelectedEvent}
-                        updateShowEvents={updateShowEvents}
-                      />
-                    </Route>
-                    <Route path="/">
-                      <BackendURLForm onSetBackendURL={this.onSetBackendURL} />;
-                    </Route>
-                    {unableToConnect ?
-                      <div>
-                        <h1>Unable to connect to PrepNetwork</h1>
-                      </div> : null
-                    }
-                    {loadingNewRegister ? <div className="loader"></div> : null}
-                  </Switch>
-                </Router>
-              </Group>
-            </Group>
-          </Group>
-        </div>
+      <div className="main-page" >
+        <Router>
+          <Switch>
+            <Route path="/connect">
+              <Readers
+                onClickDiscover={() => this.discoverReaders(false)}
+                onSubmitRegister={this.registerAndConnectNewReader}
+                readers={this.state.discoveredReaders}
+                onConnectToReader={this.connectToReader}
+                handleUseSimulator={this.connectToSimulator}
+              />
+            </Route>
+            <Route path="/events">
+              <EventSelector
+                updateSelectedEvent={updateSelectedEvent}
+                updateShowEvents={updateShowEvents}
+              />
+            </Route>
+            <Route path="/products">
+              <Cart cart={cart} />
+            </Route>
+            <Route path="/">
+              <BackendURLForm onSetBackendURL={this.onSetBackendURL} />;
+            </Route>
+          </Switch>
+        </Router>
       </div>
     );
   }

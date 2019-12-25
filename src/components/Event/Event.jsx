@@ -1,12 +1,13 @@
 import React from 'react'
 import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
+import { Redirect } from 'react-router-dom'
 
 class Event extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            events: null
+            eventSelected: false,
         }
     }
 
@@ -22,9 +23,17 @@ class Event extends React.Component {
         }
         this.props.updateShowEvents(false)
         this.props.updateSelectedEvent(selectedEvent)
+        this.setState({ eventSelected: true })
     }
 
     render() {
+
+        const { eventSelected } = this.state
+
+        if (eventSelected) {
+            return <Redirect to="/products" />
+        }
+
         return (
             <Card className="event">
                 <Card.Img variant="top" src="https://via.placeholder.com/250x150" />

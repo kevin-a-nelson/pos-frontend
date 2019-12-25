@@ -362,6 +362,10 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }
 
+.center {
+  margin: 0px auto;
+}
+
 /* Main Page
    ========================================================================== */
 .main-page {

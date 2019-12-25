@@ -417,6 +417,7 @@ class App extends Component {
     }
     this.initializeBackendClientAndTerminal(url);
     this.setState({ backendURL: url });
+    console.log(this.state.backendURL)
   };
   updateChargeAmount = amount => this.setState({ chargeAmount: parseInt(amount, 10) });
   updateItemDescription = description => this.setState({ itemDescription: description });
@@ -583,33 +584,36 @@ class App extends Component {
               <Group direction="column" spacing={16} responsive>
                 <Router>
                   <Switch>
-                    <Route path="/test">
-                      <h1>Test</h1>
+                    <Route path="/connect">
+                      <ConnectionInfo
+                        backendURL={this.state.backendURL}
+                        reader={this.state.reader}
+                        onSetBackendURL={this.onSetBackendURL}
+                        onClickDisconnect={this.disconnectReader}
+                      />
+                      <Readers
+                        onClickDiscover={() => this.discoverReaders(false)}
+                        onSubmitRegister={this.registerAndConnectNewReader}
+                        readers={this.state.discoveredReaders}
+                        onConnectToReader={this.connectToReader}
+                        handleUseSimulator={this.connectToSimulator}
+                      />
+                    </Route>
+                    <Route path="/events">
+                      <EventSelector
+                        updateSelectedEvent={updateSelectedEvent}
+                        updateShowEvents={updateShowEvents}
+                      />
                     </Route>
                     <Route path="/">
-                      {backendURL && (
-                        <ConnectionInfo
-                          backendURL={backendURL}
-                          reader={reader}
-                          onSetBackendURL={this.onSetBackendURL}
-                          onClickDisconnect={this.disconnectReader}
-                        />
-                      )}
-                      {showEvents ?
-                        <div>
-                          <EventSelector
-                            updateSelectedEvent={updateSelectedEvent}
-                            updateShowEvents={updateShowEvents}
-                          />
-                        </div> : this.renderForm()
-                      }
-                      {unableToConnect ?
-                        <div>
-                          <h1>Unable to connect to PrepNetwork</h1>
-                        </div> : null
-                      }
-                      {loadingNewRegister ? <div className="loader"></div> : null}
+                      <BackendURLForm onSetBackendURL={this.onSetBackendURL} />;
                     </Route>
+                    {unableToConnect ?
+                      <div>
+                        <h1>Unable to connect to PrepNetwork</h1>
+                      </div> : null
+                    }
+                    {loadingNewRegister ? <div className="loader"></div> : null}
                   </Switch>
                 </Router>
               </Group>

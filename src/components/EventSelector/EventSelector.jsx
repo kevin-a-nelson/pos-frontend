@@ -26,8 +26,9 @@ class EventSelector extends React.Component {
             <div>
                 {
                     events ?
-                        events.map((event) =>
+                        events.map((event, index) =>
                             <Event
+                                key={index}
                                 title={event.title}
                                 start_date={event.start_date}
                                 end_date={event.end_date}

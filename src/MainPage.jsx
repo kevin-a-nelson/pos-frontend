@@ -9,6 +9,7 @@ import CartForm from './Forms/CartForm.jsx';
 import ConnectionInfo from './ConnectionInfo/ConnectionInfo.jsx';
 import Readers from './Forms/Readers.jsx';
 
+import Alert from 'react-bootstrap/Alert';
 import Button from './components/Button/Button.jsx';
 import Group from './components/Group/Group.jsx';
 import Icon from './components/Icon/Icon.jsx';
@@ -19,6 +20,7 @@ import Products from './static/Products';
 
 import { css } from 'emotion';
 import EventSelector from './components/EventSelector/EventSelector';
+
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -255,7 +257,6 @@ class App extends Component {
   };
 
   registerAndConnectNewReader = async (label, registrationCode) => {
-    this.cancelPendingPayment();
     this.setState({ loadingNewRegister: true })
     this.setState({ unableToConnect: false })
     try {
@@ -269,7 +270,10 @@ class App extends Component {
       this.setState({ showEvents: true })
     } catch (e) {
       console.log("Unable to Register and Connect");
-      this.setState({ unableToConnect: true })
+      this.setState({
+        unableToConnect: true,
+        showEvents: false
+      })
       // Suppress backend errors since they will be shown in logs
     } finally {
       this.setState({ loadingNewRegister: false })
@@ -392,16 +396,6 @@ class App extends Component {
     }
   };
 
-  // 3c. Cancel a pending payment.
-  // Note this can only be done before calling `processPayment`.
-  cancelPendingPayment = async () => {
-    console.log("Canceling Payment")
-    this.setState({ showFinish: false });
-    await this.terminal.cancelCollectPaymentMethod();
-    this.pendingPaymentIntentSecret = null;
-    this.setState({ cancelablePayment: false });
-  };
-
   // 3d. Save a card for re-use online.
   saveCardForFutureUse = async () => {
     // First, read a card without charging it using `readReusableCard`
@@ -481,27 +475,25 @@ class App extends Component {
     let ProductGrid;
     if (cart && cart.length > 0) {
       ProductGrid = cart.map((item, index) => (
-        <Group direction="row">
-          <div
-            className={`item-option ${cart.find(cartItem => cartItem.id === item.id) ? 'added' : ''}`}
-            key={item.id}
-          >
-            <div className="item-option-img-container item-option-elem">
-              <img className="item-option-img" src={item.image} alt={item.label} />
-            </div>
-            <div className="item-option-label item-option-elem">
-              <p>{item.label}</p>
-            </div>
-            <div className="item-option-quantity-selector item-option-elem">
-              <Button onClick={() => this.addQuantity(index)}>+</Button>
-              <span className="item-option-quantity-selector-amount">{item.quantity}</span>
-              <Button onClick={() => this.removeQuantity(index)}>-</Button>
-            </div>
-            <div className="item-option-price item-option-elem">
-              <p>${item.price}</p>
-            </div>
+        <div
+          className={`item-option ${cart.find(cartItem => cartItem.id === item.id) ? 'added' : ''}`}
+          key={item.id}
+        >
+          <div className="item-option-img-container item-option-elem">
+            <img className="item-option-img" src={item.image} alt={item.label} />
           </div>
-        </Group>
+          <div className="item-option-label item-option-elem">
+            <p>{item.label}</p>
+          </div>
+          <div className="item-option-quantity-selector item-option-elem">
+            <Button onClick={() => this.addQuantity(index)}>+</Button>
+            <span className="item-option-quantity-selector-amount">{item.quantity}</span>
+            <Button onClick={() => this.removeQuantity(index)}>-</Button>
+          </div>
+          <div className="item-option-price item-option-elem">
+            <p>${item.price}</p>
+          </div>
+        </div>
       ));
     }
     const { backendURL, cancelablePayment, reader, discoveredReaders } = this.state;
@@ -607,7 +599,7 @@ class App extends Component {
           );
         }
       } else {
-        buttonArea = <div>SUCCESS</div>;
+        buttonArea = <Alert variant="info">SUCCESS</Alert>
       }
       return (
         <div>

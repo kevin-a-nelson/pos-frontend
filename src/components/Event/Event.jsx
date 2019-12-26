@@ -21,7 +21,6 @@ class Event extends React.Component {
             location_address_line_2: this.props.location_address_line_2,
             bg_image_path: this.props.bg_image_path,
         }
-        this.props.updateShowEvents(false)
         this.props.updateSelectedEvent(selectedEvent)
         this.setState({ eventSelected: true })
     }
@@ -40,7 +39,7 @@ class Event extends React.Component {
                 <Card.Body>
                     <Card.Title className="event-title">{this.props.title}</Card.Title>
                     <Card.Text>
-                        <p>{this.props.location_state}, {this.props.location_address_line_2}</p>
+                        {this.props.location_state}, {this.props.location_address_line_2}
                     </Card.Text>
                     <Button variant="primary" onClick={this.handleClick.bind(this)}>Select Event</Button>
                 </Card.Body>

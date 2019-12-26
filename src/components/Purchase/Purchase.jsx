@@ -7,22 +7,29 @@ class Purchase extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      goToCheckout: false,
+      paymentCollected: false,
     }
   }
 
   handleCollectPayment() {
     this.props.collectCardPayment()
-    this.setState({ goToCheckout: true })
+    this.setState({ paymentCollected: true })
   }
 
   handleBack() {
-    this.setState({ goToCheckout: true })
+    this.setState({ paymentCollected: true })
   }
 
   render() {
-    if (this.state.goToCheckout) {
-      return <Redirect to="/checkout" />
+    const { paymentCollected } = this.state
+    const { workFlowInProgress } = this.props
+
+    if (workFlowInProgress) {
+      return <h1>Loading ... </h1>
+    }
+
+    if (paymentCollected) {
+      return <Redirect to="/success" />
     }
     return (
       <div className="insert-card">

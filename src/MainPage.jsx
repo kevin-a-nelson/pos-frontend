@@ -17,6 +17,7 @@ import Cart from './components/Cart/Cart.jsx';
 import Products from './static/Products';
 import Purchase from './components/Purchase/Purchase.jsx';
 import EventSelector from './components/EventSelector/EventSelector';
+import Success from './components/Success/Success.jsx';
 
 
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -36,8 +37,6 @@ class App extends Component {
       taxAmount: 0,
       currency: 'usd',
       workFlowInProgress: null,
-      showFinish: false,
-      success: false,
       cart: Products,
       showEvents: false,
       selectedEvent: "",
@@ -49,12 +48,12 @@ class App extends Component {
 
   isWorkflowDisabled = () => this.state.cancelablePayment || this.state.workFlowInProgress;
 
-  runWorkflow = async (workflowName, workflowFn) => {
+  runWorkflow = async (workflowFn, args) => {
     this.setState({
-      workFlowInProgress: workflowName
+      workFlowInProgress: true
     });
     try {
-      await workflowFn();
+      await workflowFn(args);
     } finally {
       this.setState({
         workFlowInProgress: null
@@ -63,7 +62,6 @@ class App extends Component {
   };
 
   componentWillMount() {
-    console.log("Main Mounted")
     this.initializeBackendClientAndTerminal("https://prepnetwork-stripe.herokuapp.com/")
   }
 
@@ -197,10 +195,9 @@ class App extends Component {
     });
   };
 
-  registerAndConnectNewReader = async (label, registrationCode) => {
+  registerAndConnectNewReader = async (registrationCode) => {
     try {
       let reader = await this.client.registerDevice({
-        label,
         registrationCode
       });
       // After registering a new reader, we can connect immediately using the reader object returned from the server.
@@ -336,19 +333,22 @@ class App extends Component {
   updateSuccess = bool => this.setState({ success: bool })
 
   updateLineItemsHelper = async () => {
-    this.runWorkflow('updateLineItems', this.updateLineItems);
+    this.runWorkflow(this.updateLineItems);
   };
 
   collectCardPaymentHelper = async () => {
-    this.runWorkflow('collectPayment', this.collectCardPayment)
+    this.runWorkflow(this.collectCardPayment)
+  }
+
+  registerAndConnectNewReaderHelper = async (registrationCode) => {
+    this.runWorkflow(
+      this.registerAndConnectNewReader,
+      [registrationCode]
+    )
   }
 
   render() {
-    const { cart, chargeAmount, showFinish, success } = this.state;
-
-    // if (this.state.workFlowInProgress) {
-    //   return (<h1>Loading</h1>)
-    // }
+    const { cart, chargeAmount, workFlowInProgress } = this.state;
 
     return (
       <div className="main-page" >
@@ -357,7 +357,7 @@ class App extends Component {
             <Route path="/events">
               <EventSelector
                 updateSelectedEvent={this.updateSelectedEvent}
-                updateShowEvents={this.updateShowEvents}
+                workFlowInProgress={workFlowInProgress}
               />
             </Route>
             <Route path="/checkout">
@@ -367,16 +367,22 @@ class App extends Component {
                 chargeAmount={chargeAmount}
                 updateChargeAmount={this.updateChargeAmount}
                 updateLineItems={this.updateLineItemsHelper}
+                workFlowInProgress={workFlowInProgress}
               />
             </Route>
             <Route path="/purchase">
               <Purchase
                 collectCardPayment={this.collectCardPaymentHelper}
+                workFlowInProgress={workFlowInProgress}
               />
+            </Route>
+            <Route path="/success">
+              <Success />
             </Route>
             <Route path="/">
               <RegisterNewReader
-                onSubmitRegister={this.registerAndConnectNewReader}
+                onSubmitRegister={this.registerAndConnectNewReaderHelper}
+                workFlowInProgress={workFlowInProgress}
               />
             </Route>
           </Switch>

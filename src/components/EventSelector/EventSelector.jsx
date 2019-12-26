@@ -21,7 +21,11 @@ class EventSelector extends React.Component {
 
     render() {
         const { events } = this.state
-        const { updateShowEvents, updateSelectedEvent } = this.props
+        const { updateSelectedEvent, workFlowInProgress } = this.props
+
+        if (workFlowInProgress) {
+            return <h1>Loading ... </h1>
+        }
         return (
             <div>
                 {
@@ -36,7 +40,6 @@ class EventSelector extends React.Component {
                                 location_state={event.location_state}
                                 location_address_line_1={event.location_address_line_1}
                                 location_address_line_2={event.location_address_line_2}
-                                updateShowEvents={updateShowEvents}
                                 updateSelectedEvent={updateSelectedEvent}
                             />
                         ) : null

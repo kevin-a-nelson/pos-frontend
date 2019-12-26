@@ -9,7 +9,6 @@ class Product extends React.Component {
     return (
       <div
         className="item-option"
-        key={item.id}
       >
         <div className="item-option-img-container item-option-elem">
           <img className="item-option-img" src={item.image} alt={item.label} />
@@ -47,8 +46,9 @@ class Products extends React.Component {
           (cart && cart.length) > 0 ?
             cart.map((item, index) => (
               <Product
-                item={item}
                 index={index}
+                key={index}
+                item={item}
                 changeQuantity={this.changeQuantity}
               />
             ))

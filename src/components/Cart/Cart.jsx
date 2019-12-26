@@ -27,7 +27,11 @@ class Cart extends React.Component {
   render() {
 
     const { checkedOut } = this.state
-    const { cart, updateCart, chargeAmount } = this.props
+    const { cart, updateCart, chargeAmount, workFlowInProgress } = this.props
+
+    if (workFlowInProgress) {
+      return <h1>Loading ... </h1>
+    }
 
     if (checkedOut) {
       return <Redirect to="/purchase" />

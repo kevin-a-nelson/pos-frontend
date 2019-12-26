@@ -18,6 +18,7 @@ import CommonWorkflows from './Forms/CommonWorkflows.jsx';
 import CartForm from './Forms/CartForm.jsx';
 import ConnectionInfo from './ConnectionInfo/ConnectionInfo.jsx';
 import Readers from './Forms/Readers.jsx';
+import RegisterNewReader from './Forms/RegisterNewReader.jsx'
 
 import Alert from 'react-bootstrap/Alert';
 import Button from './components/Button/Button.jsx';
@@ -60,7 +61,6 @@ class App extends Component {
       lineItems: [],
       loadingNewRegister: false,
       unableToConnect: false,
-      client: new Client("https://prepnetwork-stripe.herokuapp.com/"),
     };
   }
 
@@ -79,10 +79,15 @@ class App extends Component {
     }
   };
 
+  componentWillMount() {
+    console.log("Main Mounted")
+    this.initializeBackendClientAndTerminal("https://prepnetwork-stripe.herokuapp.com/")
+  }
+
   // 1. Stripe Terminal Initialization
   initializeBackendClientAndTerminal(url) {
     // 1a. Initialize Client class, which communicates with the example terminal backend
-    this.client = this.state.client
+    this.client = new Client(url);
 
     // 1b. Initialize the StripeTerminal object
     this.terminal = window.StripeTerminal.create({
@@ -182,16 +187,6 @@ class App extends Component {
     }
   };
 
-  connectToSimulator = async () => {
-    const simulatedResult = await this.terminal.discoverReaders({
-      simulated: true
-    });
-
-    this.setState({ loadingNewRegister: true })
-    await this.connectToReader(simulatedResult.discoveredReaders[0])
-    this.setState({ loadingNewRegister: false })
-  };
-
   connectToReader = async selectedReader => {
     console.log("Connecting to reader")
     // 2b. Connect to a discovered reader.
@@ -220,45 +215,16 @@ class App extends Component {
   };
 
   registerAndConnectNewReader = async (label, registrationCode) => {
-    console.log(this.client)
     try {
       let reader = await this.client.registerDevice({
         label,
         registrationCode
       });
       // After registering a new reader, we can connect immediately using the reader object returned from the server.
-      this.setState({
-        loadingNewRegister: true,
-        unableToConnect: false
-      })
       await this.connectToReader(reader);
-      this.setState({ showEvents: true })
     } catch (e) {
       console.log(e)
       console.log("Unable to Register and Connect");
-      this.setState({
-        unableToConnect: true,
-        showEvents: false
-      })
-      // Suppress backend errors since they will be shown in logs
-    } finally {
-      this.setState({
-        loadingNewRegister: false,
-        route: "events",
-      })
-    }
-  };
-
-  getSiteData = async (label, registrationCode) => {
-    try {
-      let reader = await this.client.registerDevice({
-        label,
-        registrationCode
-      });
-      // After registering a new reader, we can connect immediately using the reader object returned from the server.
-      await this.connectToReader(reader);
-      console.log('Registered and Connected Successfully!');
-    } catch (e) {
       // Suppress backend errors since they will be shown in logs
     }
   };
@@ -279,7 +245,10 @@ class App extends Component {
       }
     })
 
-    this.setState({ lineItems })
+    this.setState({
+      lineItems,
+      showFinish: true
+    })
 
     // 3a. Update the reader display to show cart contents to the customer
     await this.terminal.setReaderDisplay({
@@ -365,100 +334,64 @@ class App extends Component {
     }
   };
 
-  // 3d. Save a card for re-use online.
-  saveCardForFutureUse = async () => {
-    // First, read a card without charging it using `readReusableCard`
-    const readResult = await this.terminal.readReusableCard();
-    if (readResult.error) {
-      alert(`readReusableCard failed: ${readResult.error.message}`);
-    } else {
-      try {
-        // Then, pass the payment method to your backend client to save it to a customer
-        let customer = await this.client.savePaymentMethodToCustomer({
-          paymentMethodId: readResult.payment_method.id
-        });
-        console.log('Payment method saved to customer!', customer);
-        return customer;
-      } catch (e) {
-        // Suppress backend errors since they will be shown in logs
-        return;
-      }
-    }
-  };
-
-  /* Functions used for products */
-  addItemToCart = async item => {
-    console.log(item);
-    const cart = this.state.cart;
-    cart.push(item);
-    this.setState({ cart });
-    this.calculateTotal(cart)
-  };
-
-  calculateTotal(items) {
-    let chargeAmount = 0;
-    items.forEach((item) => {
-      chargeAmount += item.price * item.quantity
-    })
-    this.setState({ chargeAmount })
-  }
-
-  // 4. UI Methods
-  onSetBackendURL = url => {
-    if (url !== null) {
-      window.localStorage.setItem('terminal.backendUrl', url);
-    } else {
-      window.localStorage.removeItem('terminal.backendUrl');
-    }
-
-    this.initializeBackendClientAndTerminal(url);
-    this.setState({ backendURL: url });
-
-    console.log(this.client);
+  // 3c. Cancel a pending payment.
+  // Note this can only be done before calling `processPayment`.
+  cancelPendingPayment = async () => {
+    await this.terminal.cancelCollectPaymentMethod();
+    this.pendingPaymentIntentSecret = null;
+    this.setState({ cancelablePayment: false });
   };
 
   updateChargeAmount = amount => this.setState({ chargeAmount: parseInt(amount, 10) });
   updateItemDescription = description => this.setState({ itemDescription: description });
   updateTaxAmount = amount => this.setState({ taxAmount: parseInt(amount, 10) });
   updateCurrency = currency => this.setState({ currency: currency });
+  updateSelectedEvent = event => this.setState({ selectedEvent: event });
+  updateShowEvents = bool => this.setState({ showEvents: bool });
+  updateCart = cart => this.setState({ cart: cart })
+  updateShowFinish = bool => this.setState({ showFinish: bool })
+  updateSuccess = bool => this.setState({ success: bool })
 
-  updateCart = async () => {
+  updateLineItemsHelper = async () => {
     this.runWorkflow('updateLineItems', this.updateLineItems);
-    this.setState({ showFinish: true })
   };
 
+  collectCardPaymentHelper = async () => {
+    this.runWorkflow('collectPayment', this.collectCardPayment)
+  }
+
   render() {
-    const { backendURL, reader, showEvents, loadingNewRegister, unableToConnect, route, cart } = this.state;
-
-    const updateSelectedEvent = event => this.setState({ selectedEvent: event })
-    const updateShowEvents = boolean => this.setState({ showEvents: boolean })
-
-    const loadingType = loadingNewRegister ? 'spinningBubbles' : 'blank'
+    const { cart, chargeAmount, showFinish, success } = this.state;
 
     return (
       <div className="main-page" >
         <Router>
           <Switch>
-            <Route path="/connect">
-              <Readers
-                onClickDiscover={() => this.discoverReaders(false)}
-                onSubmitRegister={this.registerAndConnectNewReader}
-                readers={this.state.discoveredReaders}
-                onConnectToReader={this.connectToReader}
-                handleUseSimulator={this.connectToSimulator}
-              />
-            </Route>
             <Route path="/events">
               <EventSelector
-                updateSelectedEvent={updateSelectedEvent}
-                updateShowEvents={updateShowEvents}
+                updateSelectedEvent={this.updateSelectedEvent}
+                updateShowEvents={this.updateShowEvents}
               />
             </Route>
             <Route path="/products">
-              <Cart cart={cart} />
+              <Cart
+                cart={cart}
+                updateChargeAmount={this.updateChargeAmount}
+                updateCart={this.updateCart}
+                updateLineItems={this.updateLineItemsHelper}
+                chargeAmount={chargeAmount}
+                collectCardPayment={this.collectCardPaymentHelper}
+                cancelPendingPayment={this.cancelPendingPayment}
+                updateShowFinish={this.updateShowFinish}
+                showFinish={showFinish}
+                success={success}
+                updateSuccess={this.updateSuccess}
+              />
             </Route>
             <Route path="/">
-              <BackendURLForm onSetBackendURL={this.onSetBackendURL} />;
+              <RegisterNewReader
+                onSubmitRegister={this.registerAndConnectNewReader}
+              />
             </Route>
           </Switch>
         </Router>
@@ -468,3 +401,7 @@ class App extends Component {
 }
 
 export default App;
+
+            // <Route path="/">
+            //   <BackendURLForm onSetBackendURL={this.onSetBackendURL} />;
+            // </Route>

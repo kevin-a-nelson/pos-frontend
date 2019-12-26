@@ -32,7 +32,7 @@ class RegisterNewReader extends React.Component {
   onSubmitRegister = event => {
     event.preventDefault();
     const { readerCode, readerLabel } = this.state;
-    this.props.onSubmitRegister(readerLabel, readerCode);
+    this.props.onSubmitRegister(readerCode, readerCode);
     this.setState({ submitted: true })
   };
 
@@ -67,7 +67,7 @@ class RegisterNewReader extends React.Component {
                 onChange={this.onChangeReaderCode}
                 ariaLabel="Registration code"
               />
-              <Text size={14} color="darkGrey">
+              {/* <Text size={14} color="darkGrey">
                 Reader label
               </Text>
               <TextInput
@@ -75,7 +75,7 @@ class RegisterNewReader extends React.Component {
                 value={readerLabel}
                 onChange={this.onChangeReaderLabel}
                 ariaLabel="Reader label"
-              />
+              /> */}
             </Group>
             <Group direction="row" alignment={{ justifyContent: "flex-end" }}>
               <Button color="white" onClick={onClickCancel}>
@@ -87,8 +87,6 @@ class RegisterNewReader extends React.Component {
                 type="submit"
                 disabled={
                   readerCode === null ||
-                  readerCode === "" ||
-                  readerLabel === null ||
                   readerCode === ""
                 }
                 color="primary"

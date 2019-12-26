@@ -3,35 +3,19 @@ import {
   BrowserRouter as Router,
   Switch,
   Route,
-  Link,
-  Redirect
 } from "react-router-dom";
-
-import ReactLoading from 'react-loading';
 
 import Client from './client';
 import Logger from './logger';
 
 
-import BackendURLForm from './Forms/BackendURLForm.jsx';
-import CommonWorkflows from './Forms/CommonWorkflows.jsx';
-import CartForm from './Forms/CartForm.jsx';
-import ConnectionInfo from './ConnectionInfo/ConnectionInfo.jsx';
-import Readers from './Forms/Readers.jsx';
 import RegisterNewReader from './Forms/RegisterNewReader.jsx'
 
-import Alert from 'react-bootstrap/Alert';
-import Button from './components/Button/Button.jsx';
-import Group from './components/Group/Group.jsx';
-import Icon from './components/Icon/Icon.jsx';
-import Section from './components/Section/Section.jsx';
-import Text from './components/Text/Text.jsx';
-import Connect from './components/Connect/Connect.jsx';
+
 import Cart from './components/Cart/Cart.jsx';
 
 import Products from './static/Products';
-
-import { css } from 'emotion';
+import Purchase from './components/Purchase/Purchase.jsx';
 import EventSelector from './components/EventSelector/EventSelector';
 
 
@@ -46,7 +30,6 @@ class App extends Component {
       discoveredReaders: [],
       connectionStatus: 'not_connected',
       reader: null,
-      readerLabel: '',
       registrationCode: '',
       cancelablePayment: false,
       chargeAmount: 0,
@@ -281,7 +264,7 @@ class App extends Component {
     if (!this.pendingPaymentIntentSecret) {
       try {
         let createIntentResponse = await this.client.createPaymentIntent({
-          amount: this.state.chargeAmount + this.state.taxAmount,
+          amount: this.state.chargeAmount * 100 + this.state.taxAmount,
           currency: this.state.currency,
           description: description,
         });
@@ -363,6 +346,10 @@ class App extends Component {
   render() {
     const { cart, chargeAmount, showFinish, success } = this.state;
 
+    // if (this.state.workFlowInProgress) {
+    //   return (<h1>Loading</h1>)
+    // }
+
     return (
       <div className="main-page" >
         <Router>
@@ -373,19 +360,18 @@ class App extends Component {
                 updateShowEvents={this.updateShowEvents}
               />
             </Route>
-            <Route path="/products">
+            <Route path="/checkout">
               <Cart
                 cart={cart}
-                updateChargeAmount={this.updateChargeAmount}
                 updateCart={this.updateCart}
-                updateLineItems={this.updateLineItemsHelper}
                 chargeAmount={chargeAmount}
+                updateChargeAmount={this.updateChargeAmount}
+                updateLineItems={this.updateLineItemsHelper}
+              />
+            </Route>
+            <Route path="/purchase">
+              <Purchase
                 collectCardPayment={this.collectCardPaymentHelper}
-                cancelPendingPayment={this.cancelPendingPayment}
-                updateShowFinish={this.updateShowFinish}
-                showFinish={showFinish}
-                success={success}
-                updateSuccess={this.updateSuccess}
               />
             </Route>
             <Route path="/">
@@ -401,7 +387,3 @@ class App extends Component {
 }
 
 export default App;
-
-            // <Route path="/">
-            //   <BackendURLForm onSetBackendURL={this.onSetBackendURL} />;
-            // </Route>

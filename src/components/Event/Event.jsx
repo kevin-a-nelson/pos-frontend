@@ -31,7 +31,7 @@ class Event extends React.Component {
         const { eventSelected } = this.state
 
         if (eventSelected) {
-            return <Redirect to="/products" />
+            return <Redirect to="/checkout" />
         }
 
         return (

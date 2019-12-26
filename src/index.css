@@ -392,6 +392,18 @@ code {
   100% { transform: rotate(360deg); }
 }
 
+.insert-card {
+  justify-content: center;
+}
+
+img.insert-card-img {
+  width: 100%;
+  max-width: 600px;
+  border-radius: 10%;
+  height: auto;
+  margin-bottom: 50px;
+}
+
 /* Events
    ========================================================================== */
 

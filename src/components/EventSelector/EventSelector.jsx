@@ -1,52 +1,42 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Event from '../Event/Event.jsx'
 
+const EventSelector = ({ setEvent, loading }) => {
+    const [events, setEvents] = useState(null)
 
-class EventSelector extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            events: null
-        }
-    }
-
-    componentWillMount() {
+    useEffect(() => {
         axios.get("https://events.prephoops.com/event-list")
             .then(response => {
-                this.setState({ events: response.data })
+                setEvents(response.data)
             })
             .catch(error => console.log("There was an error loading the API"))
+    }, [])
+
+    if (loading) {
+        return <h1>Loading ... </h1>
     }
 
-    render() {
-        const { events } = this.state
-        const { updateSelectedEvent, workFlowInProgress } = this.props
-
-        if (workFlowInProgress) {
-            return <h1>Loading ... </h1>
-        }
-        return (
-            <div>
-                {
-                    events ?
-                        events.map((event, index) =>
-                            <Event
-                                key={index}
-                                title={event.title}
-                                start_date={event.start_date}
-                                end_date={event.end_date}
-                                bg_image_path={event.bg_image_path}
-                                location_state={event.location_state}
-                                location_address_line_1={event.location_address_line_1}
-                                location_address_line_2={event.location_address_line_2}
-                                updateSelectedEvent={updateSelectedEvent}
-                            />
-                        ) : null
-                }
-            </div>
-        );
+    if (!events) {
+        return <h1>No Events</h1>
     }
+
+    return (
+        <div>
+            {
+                events.map((event, index) =>
+                    <Event
+                        key={index}
+                        event={event}
+                        title={event.title}
+                        image={"https://via.placeholder.com/250x150"}
+                        state={event.location_state}
+                        city={event.location_address_line_2}
+                        setEvent={setEvent}
+                    />)
+            }
+        </div>
+    )
 }
 
 export default EventSelector

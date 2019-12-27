@@ -1,63 +1,70 @@
 import React from 'react'
-import Button from '../Button/Button.jsx'
 
+const Product = ({ cart, index, item, setCart, updateChargeAmount }) => {
 
-class Product extends React.Component {
+  const calculateTotalCharge = () => {
+    let total = 0;
 
-  render() {
-    const { item, index, changeQuantity } = this.props
-    return (
-      <div
-        className="item-option"
-      >
-        <div className="item-option-img-container item-option-elem">
-          <img className="item-option-img" src={item.image} alt={item.label} />
-        </div>
-        <div className="item-option-label item-option-elem">
-          <p>{item.label}</p>
-        </div>
-        <div className="item-option-quantity-selector item-option-elem">
-          <Button onClick={() => changeQuantity(index, 1)}>+</Button>
-          <span className="item-option-quantity-selector-amount">{item.quantity}</span>
-          <Button onClick={() => changeQuantity(index, -1)}>-</Button>
-        </div>
-        <div className="item-option-price item-option-elem">
-          <p>${item.price}</p>
-        </div>
-      </div>
-    )
+    cart.forEach((item) => {
+      total += item.price * item.quantity
+    })
+    return total
   }
+
+  const changeQuantity = (change) => {
+    cart[index].quantity = cart[index].quantity + change;
+  }
+
+  const handleChangeQuantity = (change) => {
+    changeQuantity(change)
+    // setCart(cart)
+    const totalCharge = calculateTotalCharge()
+    updateChargeAmount(totalCharge)
+  }
+
+  return (
+    <div
+      className="item-option"
+    >
+      <div className="item-option-img-container item-option-elem">
+        <img className="item-option-img" src={item.image} alt={item.label} />
+      </div>
+      <div className="item-option-label item-option-elem">
+        <p>{item.label}</p>
+      </div>
+      <div className="item-option-quantity-selector item-option-elem">
+        <button tabIndex="-1" className="quantity-btn" onClick={() => handleChangeQuantity(1)}>+</button>
+        <span className="item-option-quantity-selector-amount">{item.quantity}</span>
+        <button tabIndex="-1" className="quantity-btn" onClick={() => handleChangeQuantity(-1)}>-</button>
+      </div>
+      <div className="item-option-price item-option-elem">
+        <p>${item.price}</p>
+      </div>
+    </div>
+  )
 }
 
-class Products extends React.Component {
+const Products = ({ cart, setCart, updateChargeAmount }) => {
+  return (
+    < div className="product-grid" >
+      {
+        (cart && cart.length) > 0 ?
+          cart.map((item, index) => (
+            <Product
+              key={index}
+              cart={cart}
+              setCart={setCart}
+              index={index}
+              item={item}
+              updateChargeAmount={updateChargeAmount}
+            />
+          ))
+          :
+          null
+      }
+    </div >
+  )
 
-  changeQuantity = (index, change) => {
-    const { cart, updateCart, calculateTotal } = this.props
-    cart[index].quantity = cart[index].quantity + change;
-    updateCart(cart)
-    calculateTotal(cart)
-  }
-
-  render() {
-    const { cart } = this.props
-    return (
-      <div className="product-grid">
-        {
-          (cart && cart.length) > 0 ?
-            cart.map((item, index) => (
-              <Product
-                index={index}
-                key={index}
-                item={item}
-                changeQuantity={this.changeQuantity}
-              />
-            ))
-            :
-            null
-        }
-      </div>
-    )
-  }
 }
 
 export default Products

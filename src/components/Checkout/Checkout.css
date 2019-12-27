@@ -1,0 +1,17 @@
+.checkout-total {
+  text-align: right;
+}
+
+.checkout-header {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+}
+
+.checkout-header-left {
+  text-align: left;
+}
+
+.checkout-header-right {
+  text-align: right;
+}

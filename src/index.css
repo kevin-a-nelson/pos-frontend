@@ -362,6 +362,15 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }
 
+.quantity-btn {
+  height: 30px;
+  border-radius: 5px;
+}
+
+.collect-payment-btn {
+  margin-bottom: 10px;
+}
+
 .center {
   margin: 0px auto;
 }

@@ -4,7 +4,6 @@ import './ErrorMessage.css'
 import { Link, Redirect } from 'react-router-dom'
 
 const ErrorMessage = ({ errorOccured, errorMsg, setErrorOccured, setErrorMsg }) => {
-  const [exiting, setExiting] = useState(false)
 
   if (!errorOccured || !errorMsg) {
     return null
@@ -13,11 +12,6 @@ const ErrorMessage = ({ errorOccured, errorMsg, setErrorOccured, setErrorMsg }) 
   const handleClick = () => {
     setErrorMsg(null)
     setErrorOccured(false)
-    setExiting(true)
-  }
-
-  if (exiting) {
-    return <Redirect to="/" />
   }
 
   return (

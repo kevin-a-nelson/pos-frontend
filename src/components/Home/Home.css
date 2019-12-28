@@ -1,0 +1,12 @@
+  
+.home {
+  max-width: 300px;
+  margin: 0px auto;
+}
+
+.reader-icon {
+  height: 10px;
+  display: block;
+  background-image: url('reader-large.png');
+  background-size: 100%;
+}

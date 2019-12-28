@@ -1,0 +1,13 @@
+.loader {
+  height: 100vh;
+}
+
+.loader-container {
+  display: grid;
+  /* background: blue; */
+  /* display: inline-block; */
+  /* grid-template-columns: repeat(auto-fill, 1px) */
+  /* grid-template-columns: 10px 10px 10px 10px 10px 10px 10px 10px 10px; */
+  /* height: 50vh; */
+}
+

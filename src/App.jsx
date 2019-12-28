@@ -13,9 +13,9 @@ import CollectPayment from './components/CollectPayment/CollectPayment.jsx';
 import EventSelector from './components/EventSelector/EventSelector';
 import Success from './components/Success/Success.jsx';
 import RegisterReader from './components/RegisterReader/RegisterReader.jsx'
-import ErrorBoundary from './components/ErrorBoundary/ErrorBoundary.jsx';
 import ErrorMessage from './components/ErrorMessage/ErrorMessage.jsx';
 import Loader from './components/Loader/Loader.jsx'
+
 
 import Products from './static/Products';
 import BackendUrl from './static/BackendUrl';
@@ -25,8 +25,8 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 const App = ({ client, terminal }) => {
   const [chargeAmount, setChargeAmount] = useState(0)
-  const [taxAmount, setTaxAmount] = useState(0)
-  const [currency, setCurrency] = useState('usd')
+  const [taxAmount] = useState(0)
+  const [currency] = useState('usd')
   const [workFlowInProgress, setWorkFlowInProgress] = useState(false)
   const [event, setEvent] = useState("")
   const [errorOccured, setErrorOccured] = useState(false)
@@ -73,12 +73,12 @@ const App = ({ client, terminal }) => {
   const registerAndConnectReaderWorkFlow = async (registrationCode) => { runWorkflow(registerAndConnectReader, registrationCode) }
 
 
-  useEffect(() => {
-    const registrationCode = window.localStorage.registration_code
-    if (registrationCode) {
-      registerAndConnectReaderWorkFlow(registrationCode)
-    }
-  }, [])
+  // useEffect(() => {
+  //   const registrationCode = window.localStorage.registration_code
+  //   if (registrationCode) {
+  //     registerAndConnectReaderWorkFlow(registrationCode)
+  //   }
+  // }, [])
 
 
   //////////////////////////////

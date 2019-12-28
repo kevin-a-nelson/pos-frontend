@@ -1,0 +1,15 @@
+.collect-payment-btn {
+  margin-bottom: 10px;
+}
+
+.insert-card {
+  justify-content: center;
+}
+
+img.insert-card-img {
+  width: 100%;
+  max-width: 600px;
+  border-radius: 10%;
+  height: auto;
+  margin-bottom: 50px;
+}

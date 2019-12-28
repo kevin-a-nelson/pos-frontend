@@ -7,17 +7,11 @@ import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 
 const RegisterReader = ({ registerReader, errorOccured }) => {
-  const [registered, setRegistered] = useState(false)
   let formRef = React.createRef();
 
   const handleRegister = () => {
     const registrationCode = formRef.current.value
     registerReader(registrationCode)
-    setRegistered(true)
-  }
-
-  if (registered && !errorOccured) {
-    return <Redirect to="/events" />
   }
 
   return (

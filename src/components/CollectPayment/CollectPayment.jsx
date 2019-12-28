@@ -4,7 +4,7 @@ import Button from 'react-bootstrap/Button'
 import { Redirect, Link } from 'react-router-dom'
 
 
-const CollectPayment = ({ collectPayment, cancelPayment, emptyCart }) => {
+const CollectPayment = ({ collectPayment, cancelPayment, emptyCart, collectingPayment }) => {
   const [paymentCollected, setPaymentCollected] = useState(false)
 
   const handleCollectPayment = () => {
@@ -18,7 +18,7 @@ const CollectPayment = ({ collectPayment, cancelPayment, emptyCart }) => {
     paymentCollected(false)
   }
 
-  if (paymentCollected) {
+  if (paymentCollected && !collectingPayment) {
     return <Redirect to="/success" />
   }
 

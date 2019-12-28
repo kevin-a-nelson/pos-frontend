@@ -72,13 +72,6 @@ const App = ({ client, terminal }) => {
   **/
   const registerAndConnectReaderWorkFlow = async (registrationCode) => { runWorkflow(registerAndConnectReader, registrationCode) }
 
-  useEffect(() => {
-    const registrationCode = window.localStorage.registration_code
-    if (registrationCode) {
-      registerAndConnectReaderWorkFlow(registrationCode)
-    }
-  }, [])
-
   //////////////////////////////
   // Checkout Component Funcs //
   //////////////////////////////
@@ -213,6 +206,7 @@ const App = ({ client, terminal }) => {
               cancelPayment={cancelPaymentWorkFlow}
               emptyCart={emptyCart}
               errorOccured={errorOccured}
+              collectingPayment={workFlowInProgress}
             />
           </Route>
           <Route path="/success">

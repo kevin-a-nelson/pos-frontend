@@ -12,6 +12,7 @@ const ErrorMessage = ({ errorOccured, errorMsg, setErrorOccured, setErrorMsg }) 
   const handleClick = () => {
     setErrorMsg(null)
     setErrorOccured(false)
+
   }
 
   return (

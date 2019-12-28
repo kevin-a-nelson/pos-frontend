@@ -72,14 +72,12 @@ const App = ({ client, terminal }) => {
   **/
   const registerAndConnectReaderWorkFlow = async (registrationCode) => { runWorkflow(registerAndConnectReader, registrationCode) }
 
-
-  // useEffect(() => {
-  //   const registrationCode = window.localStorage.registration_code
-  //   if (registrationCode) {
-  //     registerAndConnectReaderWorkFlow(registrationCode)
-  //   }
-  // }, [])
-
+  useEffect(() => {
+    const registrationCode = window.localStorage.registration_code
+    if (registrationCode) {
+      registerAndConnectReaderWorkFlow(registrationCode)
+    }
+  }, [])
 
   //////////////////////////////
   // Checkout Component Funcs //

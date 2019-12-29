@@ -232,7 +232,9 @@ const App = ({ client, terminal }) => {
           />
         </Route>
         <Route path="/confirm">
-          <AskCustomer />
+          <AskCustomer
+            terminal={terminal}
+          />
         </Route>
         <Route path="/collect">
           <CollectPayment

@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import InsertCard from '../../assets/insertCard.png'
+import dollarSign from '../../assets/dollarSign.png'
 import Button from 'react-bootstrap/Button'
 import { Redirect, Link } from 'react-router-dom'
 import "./CollectPayment.css"
@@ -39,7 +39,7 @@ const CollectPayment = ({ collectPayment, cancelPayment, emptyCart, collectingPa
 
   return (
     <div className="insert-card">
-      <img className="insert-card-img" src={InsertCard} alt="Insert Card" />
+      <img className="insert-card-img" src={dollarSign} alt="Insert Card" />
       <div className="insert-card-btns">
         <Button size="md" disabled={collectingPayment} className="btn" variant="primary" onClick={() => handleCollectPayment()} block>Collect Payment</Button>
         <Button size="md" variant="outline-primary" className="btn" onClick={() => handleCancelPayment()} block>Cancel Payment</Button>

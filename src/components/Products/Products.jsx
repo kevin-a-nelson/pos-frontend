@@ -1,5 +1,7 @@
 import React from 'react'
 
+import "./Products.css"
+
 const Product = ({ cart, index, item, setCart, updateChargeAmount }) => {
 
   const calculateTotalCharge = () => {

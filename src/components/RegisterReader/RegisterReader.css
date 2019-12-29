@@ -1,3 +1,9 @@
 .register-reader {
-  margin-top: 30vh;
+  max-width: 300px;
+  margin: 0px auto;
+  padding-top: 10vh;
+}
+
+.back-btn {
+  margin-left: 10px;
 }

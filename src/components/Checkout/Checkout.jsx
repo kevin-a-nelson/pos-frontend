@@ -10,14 +10,15 @@ const Checkout = ({ cart, setCart, chargeAmount, updateChargeAmount, setReaderDi
   const handleCheckout = () => {
     setReaderDisplay()
     setCheckedOut(true)
+    window.scrollTo(0, 0);
   }
 
   if (checkedOut && !errorOccured) {
-    return <Redirect to="/collect" />
+    return <Redirect to="/confirm" />
   }
 
   return (
-    <div>
+    <div className="checkout">
       <div className="checkout-header">
         <div className="checkout-header-left">
           <h1>Total: </h1>
@@ -26,12 +27,12 @@ const Checkout = ({ cart, setCart, chargeAmount, updateChargeAmount, setReaderDi
           <h1>${chargeAmount}</h1>
         </div>
       </div>
-      <Button onClick={() => handleCheckout()} block>Checkout</Button>
       <Products
         cart={cart}
         setCart={setCart}
         updateChargeAmount={updateChargeAmount}
       />
+      <Button size="lg" className="checkout-btn" disabled={chargeAmount === 0} onClick={() => handleCheckout()} block>Checkout</Button>
     </div>
   )
 }

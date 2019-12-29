@@ -1,9 +1,9 @@
-.collect-payment-btn {
-  margin-bottom: 10px;
-}
+
 
 .insert-card {
-  justify-content: center;
+  padding-top: 20vh;
+  margin: 0 auto;
+  max-width: 300px;
 }
 
 img.insert-card-img {
@@ -13,3 +13,4 @@ img.insert-card-img {
   height: auto;
   margin-bottom: 50px;
 }
+

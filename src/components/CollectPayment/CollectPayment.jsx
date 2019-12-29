@@ -2,10 +2,12 @@ import React, { useState } from 'react'
 import InsertCard from '../../assets/insertCard.png'
 import Button from 'react-bootstrap/Button'
 import { Redirect, Link } from 'react-router-dom'
+import "./CollectPayment.css"
 
 
-const CollectPayment = ({ collectPayment, cancelPayment, emptyCart, collectingPayment }) => {
+const CollectPayment = ({ collectPayment, cancelPayment, emptyCart, collectingPayment, errorOccured, terminal }) => {
   const [paymentCollected, setPaymentCollected] = useState(false)
+  const [paymentCanceled, setPaymentCanceled] = useState(false)
 
   const handleCollectPayment = () => {
     collectPayment()
@@ -14,22 +16,35 @@ const CollectPayment = ({ collectPayment, cancelPayment, emptyCart, collectingPa
   }
 
   const handleCancelPayment = () => {
+
+    if (!paymentCollected) {
+      emptyCart()
+      setPaymentCanceled(true)
+      terminal.clearReaderDisplay()
+      return
+    }
+
     cancelPayment()
-    paymentCollected(false)
+    setPaymentCollected(false)
+    setPaymentCanceled(true)
   }
 
-  if (paymentCollected && !collectingPayment) {
+  if (paymentCanceled) {
+    return <Redirect to="/checkout" />
+  }
+
+  if (paymentCollected && !collectingPayment && !errorOccured) {
     return <Redirect to="/success" />
   }
 
   return (
     <div className="insert-card">
       <img className="insert-card-img" src={InsertCard} alt="Insert Card" />
-      <Button className="collect-payment-btn" variant="primary" onClick={() => handleCollectPayment()} block>Collect Payment</Button>
-      <Link to="/checkout">
-        <Button variant="outline-primary" block>Back</Button>
-      </Link>
-    </div >
+      <div className="insert-card-btns">
+        <Button size="md" disabled={collectingPayment} className="btn" variant="primary" onClick={() => handleCollectPayment()} block>Collect Payment</Button>
+        <Button size="md" variant="outline-primary" className="btn" onClick={() => handleCancelPayment()} block>Cancel Payment</Button>
+      </div>
+    </div>
   )
 }
 

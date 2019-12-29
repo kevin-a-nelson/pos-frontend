@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Event from '../Event/Event.jsx'
+import { Redirect } from 'react-router-dom';
 
-const EventSelector = ({ setEvent, loading }) => {
+const EventSelector = ({ setEvent }) => {
     const [events, setEvents] = useState(null)
 
     useEffect(() => {
@@ -13,12 +14,8 @@ const EventSelector = ({ setEvent, loading }) => {
             .catch(error => console.log("There was an error loading the API"))
     }, [])
 
-    if (loading) {
-        return <h1>Loading ... </h1>
-    }
-
     if (!events) {
-        return <h1>No Events</h1>
+        return <Redirect to="/checkout" />
     }
 
     return (

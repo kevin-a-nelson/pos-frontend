@@ -19,6 +19,9 @@ class Client {
       onUnexpectedReaderDisconnect: console.log,
       onConnectionStatusChange: console.log
     });
+
+    terminal.onUnexpectedReaderDisconnect = terminal.clearReaderDisplay
+
     return terminal
   }
 

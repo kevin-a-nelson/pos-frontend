@@ -12,14 +12,13 @@ const ErrorMessage = ({ errorOccured, errorMsg, setErrorOccured, setErrorMsg }) 
   const handleClick = () => {
     setErrorMsg(null)
     setErrorOccured(false)
-
   }
 
   return (
     <div>
       <Alert className="error-msg" variant="danger">
         {errorMsg}<br />
-        <Link onClick={() => handleClick()}>home</Link>
+        <Link onClick={() => setErrorMsg(null)}>Close</Link>
       </Alert>
     </div>
   )

@@ -3,7 +3,10 @@ import {
   BrowserRouter as Router,
   Switch,
   Route,
+  Redirect,
 } from "react-router-dom";
+
+import Button from "react-bootstrap/Button"
 
 import Client from './client';
 
@@ -15,6 +18,7 @@ import Success from './components/Success/Success.jsx';
 import RegisterReader from './components/RegisterReader/RegisterReader.jsx'
 import ErrorMessage from './components/ErrorMessage/ErrorMessage.jsx';
 import Loader from './components/Loader/Loader.jsx'
+import AskCustomer from "./components/AskCustomer/AskCustomer.jsx"
 
 
 import Products from './static/Products';
@@ -23,7 +27,29 @@ import ErrorSnippets from './static/ErrorSnippets'
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 
+
+class Test extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      chargeAmount: 0,
+      taxAmount: 0,
+      currency: 0,
+      workFlowInProgress: 0,
+      event: "",
+      errorOccured: false,
+      errorMsg: "",
+      cart: Products,
+      readerRegistered: false
+    }
+
+    this.client = new Client(BackendUrl)
+    this.terminal = this.client.initTerminal()
+  }
+}
+
 const App = ({ client, terminal }) => {
+
   const [chargeAmount, setChargeAmount] = useState(0)
   const [taxAmount] = useState(0)
   const [currency] = useState('usd')
@@ -32,6 +58,7 @@ const App = ({ client, terminal }) => {
   const [errorOccured, setErrorOccured] = useState(false)
   const [errorMsg, setErrorMsg] = useState("")
   const [cart, setCart] = useState(Products)
+  const [readerRegistered, setReaderRegistered] = useState(false)
 
   const setFriendlyErrorMessage = (errorMsg) => {
     ErrorSnippets.forEach((errorSnippet) => {
@@ -70,7 +97,9 @@ const App = ({ client, terminal }) => {
   /*
   Loading Screen While Registering and Connecting to Reader
   **/
-  const registerAndConnectReaderWorkFlow = async (registrationCode) => { runWorkflow(registerAndConnectReader, registrationCode) }
+  const registerAndConnectReaderWorkFlow = async (registrationCode) => {
+    runWorkflow(registerAndConnectReader, registrationCode)
+  }
 
   //////////////////////////////
   // Checkout Component Funcs //
@@ -112,7 +141,6 @@ const App = ({ client, terminal }) => {
   Display Items Costomer Checked out on Reader
   **/
   const setReaderDisplay = async () => {
-    console.log(terminal)
     const readerDisplay = createReaderDisplay()
     await terminal.setReaderDisplay(readerDisplay);
   };
@@ -167,56 +195,63 @@ const App = ({ client, terminal }) => {
   }
 
   return (
-    <div className="main-page">
-      <Router>
-        <Loader
-          loading={workFlowInProgress}
-        />
-        <ErrorMessage
-          errorMsg={errorMsg}
-          setErrorMsg={setErrorMsg}
-          errorOccured={errorOccured}
-          setErrorOccured={setErrorOccured}
-        />
-        <Switch>
-          <Route path="/register">
-            <RegisterReader
-              registerReader={registerAndConnectReaderWorkFlow}
-              errorOccured={errorOccured}
-            />
-          </Route>
-          <Route path="/events">
-            <EventSelector
-              setEvent={setEvent}
-            />
-          </Route>
-          <Route path="/checkout">
-            <Checkout
-              cart={Products}
-              setCart={setCart}
-              chargeAmount={chargeAmount}
-              updateChargeAmount={setChargeAmount}
-              setReaderDisplay={setReaderDisplayWorkFlow}
-              errorOccured={errorOccured}
-            />
-          </Route>
-          <Route path="/collect">
-            <CollectPayment
-              collectPayment={collectPaymentWorkFlow}
-              cancelPayment={cancelPaymentWorkFlow}
-              emptyCart={emptyCart}
-              errorOccured={errorOccured}
-              collectingPayment={workFlowInProgress}
-            />
-          </Route>
-          <Route path="/success">
-            <Success />
-          </Route>
-          <Route path="/">
-            <Home />
-          </Route>
-        </Switch>
-      </Router>
+    <div className="app">
+      {
+        !readerRegistered ? <Redirect to="/" /> : null
+      }
+      <Loader
+        loading={workFlowInProgress}
+      />
+      <ErrorMessage
+        errorMsg={errorMsg}
+        setErrorMsg={setErrorMsg}
+        errorOccured={errorOccured}
+        setErrorOccured={setErrorOccured}
+      />
+      <Switch>
+        <Route path="/register">
+          <RegisterReader
+            setReaderRegistered={setReaderRegistered}
+            registerReader={registerAndConnectReaderWorkFlow}
+            errorOccured={errorOccured}
+          />
+        </Route>
+        <Route path="/events">
+          <EventSelector
+            setEvent={setEvent}
+          />
+        </Route>
+        <Route path="/checkout">
+          <Checkout
+            cart={Products}
+            setCart={setCart}
+            chargeAmount={chargeAmount}
+            updateChargeAmount={setChargeAmount}
+            setReaderDisplay={setReaderDisplayWorkFlow}
+            errorOccured={errorOccured}
+          />
+        </Route>
+        <Route path="/confirm">
+          <AskCustomer />
+        </Route>
+        <Route path="/collect">
+          <CollectPayment
+            collectPayment={collectPaymentWorkFlow}
+            cancelPayment={cancelPaymentWorkFlow}
+            emptyCart={emptyCart}
+            errorOccured={errorOccured}
+            collectingPayment={workFlowInProgress}
+            terminal={terminal}
+          />
+        </Route>
+        <Route path="/success">
+          <Success />
+        </Route>
+        <Route path="/">
+          <Home />
+        </Route>
+        <Button onClick={() => terminal.clearReaderDisplay()}>Clear Reader</Button>
+      </Switch>
     </div >
   );
 }
@@ -227,10 +262,12 @@ const AppWrapper = () => {
   const terminal = client.initTerminal()
 
   return (
-    <App
-      client={client}
-      terminal={terminal}
-    />
+    <Router>
+      <App
+        client={client}
+        terminal={terminal}
+      />
+    </Router>
   )
 }
 

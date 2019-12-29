@@ -1,9 +1,16 @@
 import React from 'react'
 
+import "./Loader.css"
+
 const Loader = ({ loading }) => {
+
   if (!loading) { return null }
 
-  return <h1>Loading ... </h1>
+  return (
+    <div className="loader-container">
+      <div className="loader"></div>
+    </div>
+  )
 }
 
 export default Loader

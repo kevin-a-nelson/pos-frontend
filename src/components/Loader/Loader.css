@@ -1,13 +1,15 @@
 .loader-container {
-  /* max-width: 300px;
+  max-width: 300px;
   margin: 0 auto;
   justify-content: center;
   display: flex;
-  padding-top: 50px; */
-  position: fixed;
+  /* padding-top: 50px; */
+  padding-top: 10vh;
+  height: 120vh;
+  /* position: fixed;
   z-index: 99;
   top: 30px;
-  left: 30px;
+  left: 30px; */
 }
 
 .loader {

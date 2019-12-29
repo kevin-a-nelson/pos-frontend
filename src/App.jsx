@@ -27,27 +27,6 @@ import ErrorSnippets from './static/ErrorSnippets'
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-
-class Test extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      chargeAmount: 0,
-      taxAmount: 0,
-      currency: 0,
-      workFlowInProgress: 0,
-      event: "",
-      errorOccured: false,
-      errorMsg: "",
-      cart: Products,
-      readerRegistered: false
-    }
-
-    this.client = new Client(BackendUrl)
-    this.terminal = this.client.initTerminal()
-  }
-}
-
 const App = ({ client, terminal }) => {
 
   const [chargeAmount, setChargeAmount] = useState(0)

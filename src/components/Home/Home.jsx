@@ -9,10 +9,10 @@ const Home = () => {
   return (
     <div className="home">
       <img src={readerImg} />
+      <p>Enter</p>
+      <p className="nums"><strong>0 7 1 3 9</strong></p>
+      <p>Into the reader</p>
       <div className="home-text-btn-container">
-        <p>Enter</p>
-        <p className="nums"><strong>0 7 1 3 9</strong></p>
-        <p>Into the reader</p>
         <Link to="/register">
           <Button block>Next</Button>
         </Link>

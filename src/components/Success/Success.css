@@ -1,0 +1,21 @@
+
+
+.success-container {
+  margin: 0px auto;
+  max-width: 300px;
+  text-align: center;
+}
+
+.success-container h1 {
+  position: relative;
+  top: 50px;
+}
+
+.success-img-container {
+  /* background: blue; */
+}
+
+.success-img {
+  width: 100%;
+  height: auto;
+}

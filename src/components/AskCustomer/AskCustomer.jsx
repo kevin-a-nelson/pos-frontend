@@ -10,7 +10,9 @@ const AskCustomer = (props) => {
   return (
     <div className="ask-customer">
       <h1>Insert Card</h1>
-      <img src={InsertCard} />
+      <div className="ask-customer-img-container">
+        <img className="ask-customer-img" src={InsertCard} />
+      </div>
       <Link to="/collect">
         <Button className="next-btn" block>Next</Button>
       </Link>

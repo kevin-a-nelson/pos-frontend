@@ -1,12 +1,57 @@
-.landing {
-
-  max-width: 180px;
+.generic {
+  max-width: 250px;
   margin: 10vh auto 0 auto;
   text-align: center;
   line-height: 20px;
+
+  .img-container {
+    width: 100%;
+
+    img {
+      width: 100%;
+      height: auto;
+    }
+  }
+
+  .btn-container {
+    margin-top: 0px;
+  }
+}
+
+.payment-successful {
+
+  .img-container {
+    margin-top: 70px;
+  }
+
+  .btn-container {
+    margin-top: 30px;
+  }
+}
+
+.collect-payment {
+
+  .btn-container {
+    margin-top: 50px;
+  }
+}
+
+
+.landing {
+
+  max-width: 200px;
+
+  .img-container {
+    width: 150px;
+    margin: 0px auto;
+  }
 
   .line2 {
     font-size: 30px;
     font-weight: 700;
   }
 }
+
+
+
+

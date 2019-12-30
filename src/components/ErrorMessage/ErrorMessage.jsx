@@ -14,7 +14,9 @@ const ErrorMessage = ({ errorMsg, onClose }) => {
       <Alert className="error-msg" variant="danger">
         {errorMsg}
         <br />
-        <Link onClick={onClose}>Close</Link>
+        <div className="error-msg-close-container">
+          <Link onClick={() => onClose(null)}>Close</Link>
+        </div>
       </Alert>
     </div>
   )

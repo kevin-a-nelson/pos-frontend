@@ -13,6 +13,11 @@ const Instruction = (props) => {
   } = props
 
   const Lines = () => {
+
+    if (!lines || lines.length === 0) {
+      return null
+    }
+
     return lines.map((line, index) => {
       return (
         <p
@@ -25,12 +30,18 @@ const Instruction = (props) => {
   }
 
   const Buttons = () => {
+
+    if (!btns || btns.length === 0) {
+      return null
+    }
+
     return btns.map((btn, index) => {
       return (
         <Button
           key={index}
+          variant={btn.variant}
           className={`btn${index}`}
-          onClick={btn.onClick}
+          onClick={() => btn.onClick()}
           block={btn.block}
         >
           {btn.text}
@@ -40,11 +51,15 @@ const Instruction = (props) => {
   }
 
   return (
-    <div className={className}>
+    <div className={`generic ${className}`}>
       <h1>{header}</h1>
-      <img src={img} alt="img" />
+      <div className="img-container">
+        <img src={img} alt="img" />
+      </div>
       <Lines />
-      <Buttons />
+      <div className="btn-container">
+        <Buttons />
+      </div>
     </div >
   )
 }

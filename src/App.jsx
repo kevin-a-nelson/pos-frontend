@@ -4,6 +4,7 @@ import {
   Switch,
   Route,
   Redirect,
+  withRouter,
 } from "react-router-dom";
 
 import Button from "react-bootstrap/Button"
@@ -58,6 +59,8 @@ class Test extends React.Component {
 
   render() {
 
+    const { math, location, history } = this.props;
+
     const landing = {
       className: "landing",
       header: null,
@@ -68,24 +71,25 @@ class Test extends React.Component {
         { text: "Into the reader" },
       ],
       btns: [
-        { text: "Next", variant: "primary", onClick: () => console.log("Hello"), block: true },
+        { text: "Next", variant: "primary", onClick: () => history.push("/register"), block: true },
       ]
     }
 
     return (
-      <Router>
-        <Switch>
-          <Route path="/">
-            <Instruction
-              className={landing.className}
-              header={landing.header}
-              img={landing.img}
-              lines={landing.lines}
-              btns={landing.btns}
-            />
-          </Route>
-        </Switch>
-      </Router >
+      <Switch>
+        <Route path="/register">
+          <h1>It worked!</h1>
+        </Route>
+        <Route path="/">
+          <Instruction
+            className={landing.className}
+            header={landing.header}
+            img={landing.img}
+            lines={landing.lines}
+            btns={landing.btns}
+          />
+        </Route>
+      </Switch>
     )
   }
 }
@@ -317,4 +321,4 @@ const AppWrapper = () => {
   )
 }
 
-export default Test
+export default withRouter(Test)

@@ -4,7 +4,6 @@ import Form from "react-bootstrap/Form"
 
 import "./InputForm.scss"
 
-
 const InputForm = (props) => {
   const [formValue, setFormValue] = useState()
 

@@ -1,5 +1,4 @@
 import React from 'react'
-
 import "./Product.css"
 
 const Product = (props) => {
@@ -10,7 +9,7 @@ const Product = (props) => {
     onQtyChange
   } = props
 
-  const marginTop = item.lines === 2 ? "mt-6per" : "mt-8per";
+  const marginTop = item.lines === 1 ? "mt-8per" : "mt-6per";
 
   return (
     <div
@@ -20,7 +19,7 @@ const Product = (props) => {
         <img className="product-img" src={item.image} alt={item.label} />
       </div>
       <div className={`product-label w-25per ${marginTop}`}>
-        <p>{item.label}</p>
+        <p>{item.label} </p>
       </div>
       <div className="product-quantity-selector w-25per">
         <button tabIndex="-1" className="quantity-btn" onClick={() => onQtyChange(1, index)}>+</button>

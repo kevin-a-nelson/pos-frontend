@@ -7,3 +7,11 @@
   0%,100% { opacity: 0 }
   100% { opacity: 1 }
 } */
+
+/* @import url('https://fonts.googleapis.com/css?family=Josefin+Sans'); */
+@import url('https://fonts.googleapis.com/css?family=Lora');
+
+.app {
+  font-family: Lora;
+}
+

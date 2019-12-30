@@ -1,6 +1,7 @@
 import React from 'react'
 import Products from '../Products/Products.jsx'
 import Button from 'react-bootstrap/Button';
+import Alert from 'react-bootstrap/Alert'
 import './Checkout.css'
 
 const Checkout = (props) => {
@@ -15,11 +16,11 @@ const Checkout = (props) => {
   return (
     <div className="checkout">
       <div className="checkout-header">
-        <div className="checkout-header-left">
-          <h1>Total: </h1>
+        <div id="total-container">
+          <span id="total">Total</span>
         </div>
-        <div className="checkout-header-right">
-          <h1>${chargeAmount}</h1>
+        <div id="amount-container">
+          <span id="amount">${chargeAmount}</span>
         </div>
       </div>
       <Products

@@ -40,7 +40,7 @@ const Instruction = (props) => {
         <Button
           key={index}
           variant={btn.variant}
-          className={`btn${index}`}
+          className={`btn${index + 1}`}
           onClick={() => btn.onClick()}
           block={btn.block}
           size={btn.size || "lg"}

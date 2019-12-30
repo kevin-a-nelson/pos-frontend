@@ -30,6 +30,7 @@ import Products from './static/Products';
 import BackendUrl from './static/BackendUrl';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
+import "./index.css"
 
 class App extends React.Component {
   constructor(props) {
@@ -342,7 +343,8 @@ class App extends React.Component {
         {
           text: "Return to Checkout",
           block: true,
-          onClick: goToCheckout
+          onClick: goToCheckout,
+          variant: "outline-primary",
         }
       ]
     }
@@ -356,7 +358,7 @@ class App extends React.Component {
     }
 
     return (
-      <div>
+      <div className="app">
         {/* Redirect use to landing page if not connected to reader */}
         {
           // !isConnected ? <Redirect to="/" /> : null

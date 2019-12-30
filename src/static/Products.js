@@ -7,7 +7,7 @@ export default [
     weekDayOnly: false,
     lines: 1,
     quantity: 0,
-    image: "https://via.placeholder.com/100x75"
+    image: "http://sportsteam.com/pub/media/catalog/product//9/1/91285.jpg"
   },
   {
     id: 2,
@@ -17,7 +17,7 @@ export default [
     weekDayOnly: false,
     lines: 1,
     quantity: 0,
-    image: "https://via.placeholder.com/100x75"
+    image: "http://sportsteam.com/pub/media/catalog/product//9/1/91285.jpg"
   },
   {
     id: 3,
@@ -27,7 +27,7 @@ export default [
     weekDayOnly: false,
     lines: 1,
     quantity: 0,
-    image: "https://via.placeholder.com/100x75"
+    image: "http://sportsteam.com/pub/media/catalog/product//9/1/91285.jpg"
   },
   {
     id: 6,
@@ -37,7 +37,7 @@ export default [
     weekDayOnly: false,
     lines: 2,
     quantity: 0,
-    image: "https://via.placeholder.com/100x75"
+    image: "https://designmodo.com/demo/shopping-cart/item-1.png"
   },
   {
     id: 7,
@@ -47,7 +47,7 @@ export default [
     weekDayOnly: false,
     lines: 1,
     quantity: 0,
-    image: "https://via.placeholder.com/100x75"
+    image: "https://designmodo.com/demo/shopping-cart/item-1.png"
   },
   {
     id: 8,
@@ -57,7 +57,7 @@ export default [
     weekDayOnly: true,
     lines: 2,
     quantity: 0,
-    image: "https://via.placeholder.com/100x75"
+    image: "https://designmodo.com/demo/shopping-cart/item-1.png"
   },
   {
     id: 9,
@@ -67,6 +67,6 @@ export default [
     weekDayOnly: true,
     lines: 2,
     quantity: 0,
-    image: "https://via.placeholder.com/100x75"
+    image: "https://designmodo.com/demo/shopping-cart/item-1.png"
   },
 ];

@@ -1,4 +1,5 @@
 .generic {
+  font-size: 18px;
   max-width: 300px;
   margin: 10vh auto 0 auto;
   text-align: center;
@@ -20,6 +21,13 @@
 
   .btn-container {
     margin-top: 30px;
+  }
+}
+
+.landing {
+  .line2 {
+    font-size: 30px;
+    font-weight: 600;
   }
 }
 

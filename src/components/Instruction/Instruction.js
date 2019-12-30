@@ -52,7 +52,7 @@ const Instruction = (props) => {
   }
 
   return (
-    <div className={`generic`}>
+    <div className={`generic ${className}`}>
       <div className="header-container">
         <h1>{header}</h1>
       </div>

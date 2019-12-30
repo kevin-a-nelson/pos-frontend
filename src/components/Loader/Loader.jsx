@@ -7,8 +7,18 @@ const Loader = ({ loading }) => {
   if (!loading) { return null }
 
   return (
-    <div className="loader-container">
-      <div className="loader"></div>
+    <div className="lds-grid-container">
+      <div class="lds-grid">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
     </div>
   )
 }

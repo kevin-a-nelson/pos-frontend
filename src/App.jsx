@@ -347,6 +347,10 @@ class App extends React.Component {
       ]
     }
 
+    if (true) {
+      return <Loader loading={true} />
+    }
+
     if (isLoading) {
       return <Loader loading={isLoading} />
     }

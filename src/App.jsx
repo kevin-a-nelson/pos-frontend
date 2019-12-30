@@ -92,6 +92,8 @@ class Test extends React.Component {
 
     const { history } = this.props;
 
+
+    // Landing Props
     const landing = {
       className: "landing",
       header: null,
@@ -106,6 +108,7 @@ class Test extends React.Component {
       ]
     }
 
+    // Registartion Props
     const onRegister = (registrationCode) => {
       this.withLoadingAndErrors(this.registerAndConnectReader, registrationCode)
       history.push("/checkout")
@@ -126,6 +129,11 @@ class Test extends React.Component {
 
     return (
       <div>
+        <ErrorMessage
+          errorMsg={errorMsg}
+          errorOccured={errorOccured}
+          onClose={() => this.setErrorOccured(false)}
+        />
         <Switch>
           <Route path="/register">
             <InputForm

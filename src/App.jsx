@@ -21,8 +21,8 @@ import InputForm from "./components/InputForm/InputForm"
 
 // Images
 import ReaderImg from "./assets/reader-large.png"
-import BlueCheck from "./assets/blueCheck.png"
-import InsertCard from "./assets/insertCard2.png"
+import BlueCheck from "./assets/blueCheck3.png"
+import InsertCard from "./assets/creditCard2.png"
 import DollarSign from "./assets/dollarSign.png"
 
 // Static Data
@@ -173,6 +173,7 @@ class App extends React.Component {
         cart: {
           line_items: lineItems,
           tax: taxAmount,
+          // Reader displays 100 as 1.00 so everything needs to be mult by 100
           total: chargeAmount * 100 + taxAmount,
           currency: currency,
         },
@@ -317,8 +318,7 @@ class App extends React.Component {
     }
 
     const collectPaymentProps = {
-      className: "collect-payment",
-      header: "Collect Payment",
+      header: "Collect",
       img: DollarSign,
       btns: [
         {
@@ -336,7 +336,6 @@ class App extends React.Component {
     }
 
     const paymentSuccessful = {
-      className: "payment-successful",
       header: "Success",
       img: BlueCheck,
       btns: [
@@ -354,9 +353,9 @@ class App extends React.Component {
 
     return (
       <div>
-        {/* Redirect use to landing page if not connected */}
+        {/* Redirect use to landing page if not connected to reader */}
         {
-          !isConnected ? <Redirect to="/" /> : null
+          // !isConnected ? <Redirect to="/" /> : null
         }
         <ErrorMessage
           errorMsg={errorMsg}
@@ -389,6 +388,7 @@ class App extends React.Component {
           </Route>
           <Route path="/collect">
             <Instruction
+              header={collectPaymentProps.header}
               className={collectPaymentProps.className}
               img={collectPaymentProps.img}
               btns={collectPaymentProps.btns}

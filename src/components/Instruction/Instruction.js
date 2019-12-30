@@ -9,7 +9,7 @@ const Instruction = (props) => {
     header,
     img,
     btns,
-    lines
+    lines,
   } = props
 
   const Lines = () => {
@@ -43,6 +43,7 @@ const Instruction = (props) => {
           className={`btn${index}`}
           onClick={() => btn.onClick()}
           block={btn.block}
+          size={btn.size || "lg"}
         >
           {btn.text}
         </Button >
@@ -51,8 +52,10 @@ const Instruction = (props) => {
   }
 
   return (
-    <div className={`generic ${className}`}>
-      <h1>{header}</h1>
+    <div className={`generic`}>
+      <div className="header-container">
+        <h1>{header}</h1>
+      </div>
       <div className="img-container">
         <img src={img} alt="img" />
       </div>

@@ -20,6 +20,9 @@ import ErrorMessage from './components/ErrorMessage/ErrorMessage.jsx';
 import Loader from './components/Loader/Loader.jsx'
 import AskCustomer from "./components/AskCustomer/AskCustomer.jsx"
 
+import Instruction from "./components/Instruction/Instruction"
+
+import ReaderImg from "./assets/reader-large.png"
 
 import Products from './static/Products';
 import BackendUrl from './static/BackendUrl';
@@ -53,24 +56,36 @@ class Test extends React.Component {
   setCart(cart) { this.setState({ cart }) }
   setState(readerRegistered) { this.setState({ readerRegistered }) }
 
-
-
   render() {
+
+    const landing = {
+      className: "landing",
+      header: null,
+      img: ReaderImg,
+      lines: [
+        { text: "Enter" },
+        { text: "0 7 1 3 9" },
+        { text: "Into the reader" },
+      ],
+      btns: [
+        { text: "Next", variant: "primary", onClick: () => console.log("Hello"), block: true },
+      ]
+    }
+
     return (
       <Router>
         <Switch>
           <Route path="/">
-            <Home />
-          </Route>
-          <Route path="/register">
-            {/* <RegisterReader
-              setReaderRegistered={setReaderRegistered}
-              registerReader={registerAndConnectReaderWorkFlow}
-              errorOccured={errorOccured}
-            /> */}
+            <Instruction
+              className={landing.className}
+              header={landing.header}
+              img={landing.img}
+              lines={landing.lines}
+              btns={landing.btns}
+            />
           </Route>
         </Switch>
-      </Router>
+      </Router >
     )
   }
 }

@@ -41,9 +41,10 @@ class Test extends React.Component {
       isLoading: false,
       event: "",
       errorOccured: false,
-      errorMsg: "",
+      errorMsg: null,
       cart: Products,
       readerRegistered: false,
+      currency: "usd"
     }
     this.client = new Client(BackendUrl)
     this.terminal = this.client.initTerminal()
@@ -60,11 +61,10 @@ class Test extends React.Component {
 
   withLoadingAndErrors = async (fn, args) => {
     this.setIsLoading(true)
-    this.setErrorOccured(true)
+    this.setErrorMsg(null)
     try {
       await fn(args);
     } catch (error) {
-      this.setErrorOccured(true)
       this.setErrorMsg(`${error}`)
       this.props.history.push("/register")
     } finally {
@@ -88,12 +88,14 @@ class Test extends React.Component {
       errorMsg,
       cart,
       readerRegistered,
+      currency
     } = this.state
 
     const { history } = this.props;
 
-
-    // Landing Props
+    //////////////////////////////////////////////////
+    // Landing Page Props for Instruction Component //
+    //////////////////////////////////////////////////
     const landing = {
       className: "landing",
       header: null,
@@ -108,7 +110,9 @@ class Test extends React.Component {
       ]
     }
 
-    // Registartion Props
+    ////////////////////////////////////////////////
+    // Registration Props for InputForm Component //
+    ////////////////////////////////////////////////
     const onRegister = (registrationCode) => {
       this.withLoadingAndErrors(this.registerAndConnectReader, registrationCode)
       history.push("/checkout")
@@ -123,6 +127,43 @@ class Test extends React.Component {
       ]
     }
 
+    //////////////////
+    // CHECKOUT Fns //
+    //////////////////
+    const collectLineItems = () => {
+      let lineItems = []
+      cart.forEach((item) => {
+        if (item.quantity > 0) {
+          let displayItem = {
+            "description": item.label,
+            "amount": item.price * 100,
+            "quantity": item.quantity
+          }
+          lineItems.push(displayItem)
+        }
+      })
+      return lineItems
+    }
+
+    const createReaderDisplay = () => {
+      const lineItems = collectLineItems()
+      const readerDisplay = {
+        type: 'cart',
+        cart: {
+          line_items: lineItems,
+          tax: taxAmount,
+          total: chargeAmount * 100 + taxAmount,
+          currency: currency,
+        },
+      }
+      return readerDisplay
+    }
+
+    const setReaderDisplay = async () => {
+      const readerDisplay = createReaderDisplay()
+      await this.terminal.setReaderDisplay(readerDisplay);
+    };
+
     if (isLoading) {
       return <Loader loading={isLoading} />
     }
@@ -131,8 +172,7 @@ class Test extends React.Component {
       <div>
         <ErrorMessage
           errorMsg={errorMsg}
-          errorOccured={errorOccured}
-          onClose={() => this.setErrorOccured(false)}
+          onClose={() => this.setErrorMsg(null)}
         />
         <Switch>
           <Route path="/register">
@@ -140,6 +180,16 @@ class Test extends React.Component {
               label={Registration.label}
               placeholder={Registration.placeholder}
               btns={Registration.btns}
+            />
+          </Route>
+          <Route path="/checkout">
+            <Checkout
+              cart={Products}
+              setCart={this.setCart}
+              chargeAmount={chargeAmount}
+              updateChargeAmount={this.setChargeAmount.bind(this)}
+              setReaderDisplay={() => this.withLoadingAndErrors(setReaderDisplay)}
+              errorOccured={errorMsg}
             />
           </Route>
           <Route path="/">

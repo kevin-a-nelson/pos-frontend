@@ -3,16 +3,17 @@ import Alert from 'react-bootstrap/Alert'
 import './ErrorMessage.css'
 import { Link, Redirect } from 'react-router-dom'
 
-const ErrorMessage = ({ errorOccured, errorMsg, onClose }) => {
+const ErrorMessage = ({ errorMsg, onClose }) => {
 
-  if (!errorOccured) {
+  if (errorMsg === null) {
     return null
   }
 
   return (
     <div>
       <Alert className="error-msg" variant="danger">
-        {errorMsg}<br />
+        {errorMsg}
+        <br />
         <Link onClick={onClose}>Close</Link>
       </Alert>
     </div>

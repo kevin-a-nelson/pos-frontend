@@ -22,6 +22,7 @@ import Loader from './components/Loader/Loader.jsx'
 import AskCustomer from "./components/AskCustomer/AskCustomer.jsx"
 
 import Instruction from "./components/Instruction/Instruction"
+import InputForm from "./components/InputForm/InputForm"
 
 import ReaderImg from "./assets/reader-large.png"
 
@@ -37,7 +38,7 @@ class Test extends React.Component {
     this.state = {
       chargeAmount: 0,
       taxAmount: 0,
-      workFlowInProgress: false,
+      isLoading: false,
       event: "",
       errorOccured: false,
       errorMsg: "",
@@ -50,16 +51,46 @@ class Test extends React.Component {
 
   setChargeAmount(chargeAmount) { this.setState({ chargeAmount }) }
   setTaxAmount(taxAmount) { this.setState({ taxAmount }) }
-  setWorkFlowInProgress(workFlowInProgress) { this.setState({ workFlowInProgress }) }
+  setIsLoading(isLoading) { this.setState({ isLoading }) }
   setEvent(event) { this.setState({ event }) }
   setErrorOccured(errorOccured) { this.setState({ errorOccured }) }
   setErrorMsg(errorMsg) { this.setState({ errorMsg }) }
   setCart(cart) { this.setState({ cart }) }
-  setState(readerRegistered) { this.setState({ readerRegistered }) }
+  // setState(readerRegistered) { this.setState({ readerRegistered }) }
+
+  withLoadingAndErrors = async (fn, args) => {
+    this.setIsLoading(true)
+    this.setErrorOccured(true)
+    try {
+      await fn(args);
+    } catch (error) {
+      this.setErrorOccured(true)
+      this.setErrorMsg(`${error}`)
+      this.props.history.push("/register")
+    } finally {
+      this.setIsLoading(false)
+    }
+  };
+
+  registerAndConnectReader = async (registrationCode) => {
+    const reader = await this.client.registerReader({ registrationCode });
+    await this.terminal.connectReader(reader);
+  };
 
   render() {
 
-    const { math, location, history } = this.props;
+    const {
+      chargeAmount,
+      taxAmount,
+      isLoading,
+      event,
+      errorOccured,
+      errorMsg,
+      cart,
+      readerRegistered,
+    } = this.state
+
+    const { history } = this.props;
 
     const landing = {
       className: "landing",
@@ -75,21 +106,45 @@ class Test extends React.Component {
       ]
     }
 
+    const onRegister = (registrationCode) => {
+      this.withLoadingAndErrors(this.registerAndConnectReader, registrationCode)
+      history.push("/checkout")
+    }
+
+    const Registration = {
+      placeholder: "Ex. Sepia-cerulean-orynx",
+      label: "Registration Code",
+      btns: [
+        { text: "Submit", variant: "primary", onClick: onRegister },
+        { text: "Back", variant: "outline-primary", onClick: () => history.push("/") },
+      ]
+    }
+
+    if (isLoading) {
+      return <Loader loading={isLoading} />
+    }
+
     return (
-      <Switch>
-        <Route path="/register">
-          <h1>It worked!</h1>
-        </Route>
-        <Route path="/">
-          <Instruction
-            className={landing.className}
-            header={landing.header}
-            img={landing.img}
-            lines={landing.lines}
-            btns={landing.btns}
-          />
-        </Route>
-      </Switch>
+      <div>
+        <Switch>
+          <Route path="/register">
+            <InputForm
+              label={Registration.label}
+              placeholder={Registration.placeholder}
+              btns={Registration.btns}
+            />
+          </Route>
+          <Route path="/">
+            <Instruction
+              className={landing.className}
+              header={landing.header}
+              img={landing.img}
+              lines={landing.lines}
+              btns={landing.btns}
+            />
+          </Route>
+        </Switch>
+      </div>
     )
   }
 }

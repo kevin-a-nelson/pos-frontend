@@ -16,6 +16,7 @@ const Instruction = (props) => {
     return lines.map((line, index) => {
       return (
         <p
+          key={index}
           className={`line${index + 1}`}>
           {line.text}
         </p>
@@ -27,6 +28,7 @@ const Instruction = (props) => {
     return btns.map((btn, index) => {
       return (
         <Button
+          key={index}
           className={`btn${index}`}
           onClick={btn.onClick}
           block={btn.block}

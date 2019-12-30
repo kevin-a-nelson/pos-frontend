@@ -1,29 +1,13 @@
-.loader-container {
-  max-width: 300px;
-  margin: 0 auto;
-  justify-content: center;
-  display: flex;
-  padding-top: 34vh;
-  height: 120vh;
-}
 
-.loader {
-  border: 16px solid #f3f3f3; /* Light grey */
-  border-top: 16px solid #3498db; /* Blue */
-  border-radius: 50%;
-  width: 120px;
-  height: 120px;
-  animation: spin 2s linear infinite;
-}
+/* I wish I made this :P
+Loader from https://loading.io/css/ */
 
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+:root {
+  --size: 10px;
 }
 
 .lds-grid-container {
-  /* background: blue; */
-  max-width: 80px;
+  max-width: calc(var(--size) * 10);
   margin: 0px auto;
   padding-top: 30vh;
 }
@@ -31,61 +15,61 @@
 .lds-grid {
   display: inline-block;
   position: relative;
-  width: 160px;
-  height: 160px;
+  width: calc(var(--size) * 10);
+  height: calc(var(--size) * 10);
 }
 
 .lds-grid div {
   position: absolute;
-  width: 16px;
-  height: 16px;
+  width: calc(var(--size) * 2);
+  height: calc(var(--size) * 2);
   border-radius: 50%;
   background: #99ccff;
   animation: lds-grid 1.2s linear infinite;
 }
 .lds-grid div:nth-child(1) {
-  top: 8px;
-  left: 8px;
+  top: calc(var(--size) * 1);
+  left: calc(var(--size) * 1);
   animation-delay: 0s;
 }
 .lds-grid div:nth-child(2) {
-  top: 8px;
-  left: 32px;
+  top: var(--size);
+  left: calc(var(--size) * 4);
   animation-delay: -0.4s;
 }
 .lds-grid div:nth-child(3) {
-  top: 8px;
-  left: 56px;
+  top: var(--size);
+  left: calc(var(--size) * 7);
   animation-delay: -0.8s;
 }
 .lds-grid div:nth-child(4) {
-  top: 32px;
-  left: 8px;
+  top: calc(var(--size) * 4);
+  left: var(--size);
   animation-delay: -0.4s;
 }
 .lds-grid div:nth-child(5) {
-  top: 32px;
-  left: 32px;
+  top: calc(var(--size) * 4);
+  left: calc(var(--size) * 4);
   animation-delay: -0.8s;
 }
 .lds-grid div:nth-child(6) {
-  top: 32px;
-  left: 56px;
+  top: calc(var(--size) * 4);
+  left: calc(var(--size) * 7);
   animation-delay: -1.2s;
 }
 .lds-grid div:nth-child(7) {
-  top: 56px;
-  left: 8px;
+  top: calc(var(--size) * 7);
+  left: var(--size);
   animation-delay: -0.8s;
 }
 .lds-grid div:nth-child(8) {
-  top: 56px;
-  left: 32px;
+  top: calc(var(--size) * 7);
+  left: calc(var(--size) * 4);
   animation-delay: -1.2s;
 }
 .lds-grid div:nth-child(9) {
-  top: 56px;
-  left: 56px;
+  top: calc(var(--size) * 7);
+  left: calc(var(--size) * 7);
   animation-delay: -1.6s;
 }
 @keyframes lds-grid {

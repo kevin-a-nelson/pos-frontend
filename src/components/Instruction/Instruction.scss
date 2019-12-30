@@ -25,6 +25,13 @@
 }
 
 .landing {
+
+  max-width: 200px;
+
+  .img-container {
+    max-height: 200px;
+  }
+
   .line2 {
     font-size: 30px;
     font-weight: 600;

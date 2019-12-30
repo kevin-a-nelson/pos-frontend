@@ -27,6 +27,54 @@ import ErrorSnippets from './static/ErrorSnippets'
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 
+class Test extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      chargeAmount: 0,
+      taxAmount: 0,
+      workFlowInProgress: false,
+      event: "",
+      errorOccured: false,
+      errorMsg: "",
+      cart: Products,
+      readerRegistered: false,
+    }
+    this.client = new Client(BackendUrl)
+    this.terminal = this.client.initTerminal()
+  }
+
+  setChargeAmount(chargeAmount) { this.setState({ chargeAmount }) }
+  setTaxAmount(taxAmount) { this.setState({ taxAmount }) }
+  setWorkFlowInProgress(workFlowInProgress) { this.setState({ workFlowInProgress }) }
+  setEvent(event) { this.setState({ event }) }
+  setErrorOccured(errorOccured) { this.setState({ errorOccured }) }
+  setErrorMsg(errorMsg) { this.setState({ errorMsg }) }
+  setCart(cart) { this.setState({ cart }) }
+  setState(readerRegistered) { this.setState({ readerRegistered }) }
+
+
+
+  render() {
+    return (
+      <Router>
+        <Switch>
+          <Route path="/">
+            <Home />
+          </Route>
+          <Route path="/register">
+            {/* <RegisterReader
+              setReaderRegistered={setReaderRegistered}
+              registerReader={registerAndConnectReaderWorkFlow}
+              errorOccured={errorOccured}
+            /> */}
+          </Route>
+        </Switch>
+      </Router>
+    )
+  }
+}
+
 const App = ({ client, terminal }) => {
 
   const [chargeAmount, setChargeAmount] = useState(0)
@@ -174,66 +222,68 @@ const App = ({ client, terminal }) => {
   }
 
   return (
-    <div className="app">
-      {
-        !readerRegistered ? <Redirect to="/" /> : null
-      }
-      <Loader
-        loading={workFlowInProgress}
-      />
-      <ErrorMessage
-        errorMsg={errorMsg}
-        setErrorMsg={setErrorMsg}
-        errorOccured={errorOccured}
-        setErrorOccured={setErrorOccured}
-      />
-      <Switch>
-        <Route path="/register">
-          <RegisterReader
-            setReaderRegistered={setReaderRegistered}
-            registerReader={registerAndConnectReaderWorkFlow}
-            errorOccured={errorOccured}
-          />
-        </Route>
-        <Route path="/events">
-          <EventSelector
-            setEvent={setEvent}
-          />
-        </Route>
-        <Route path="/checkout">
-          <Checkout
-            cart={Products}
-            setCart={setCart}
-            chargeAmount={chargeAmount}
-            updateChargeAmount={setChargeAmount}
-            setReaderDisplay={setReaderDisplayWorkFlow}
-            errorOccured={errorOccured}
-          />
-        </Route>
-        <Route path="/confirm">
-          <AskCustomer
-            terminal={terminal}
-          />
-        </Route>
-        <Route path="/collect">
-          <CollectPayment
-            collectPayment={collectPaymentWorkFlow}
-            cancelPayment={cancelPaymentWorkFlow}
-            emptyCart={emptyCart}
-            errorOccured={errorOccured}
-            collectingPayment={workFlowInProgress}
-            terminal={terminal}
-          />
-        </Route>
-        <Route path="/success">
-          <Success />
-        </Route>
-        <Route path="/">
-          <Home />
-        </Route>
-        <Button onClick={() => terminal.clearReaderDisplay()}>Clear Reader</Button>
-      </Switch>
-    </div >
+    <Router>
+      <div className="app">
+        {
+          !readerRegistered ? <Redirect to="/" /> : null
+        }
+        <Loader
+          loading={workFlowInProgress}
+        />
+        <ErrorMessage
+          errorMsg={errorMsg}
+          setErrorMsg={setErrorMsg}
+          errorOccured={errorOccured}
+          setErrorOccured={setErrorOccured}
+        />
+        <Switch>
+          <Route path="/register">
+            <RegisterReader
+              setReaderRegistered={setReaderRegistered}
+              registerReader={registerAndConnectReaderWorkFlow}
+              errorOccured={errorOccured}
+            />
+          </Route>
+          <Route path="/events">
+            <EventSelector
+              setEvent={setEvent}
+            />
+          </Route>
+          <Route path="/checkout">
+            <Checkout
+              cart={Products}
+              setCart={setCart}
+              chargeAmount={chargeAmount}
+              updateChargeAmount={setChargeAmount}
+              setReaderDisplay={setReaderDisplayWorkFlow}
+              errorOccured={errorOccured}
+            />
+          </Route>
+          <Route path="/confirm">
+            <AskCustomer
+              terminal={terminal}
+            />
+          </Route>
+          <Route path="/collect">
+            <CollectPayment
+              collectPayment={collectPaymentWorkFlow}
+              cancelPayment={cancelPaymentWorkFlow}
+              emptyCart={emptyCart}
+              errorOccured={errorOccured}
+              collectingPayment={workFlowInProgress}
+              terminal={terminal}
+            />
+          </Route>
+          <Route path="/success">
+            <Success />
+          </Route>
+          <Route path="/">
+            <Home />
+          </Route>
+          <Button onClick={() => terminal.clearReaderDisplay()}>Clear Reader</Button>
+        </Switch>
+      </div >
+    </Router>
   );
 }
 
@@ -252,4 +302,4 @@ const AppWrapper = () => {
   )
 }
 
-export default AppWrapper
+export default Test

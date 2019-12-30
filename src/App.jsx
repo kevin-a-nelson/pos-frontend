@@ -1,4 +1,7 @@
+
+
 import React from 'react';
+
 import {
   Switch,
   Route,
@@ -42,7 +45,9 @@ class App extends React.Component {
       readerRegistered: false,
       currency: "usd"
     }
+    // Communicates with API
     this.client = new Client(BackendUrl)
+    // Communicates with Reader
     this.terminal = this.client.initTerminal()
   }
 
@@ -68,49 +73,46 @@ class App extends React.Component {
     const setCart = (cart) => { this.setState({ cart }) }
     const setIsConnected = (isConnected) => { this.setState({ isConnected }) }
 
+    /**
+    * Process: 
+    *   Run Input Function
+    *   Run Loading Screen
+    *   Catch Error
+    *   Display Error Msg
+    *   Stop Loading Screen
+    *
+    * All Functions that communicate with the reader or terminal 
+    * Are run through this function
+    * 
+    * Ex. withLoadingAndErrors(collectPayment)
+    */
     const withLoadingAndErrors = async (fn, args) => {
       setIsLoading(true)
+      // Error msg will not show if ErrorMsg is null
       setErrorMsg(null)
       try {
         await fn(args);
       } catch (error) {
         setErrorMsg(`${error}`)
+        // After an action, your always redirected to the next route. If an error occurs your redirected back
+        // Ex. click checkout => routed to insert card => error => routed back to checkout
         history.goBack()
       } finally {
         setIsLoading(false)
       }
     };
 
-    //////////////////////////////////////////////////
-    // Landing Page Props for Instruction Component //
-    //////////////////////////////////////////////////
+    //////////
+    // Home //
+    //////////
 
     const goToRegister = () => {
       history.push("/register")
     }
 
-    const landing = {
-      className: "landing",
-      header: null,
-      img: ReaderImg,
-      lines: [
-        { text: "Enter" },
-        { text: "0 7 1 3 9" },
-        { text: "Into the reader" },
-      ],
-      btns: [
-        {
-          text: "Next",
-          variant: "primary",
-          onClick: goToRegister,
-          block: true
-        },
-      ]
-    }
-
-    ////////////////////////////////////////////////
-    // Registration Props for InputForm Component //
-    ////////////////////////////////////////////////
+    //////////////
+    // Register //
+    //////////////
 
     const registerAndConnectReader = async (registrationCode) => {
       const reader = await this.client.registerReader({ registrationCode });
@@ -123,18 +125,31 @@ class App extends React.Component {
       history.push("/checkout")
     }
 
-    const Registration = {
-      placeholder: "Ex. Sepia-cerulean-orynx",
-      label: "Registration Code",
-      btns: [
-        { text: "Submit", variant: "primary", onClick: onRegister },
-        { text: "Back", variant: "outline-primary", onClick: () => history.push("/") },
-      ]
+    //////////////
+    // Checkout //
+    //////////////
+
+    const calculateTotalCharge = () => {
+      let total = 0;
+      cart.forEach((item) => { total += item.price * item.quantity })
+      return total
     }
 
-    ////////////////////
-    // Checkout Logic //
-    ////////////////////
+    const changeQuantity = (change, index) => {
+      if (cart[index].quantity + change < 0) { return }
+      const newCart = cart
+      newCart[index].quantity = cart[index].quantity + change;
+      setCart(newCart)
+    }
+
+    // Changes qty of product in cart when + or - is pressed
+    const onQtyChange = (change, index) => {
+      changeQuantity(change, index)
+      const totalCharge = calculateTotalCharge()
+      setChargeAmount(totalCharge)
+    }
+
+    // Return hash of items in cart with qty > 0
     const collectLineItems = () => {
       let lineItems = []
       cart.forEach((item) => {
@@ -150,6 +165,7 @@ class App extends React.Component {
       return lineItems
     }
 
+    // Add Additional info to purchase
     const createReaderDisplay = () => {
       const lineItems = collectLineItems()
       const readerDisplay = {
@@ -164,72 +180,37 @@ class App extends React.Component {
       return readerDisplay
     }
 
+    // Display Items Customer checked out on Reader
     const setReaderDisplay = async () => {
       const readerDisplay = createReaderDisplay()
       await this.terminal.setReaderDisplay(readerDisplay);
     };
 
-    const calculateTotalCharge = () => {
-      let total = 0;
-      cart.forEach((item) => { total += item.price * item.quantity })
-      return total
-    }
-
-    const changeQuantity = (change, index) => {
-      if (cart[index].quantity + change < 0) { return }
-      const newCart = cart
-      newCart[index].quantity = cart[index].quantity + change;
-      setCart(newCart)
-    }
-
-    const onQtyChange = (change, index) => {
-      changeQuantity(change, index)
-      const totalCharge = calculateTotalCharge()
-      setChargeAmount(totalCharge)
-    }
-
     const onCheckout = () => {
+      // Scroll user to top so user sees loading animation
       window.scrollTo(0, 0)
       withLoadingAndErrors(setReaderDisplay)
       history.push("/insert")
     }
 
-    ///////////////////
-    // Confirm Logic //
-    ///////////////////
+    /////////////////
+    // Insert Card //
+    /////////////////
 
     const onEditOrder = () => {
       this.terminal.clearReaderDisplay()
       history.push("/checkout")
     }
 
-    const onCollect = () => {
+    const goToCollect = () => {
       history.push("/collect")
     }
 
-    const insertCard = {
-      header: "Insert Card",
-      img: InsertCard,
-      btns: [
-        {
-          text: "Next",
-          variant: "primary",
-          block: true,
-          onClick: onCollect
-        },
-        {
-          text: "Edit Order",
-          variant: "outline-primary",
-          block: true,
-          onClick: onEditOrder
-        },
-      ]
-    }
+    /////////////////////
+    // Collect Payment //
+    ////////////////////
 
-    ///////////////////
-    // Collect Logic //
-    ///////////////////
-
+    // Ex. Ouput: Prep Showdown - Shirts (2), Weekend Pass (1), Pants(3)
     const createPaymentIntentDescription = () => {
       let lineItemsStr = ""
       cart.forEach((lineItem) => { lineItemsStr += `${lineItem.label} (${lineItem.quantity}), ` })
@@ -265,17 +246,74 @@ class App extends React.Component {
     };
 
     const onCancelPayment = () => {
-      console.log("Cancel Payment")
       history.push("/checkout")
       this.terminal.clearReaderDisplay()
       emptyCart()
     }
 
     const onCollectPayment = () => {
-      console.log("Collect Payment")
       withLoadingAndErrors(collectPayment)
       history.push("/success")
       emptyCart()
+    }
+
+    /////////////
+    // Success //
+    /////////////
+
+    const goToCheckout = () => {
+      history.push("/checkout")
+    }
+
+    /////////////////////
+    // Component Props //
+    /////////////////////
+
+    const landing = {
+      className: "landing",
+      header: null,
+      img: ReaderImg,
+      lines: [
+        { text: "Enter" },
+        { text: "0 7 1 3 9" },
+        { text: "Into the reader" },
+      ],
+      btns: [
+        {
+          text: "Next",
+          variant: "primary",
+          onClick: goToRegister,
+          block: true
+        },
+      ]
+    }
+
+    const Registration = {
+      placeholder: "Ex. Sepia-cerulean-orynx",
+      label: "Registration Code",
+      btns: [
+        { text: "Submit", variant: "primary", onClick: onRegister },
+        { text: "Back", variant: "outline-primary", onClick: () => history.push("/") },
+      ]
+    }
+
+    const insertCard = {
+      header: "Insert Card",
+      img: InsertCard,
+      btns: [
+        {
+          text: "Next",
+          variant: "primary",
+          block: true,
+          onClick: goToCollect
+        },
+        {
+          text: "Edit Order",
+          variant: "outline-primary",
+          block: true,
+          onClick: onEditOrder
+        },
+      ]
     }
 
     const collectPaymentProps = {
@@ -297,14 +335,6 @@ class App extends React.Component {
       ]
     }
 
-    /////////////
-    // Success //
-    /////////////
-
-    const goToCheckout = () => {
-      history.push("/checkout")
-    }
-
     const paymentSuccessful = {
       className: "payment-successful",
       header: "Success",
@@ -324,6 +354,7 @@ class App extends React.Component {
 
     return (
       <div>
+        {/* Redirect use to landing page if not connected */}
         {
           !isConnected ? <Redirect to="/" /> : null
         }

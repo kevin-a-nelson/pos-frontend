@@ -4,18 +4,14 @@ import { Redirect } from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
 import './Checkout.css'
 
-const Checkout = ({ cart, setCart, chargeAmount, updateChargeAmount, setReaderDisplay, errorOccured }) => {
-  const [checkedOut, setCheckedOut] = useState(false)
+const Checkout = (props) => {
 
-  const handleCheckout = () => {
-    setReaderDisplay()
-    setCheckedOut(true)
-    window.scrollTo(0, 0);
-  }
-
-  if (checkedOut && !errorOccured) {
-    return <Redirect to="/confirm" />
-  }
+  const {
+    cart,
+    chargeAmount,
+    onCheckout,
+    onQtyChange
+  } = props
 
   return (
     <div className="checkout">
@@ -29,10 +25,9 @@ const Checkout = ({ cart, setCart, chargeAmount, updateChargeAmount, setReaderDi
       </div>
       <Products
         cart={cart}
-        setCart={setCart}
-        updateChargeAmount={updateChargeAmount}
+        onQtyChange={onQtyChange}
       />
-      <Button size="lg" className="checkout-btn" disabled={chargeAmount === 0} onClick={() => handleCheckout()} block>Checkout</Button>
+      <Button size="lg" className="checkout-btn" disabled={chargeAmount === 0} onClick={() => onCheckout()} block>Checkout</Button>
     </div>
   )
 }

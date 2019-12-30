@@ -127,9 +127,9 @@ class Test extends React.Component {
       ]
     }
 
-    //////////////////
-    // CHECKOUT Fns //
-    //////////////////
+    ////////////////////
+    // Checkout Logic //
+    ////////////////////
     const collectLineItems = () => {
       let lineItems = []
       cart.forEach((item) => {
@@ -164,6 +164,29 @@ class Test extends React.Component {
       await this.terminal.setReaderDisplay(readerDisplay);
     };
 
+    const onCheckout = () => {
+      this.withLoadingAndErrors(setReaderDisplay)
+      history.push("/confirm")
+    }
+
+    const calculateTotalCharge = () => {
+      let total = 0;
+      cart.forEach((item) => { total += item.price * item.quantity })
+      return total
+    }
+
+    const changeQuantity = (change, index) => {
+      const newCart = cart
+      newCart[index].quantity = cart[index].quantity + change;
+      this.setCart(newCart)
+    }
+
+    const onQtyChange = (change, index) => {
+      changeQuantity(change, index)
+      const totalCharge = calculateTotalCharge()
+      this.setChargeAmount(totalCharge)
+    }
+
     if (isLoading) {
       return <Loader loading={isLoading} />
     }
@@ -184,12 +207,10 @@ class Test extends React.Component {
           </Route>
           <Route path="/checkout">
             <Checkout
-              cart={Products}
-              setCart={this.setCart}
+              cart={cart}
               chargeAmount={chargeAmount}
-              updateChargeAmount={this.setChargeAmount.bind(this)}
-              setReaderDisplay={() => this.withLoadingAndErrors(setReaderDisplay)}
-              errorOccured={errorMsg}
+              onQtyChange={onQtyChange}
+              onCheckout={onCheckout}
             />
           </Route>
           <Route path="/">

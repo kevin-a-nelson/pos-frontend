@@ -2,27 +2,13 @@ import React from 'react'
 
 import "./Products.css"
 
-const Product = ({ cart, index, item, setCart, updateChargeAmount }) => {
+const Product = (props) => {
 
-  const calculateTotalCharge = () => {
-    let total = 0;
-
-    cart.forEach((item) => {
-      total += item.price * item.quantity
-    })
-    return total
-  }
-
-  const changeQuantity = (change) => {
-    cart[index].quantity = cart[index].quantity + change;
-  }
-
-  const handleChangeQuantity = (change) => {
-    changeQuantity(change)
-    // setCart(cart)
-    const totalCharge = calculateTotalCharge()
-    updateChargeAmount(totalCharge)
-  }
+  const {
+    index,
+    item,
+    onQtyChange
+  } = props
 
   return (
     <div
@@ -35,9 +21,9 @@ const Product = ({ cart, index, item, setCart, updateChargeAmount }) => {
         <p>{item.label}</p>
       </div>
       <div className="item-option-quantity-selector item-option-elem">
-        <button tabIndex="-1" className="quantity-btn" onClick={() => handleChangeQuantity(1)}>+</button>
+        <button tabIndex="-1" className="quantity-btn" onClick={() => onQtyChange(1, index)}>+</button>
         <span className="item-option-quantity-selector-amount">{item.quantity}</span>
-        <button tabIndex="-1" className="quantity-btn" onClick={() => handleChangeQuantity(-1)}>-</button>
+        <button tabIndex="-1" className="quantity-btn" onClick={() => onQtyChange(-1, index)}>-</button>
       </div>
       <div className="item-option-price item-option-elem">
         <p>${item.price}</p>
@@ -46,7 +32,13 @@ const Product = ({ cart, index, item, setCart, updateChargeAmount }) => {
   )
 }
 
-const Products = ({ cart, setCart, updateChargeAmount }) => {
+const Products = (props) => {
+
+  const {
+    cart,
+    onQtyChange
+  } = props
+
   return (
     < div className="product-grid" >
       {
@@ -54,11 +46,9 @@ const Products = ({ cart, setCart, updateChargeAmount }) => {
           cart.map((item, index) => (
             <Product
               key={index}
-              cart={cart}
-              setCart={setCart}
+              onQtyChange={onQtyChange}
               index={index}
               item={item}
-              updateChargeAmount={updateChargeAmount}
             />
           ))
           :

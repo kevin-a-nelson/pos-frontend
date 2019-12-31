@@ -302,7 +302,6 @@ class App extends React.Component {
       ]
     }
 
-
     const discoverReaders = async () => {
       const discoverResult = await this.terminal.discoverReaders();
       if (discoverResult.error) {
@@ -422,8 +421,6 @@ class App extends React.Component {
         }
       ]
     }
-
-
 
     if (isLoading) {
       return <Loader loading={isLoading} />

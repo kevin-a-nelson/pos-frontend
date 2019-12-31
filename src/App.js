@@ -13,9 +13,9 @@ import {
 import Client from './client';
 
 // Components
-import Checkout from './components/Checkout/Checkout.jsx';
-import ErrorMessage from './components/ErrorMessage/ErrorMessage.jsx';
-import Loader from './components/Loader/Loader.jsx'
+import Checkout from './components/Checkout/Checkout';
+import ErrorMessage from './components/ErrorMessage/ErrorMessage';
+import Loader from './components/Loader/Loader'
 import Instruction from "./components/Instruction/Instruction"
 import InputForm from "./components/InputForm/InputForm"
 import Events from "./components/Events/Events"
@@ -35,6 +35,25 @@ import ErrorMsgs from "./static/ErrorMsgs";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import "./index.css"
 
+function getDayStr() {
+  let date = new Date()
+  // Sun = 0, Mon = 1 ... 
+  let dayNum = date.getDay();
+  let dayStr = ""
+  switch (dayNum) {
+    case 0: dayStr = "Sun"; break;
+    case 1: dayStr = "Mon"; break;
+    case 2: dayStr = "Tues"; break;
+    case 3: dayStr = "Wed"; break;
+    case 4: dayStr = "Thurs"; break;
+    case 5: dayStr = "Fri"; break;
+    case 6: dayStr = "Sat"; break;
+    default: dayStr = "Day"; break;
+  }
+
+  return dayStr
+}
+
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -47,7 +66,8 @@ class App extends React.Component {
       errorMsg: null,
       cart: Products,
       readerRegistered: false,
-      currency: "usd"
+      currency: "usd",
+      day: getDayStr()
     }
     // Communicates with API
     this.client = new Client(BackendUrl)
@@ -136,7 +156,9 @@ class App extends React.Component {
     //////////////
 
     const registerAndConnectReader = async (registrationCode) => {
+      // post Request to stripe
       const reader = await this.client.registerReader({ registrationCode });
+      // connect to reader
       await this.terminal.connectReader(reader);
     };
 
@@ -156,6 +178,7 @@ class App extends React.Component {
       return total
     }
 
+    // increase qty of item in cart by -1 or 1 if qty > 0
     const changeQuantity = (change, index) => {
       if (cart[index].quantity + change < 0) { return }
       const newCart = cart
@@ -209,8 +232,7 @@ class App extends React.Component {
     };
 
     const onCheckout = () => {
-      // Scroll user to top so user sees loading animation
-      window.scrollTo(0, 0)
+      // Display items being bought and total charge on reader
       withLoadingAndErrors(setReaderDisplay)
       history.push("/insert")
     }
@@ -238,11 +260,13 @@ class App extends React.Component {
 
     const createPaymentIntent = () => {
       const description = createPaymentIntentDescription()
+      // 100 is read as $1 on reader so must mult by 100
       const amount = chargeAmount * 100 + taxAmount
       const paymentIntent = { amount, currency, description }
       return paymentIntent
     }
 
+    // Run within withLoadingAndErrors() which handles errors
     const collectPayment = async () => {
       const paymentIntent = createPaymentIntent()
       const processedPaymentIntent = await this.client.processPaymentIntent(paymentIntent);
@@ -259,13 +283,17 @@ class App extends React.Component {
       setChargeAmount(0)
     }
 
+    // this fn cancels PENDING payments. Currently this is not being used
+    // instead users can choose to cancel order before paying
     const cancelPayment = async () => {
       await this.terminal.cancelCollectPaymentMethod();
     };
 
-    const onCancelPayment = () => {
-      history.push("/checkout")
+    // payment is NOT PENDING when this fn is run 
+    // this button is presented. So it doesn't cancel a pending payment
+    const onCancelOrder = () => {
       this.terminal.clearReaderDisplay()
+      history.push("/checkout")
       emptyCart()
     }
 
@@ -279,8 +307,28 @@ class App extends React.Component {
     // Component Props //
     /////////////////////
 
-    const landing = {
-      className: "landing",
+    const wifi = {
+      className: "wifi",
+      img: wifiImg,
+      // Each elem = new line
+      lines: [
+        { text: "1. The wifi is working" },
+        { text: "2. The wifi is password protected" },
+        { text: "3. The Reader and Tablet are connected to the same wifi" },
+      ],
+      btns: [
+        {
+          text: "Next",
+          variant: "primary",
+          onClick: () => history.push("/enter07139"),
+          // Makes button 100% width
+          block: true
+        },
+      ]
+    }
+
+    const enter07139 = {
+      className: "enter07139",
       header: null,
       img: ReaderImg,
       lines: [
@@ -293,48 +341,13 @@ class App extends React.Component {
           text: "Next",
           variant: "primary",
           onClick: () => history.push("/register"),
+          // makes buttons stack vertically and 100% width
           block: true
         },
         {
           text: "Back",
           variant: "outline-primary",
           onClick: () => history.push("/"),
-          block: true
-        },
-      ]
-    }
-
-    const discoverReaders = async () => {
-      const discoverResult = await this.terminal.discoverReaders();
-      if (discoverResult.error) {
-        console.log('Failed to discover: ', discoverResult.error);
-        this.setState({ unableToConnect: true })
-        this.setState({ loadingNewRegister: false })
-        return discoverResult.error;
-      } else {
-        console.log("Happening")
-        this.setState({
-          discoveredReaders: discoverResult.discoveredReaders
-        });
-        this.setState({ loadingNewRegister: false })
-        return discoverResult.discoveredReaders;
-      }
-    };
-
-    const wifi = {
-      className: "wifi",
-      header: "Requirements",
-      img: wifiImg,
-      lines: [
-        { text: "1. The wifi is working" },
-        { text: "2. The wifi is password protected" },
-        { text: "3. The Reader and Tablet are connected to the same wifi" },
-      ],
-      btns: [
-        {
-          text: "Next",
-          variant: "primary",
-          onClick: () => history.push("/reader"),
           block: true
         },
       ]
@@ -352,7 +365,7 @@ class App extends React.Component {
         {
           text: "Back",
           variant: "outline-primary",
-          onClick: () => history.push("/reader")
+          onClick: () => history.push("/enter07139")
         },
       ]
     }
@@ -374,7 +387,7 @@ class App extends React.Component {
       ]
     }
 
-    const insertCard = {
+    const insert = {
       header: "Insert Card",
       img: InsertCard,
       btns: [
@@ -393,7 +406,7 @@ class App extends React.Component {
       ]
     }
 
-    const collectPaymentProps = {
+    const collect = {
       header: "Collect",
       img: DollarSign,
       btns: [
@@ -403,15 +416,15 @@ class App extends React.Component {
           block: true,
         },
         {
-          text: "Cancel Payment",
+          text: "Cancel Order",
           variant: "outline-primary",
-          onClick: onCancelPayment,
+          onClick: onCancelOrder,
           block: true,
         },
       ]
     }
 
-    const paymentSuccessful = {
+    const success = {
       header: "Success",
       img: BlueCheck,
       btns: [
@@ -431,8 +444,11 @@ class App extends React.Component {
     return (
       <div className="app">
         {
-          !isConnected ? <Redirect to="/" /> : null
+          // If a user refreshes page they will be disconnected from the reader.
+          // When this happens they are redirected back home
+          // !isConnected ? <Redirect to="/" /> : null
         }
+        {/* ErrorMsgs show if errorMsg !== null */}
         <ErrorMessage
           errorMsgs={errorMsg}
           onClose={setErrorMsg}
@@ -446,6 +462,9 @@ class App extends React.Component {
             />
           </Route>
           <Route path="/events">
+            {/* Events API is currently down: https://events.prephoops.com/event-list 
+              * This route is not being used at all
+              */}
             <Events />
           </Route>
           <Route path="/input-event">
@@ -465,37 +484,37 @@ class App extends React.Component {
           </Route>
           <Route path="/insert">
             <Instruction
-              className={insertCard.className}
-              header={insertCard.header}
-              img={insertCard.img}
-              lines={insertCard.lines}
-              btns={insertCard.btns}
+              className={insert.className}
+              header={insert.header}
+              img={insert.img}
+              lines={insert.lines}
+              btns={insert.btns}
             />
           </Route>
           <Route path="/collect">
             <Instruction
-              header={collectPaymentProps.header}
-              className={collectPaymentProps.className}
-              img={collectPaymentProps.img}
-              btns={collectPaymentProps.btns}
+              header={collect.header}
+              className={collect.className}
+              img={collect.img}
+              btns={collect.btns}
             />
           </Route>
           <Route path="/success">
             <Instruction
-              className={paymentSuccessful.className}
-              header={paymentSuccessful.header}
-              img={paymentSuccessful.img}
-              btns={paymentSuccessful.btns}
+              className={success.className}
+              header={success.header}
+              img={success.img}
+              btns={success.btns}
             >
             </Instruction>
           </Route>
-          <Route path="/reader">
+          <Route path="/enter07139">
             <Instruction
-              className={landing.className}
-              header={landing.header}
-              img={landing.img}
-              lines={landing.lines}
-              btns={landing.btns}
+              className={enter07139.className}
+              header={enter07139.header}
+              img={enter07139.img}
+              lines={enter07139.lines}
+              btns={enter07139.btns}
             />
           </Route>
           <Route path="/">

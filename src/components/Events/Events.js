@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import Event from '../Event/Event.jsx'
+import Event from '../Event/Event'
 import { Redirect } from 'react-router-dom';
 
 const Events = ({ setEvent }) => {
@@ -13,6 +13,7 @@ const Events = ({ setEvent }) => {
     }, [])
 
     if (!events || events.length === 0) {
+        // Redirect if events API is down
         return <Redirect to="/input-event" />
     }
 

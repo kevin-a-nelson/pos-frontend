@@ -295,9 +295,6 @@ class App extends React.Component {
     const collectPayment = async () => {
       const paymentIntent = createPaymentIntent()
       const processedPaymentIntent = await this.client.processPaymentIntent(paymentIntent);
-
-      // MAKE POST REQUEST
-
       const payment = await this.terminal.collectPaymentMethod(processedPaymentIntent.secret);
       const processedPayment = await this.terminal.processPayment(payment.paymentIntent);
       const captureResult = await this.client.capturePaymentIntent({ paymentIntentId: processedPayment.paymentIntent.id });
@@ -479,7 +476,7 @@ class App extends React.Component {
         {
           // If a user refreshes page they will be disconnected from the reader.
           // When this happens they are redirected back home
-          !isConnected ? <Redirect to="/" /> : null
+          // !isConnected ? <Redirect to="/" /> : null
         }
         {/* ErrorMsgs show if errorMsg !== null */}
         <ErrorMessage

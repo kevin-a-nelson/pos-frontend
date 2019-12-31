@@ -68,7 +68,10 @@ class App extends React.Component {
       currency
     } = this.state
 
-    const { history } = this.props;
+    const {
+      history,
+      location
+    } = this.props;
 
     const setChargeAmount = (chargeAmount) => { this.setState({ chargeAmount }) }
     const setIsLoading = (isLoading) => { this.setState({ isLoading }) }
@@ -125,14 +128,6 @@ class App extends React.Component {
         setIsLoading(false)
       }
     };
-
-    //////////
-    // Home //
-    //////////
-
-    const goToRegister = () => {
-      history.push("/register")
-    }
 
     //////////////
     // Register //
@@ -227,10 +222,6 @@ class App extends React.Component {
       history.push("/checkout")
     }
 
-    const goToCollect = () => {
-      history.push("/collect")
-    }
-
     /////////////////////
     // Collect Payment //
     ////////////////////
@@ -282,14 +273,6 @@ class App extends React.Component {
       emptyCart()
     }
 
-    /////////////
-    // Success //
-    /////////////
-
-    const goToCheckout = () => {
-      history.push("/checkout")
-    }
-
     /////////////////////
     // Component Props //
     /////////////////////
@@ -308,13 +291,11 @@ class App extends React.Component {
           text: "Next",
           variant: "primary",
           onClick: () => history.push("/register"),
-          size: "md",
           block: true
         },
         {
           text: "Back",
           variant: "outline-primary",
-          size: "md",
           onClick: () => history.push("/"),
           block: true
         },
@@ -339,8 +320,6 @@ class App extends React.Component {
         },
       ]
     }
-
-
 
     const Registration = {
       label: "Registration Code",
@@ -384,7 +363,7 @@ class App extends React.Component {
           text: "Next",
           variant: "primary",
           block: true,
-          onClick: goToCollect
+          onClick: () => history.push("/collect")
         },
         {
           text: "Edit Order",
@@ -420,7 +399,7 @@ class App extends React.Component {
         {
           text: "Return to Checkout",
           block: true,
-          onClick: goToCheckout,
+          onClick: () => history.push("/checkout"),
           variant: "outline-primary",
         }
       ]
@@ -433,7 +412,7 @@ class App extends React.Component {
     return (
       <div className="app">
         {
-          !isConnected ? <Redirect to="/reader" /> : null
+          // !isConnected ? <Redirect to="/reader" /> : null
         }
         <ErrorMessage
           errorMsgs={errorMsg}

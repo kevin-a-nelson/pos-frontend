@@ -143,7 +143,7 @@ class App extends React.Component {
     const onRegister = (registrationCode) => {
       withLoadingAndErrors(registerAndConnectReader, registrationCode)
       setIsConnected(true)
-      history.push("/events")
+      history.push("/input-event")
     }
 
     //////////////
@@ -249,7 +249,6 @@ class App extends React.Component {
       const payment = await this.terminal.collectPaymentMethod(processedPaymentIntent.secret);
       const processedPayment = await this.terminal.processPayment(payment.paymentIntent);
       const captureResult = await this.client.capturePaymentIntent({ paymentIntentId: processedPayment.paymentIntent.id });
-      throw Error("This is an error");
       return captureResult;
     };
 
@@ -364,8 +363,8 @@ class App extends React.Component {
     }
 
     const inputEvent = {
-      label: "Your Event",
-      placeholder: "Ex. Show Down",
+      label: "Event Name",
+      placeholder: "Ex. Prep Hoops Circuit",
       btns: [
         {
           text: "Submit",

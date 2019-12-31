@@ -21,7 +21,7 @@ const InputForm = (props) => {
   }
 
   const handleKeyPress = (target) => {
-    if (target.charCode === 13) {
+    if (target.key === "Enter") {
       btns[0].onClick(formValue)
     }
   }

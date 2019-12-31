@@ -302,6 +302,24 @@ class App extends React.Component {
       ]
     }
 
+
+    const discoverReaders = async () => {
+      const discoverResult = await this.terminal.discoverReaders();
+      if (discoverResult.error) {
+        console.log('Failed to discover: ', discoverResult.error);
+        this.setState({ unableToConnect: true })
+        this.setState({ loadingNewRegister: false })
+        return discoverResult.error;
+      } else {
+        console.log("Happening")
+        this.setState({
+          discoveredReaders: discoverResult.discoveredReaders
+        });
+        this.setState({ loadingNewRegister: false })
+        return discoverResult.discoveredReaders;
+      }
+    };
+
     const wifi = {
       className: "wifi",
       header: "Requirements",
@@ -405,6 +423,8 @@ class App extends React.Component {
       ]
     }
 
+
+
     if (isLoading) {
       return <Loader loading={isLoading} />
     }
@@ -412,7 +432,7 @@ class App extends React.Component {
     return (
       <div className="app">
         {
-          // !isConnected ? <Redirect to="/" /> : null
+          !isConnected ? <Redirect to="/" /> : null
         }
         <ErrorMessage
           errorMsgs={errorMsg}

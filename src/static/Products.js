@@ -1,31 +1,13 @@
 
-
-function getDayStr() {
-  let date = new Date()
-  // Sun = 0, Mon = 1 ... 
-  let dayNum = date.getDay();
-  let dayStr = ""
-  switch (dayNum) {
-    case 0: dayStr = "Sunday"; break;
-    case 1: dayStr = "Monday"; break;
-    case 2: dayStr = "Tuesday"; break;
-    case 3: dayStr = "Wednesday"; break;
-    case 4: dayStr = "Thursday"; break;
-    case 5: dayStr = "Friday"; break;
-    case 6: dayStr = "Saturday"; break;
-    default: dayStr = "Day"; break;
-  }
-
-  return dayStr
-}
-
-const DAY_OF_THE_WEEK = getDayStr()
+import DAY_OF_THE_WEEK from "../Utils/dayOfTheWeek"
 
 export default [
   {
     id: 1,
     price: 5,
+    // label show on the screen and the reader
     label: "Socks",
+    // label shown on the stripe website where payments are looked at
     stripeLabel: "Socks",
     replaceLabel: null,
     dayInLabel: false,
@@ -71,8 +53,8 @@ export default [
   {
     id: 8,
     price: 120,
-    label: "Adult Weekend",
-    stripeLabel: "Adult Weekend",
+    label: "Adult Whole Event",
+    stripeLabel: "Adult Whole Event",
     replaceLabel: null,
     weekDayOnly: true,
     lines: 2,
@@ -92,8 +74,8 @@ export default [
   {
     id: 9,
     price: 120,
-    label: "Kid/Senior Weekend",
-    stripeLabel: "Adult Weekend",
+    label: "Kid/Senior Whole Event",
+    stripeLabel: "Adult Whole Event",
     replaceLabel: null,
     dayInLabel: false,
     weekDayOnly: true,
@@ -102,3 +84,7 @@ export default [
     image: "https://image.shutterstock.com/image-vector/old-man-child-icon-family-600w-748985377.jpg"
   },
 ];
+
+
+
+

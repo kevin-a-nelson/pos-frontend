@@ -35,25 +35,6 @@ import ErrorMsgs from "./static/ErrorMsgs";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import "./index.css"
 
-function getDayStr() {
-  let date = new Date()
-  // Sun = 0, Mon = 1 ... 
-  let dayNum = date.getDay();
-  let dayStr = ""
-  switch (dayNum) {
-    case 0: dayStr = "Sun"; break;
-    case 1: dayStr = "Mon"; break;
-    case 2: dayStr = "Tues"; break;
-    case 3: dayStr = "Wed"; break;
-    case 4: dayStr = "Thurs"; break;
-    case 5: dayStr = "Fri"; break;
-    case 6: dayStr = "Sat"; break;
-    default: dayStr = "Day"; break;
-  }
-
-  return dayStr
-}
-
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -67,7 +48,6 @@ class App extends React.Component {
       cart: Products,
       readerRegistered: false,
       currency: "usd",
-      currentDay: getDayStr()
     }
     // Communicates with API
     this.client = new Client(BackendUrl)
@@ -86,7 +66,6 @@ class App extends React.Component {
       cart,
       isConnected,
       currency,
-      currentDay
     } = this.state
 
     const {
@@ -200,27 +179,10 @@ class App extends React.Component {
       setChargeAmount(totalCharge)
     }
 
-    const replaceSubStrInLabel = (item) => {
-      let subStrToReplace = item.replaceLabel.replace;
-      let subStrToReplaceWith = item.replaceLabel.replaceWith;
-
-      if (subStrToReplaceWith === "CURRENT_DAY") {
-        subStrToReplaceWith = currentDay
-      }
-
-      item.label = item.label.replace(subStrToReplace, subStrToReplaceWith)
-
-      return item
-    }
-
     // Return hash of items in cart with qty > 0
     const collectLineItems = () => {
       let lineItems = []
       cart.forEach((item) => {
-
-        if (item.replaceLabel) {
-          item = replaceSubStrInLabel(item)
-        }
 
         if (item.quantity > 0) {
           let displayItem = {
@@ -295,6 +257,7 @@ class App extends React.Component {
     const collectPayment = async () => {
       const paymentIntent = createPaymentIntent()
       const processedPaymentIntent = await this.client.processPaymentIntent(paymentIntent);
+      console.log(processedPaymentIntent)
       const payment = await this.terminal.collectPaymentMethod(processedPaymentIntent.secret);
       const processedPayment = await this.terminal.processPayment(payment.paymentIntent);
       const captureResult = await this.client.capturePaymentIntent({ paymentIntentId: processedPayment.paymentIntent.id });

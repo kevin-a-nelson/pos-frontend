@@ -2,7 +2,10 @@ export default [
   {
     subStr: "Invalid registration code tokens",
     cleanError: [
-      "Invalid registration code"
+      "Invalid registration code. Make sure that ... ",
+      "1. The Registration code was typed correctly",
+      "2. The Reader and tablet are connected to the same wifi",
+      "3. The wifi is working",
     ],
   },
   {

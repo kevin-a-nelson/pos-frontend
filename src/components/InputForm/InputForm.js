@@ -20,6 +20,12 @@ const InputForm = (props) => {
     setFormValue(formRef.current.value)
   }
 
+  const handleKeyPress = (target) => {
+    if (target.charCode === 13) {
+      btns[0].onClick(formValue)
+    }
+  }
+
   const Btns = () => {
     return (
       btns.map((btn, index) => {
@@ -37,7 +43,11 @@ const InputForm = (props) => {
       <Form>
         <Form.Group controlId="registerReader">
           <Form.Label>{label}</Form.Label>
-          <Form.Control onChange={handleChange} placeholder={placeholder} ref={formRef} />
+          <Form.Control
+            onKeyPress={handleKeyPress}
+            onChange={handleChange}
+            placeholder={placeholder}
+            ref={formRef} />
         </Form.Group>
         <Btns />
       </Form>

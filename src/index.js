@@ -21,7 +21,7 @@ injectGlobal({
 });
 
 ReactDOM.render(
-  <Router>
+  <Router basename="/">
     <App />
   </Router>
   ,

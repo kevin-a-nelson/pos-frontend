@@ -412,7 +412,7 @@ class App extends React.Component {
     return (
       <div className="app">
         {
-          // !isConnected ? <Redirect to="/reader" /> : null
+          // !isConnected ? <Redirect to="/" /> : null
         }
         <ErrorMessage
           errorMsgs={errorMsg}

@@ -107,7 +107,9 @@ class App extends React.Component {
       console.log(cleanError)
       if (cleanError) { return cleanError }
 
-      return error
+      // The ErrorMsg Component maps through a list of errors msgs
+      // so error needs to be a list
+      return [error]
     }
 
     const withLoadingAndErrors = async (fn, args) => {
@@ -247,6 +249,7 @@ class App extends React.Component {
       const payment = await this.terminal.collectPaymentMethod(processedPaymentIntent.secret);
       const processedPayment = await this.terminal.processPayment(payment.paymentIntent);
       const captureResult = await this.client.capturePaymentIntent({ paymentIntentId: processedPayment.paymentIntent.id });
+      throw Error("This is an error");
       return captureResult;
     };
 

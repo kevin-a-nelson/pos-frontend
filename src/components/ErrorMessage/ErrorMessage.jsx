@@ -2,6 +2,9 @@ import React from 'react'
 import Alert from 'react-bootstrap/Alert'
 import './ErrorMessage.css'
 
+import { Link } from "react-router-dom"
+
+
 const ErrorMessage = ({ errorMsgs, onClose }) => {
 
   if (!errorMsgs) { return null }
@@ -15,6 +18,7 @@ const ErrorMessage = ({ errorMsgs, onClose }) => {
             <p>{errorMsg}</p>
           )
         }
+        <span>If all else fails <Link to="/reader" onClick={() => onClose(null)} >restart</Link></span>
         <div className="error-msg-close-container">
           <span className="close-link" onClick={() => onClose(null)}>Close</span>
         </div>

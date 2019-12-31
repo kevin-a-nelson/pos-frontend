@@ -100,6 +100,23 @@ class App extends React.Component {
     const setCart = (cart) => { this.setState({ cart }) }
     const setIsConnected = (isConnected) => { this.setState({ isConnected }) }
 
+    const cleanErrorMsg = (error) => {
+      let cleanError = null
+
+      ErrorMsgs.forEach((errorMsg) => {
+        if (error.includes(errorMsg.subStr)) {
+          cleanError = errorMsg.cleanError
+          return
+        }
+      })
+
+      if (cleanError) { return cleanError }
+
+      // The ErrorMsg Component maps through a list of errors msgs
+      // so error needs to be a list
+      return [error]
+    }
+
     /**
     * Process: 
     *   Run Input Function
@@ -114,24 +131,6 @@ class App extends React.Component {
     * Ex. withLoadingAndErrors(collectPayment)
     */
 
-    const cleanErrorMsg = (error) => {
-      let cleanError = null
-
-      ErrorMsgs.forEach((errorMsg) => {
-        if (error.includes(errorMsg.subStr)) {
-          cleanError = errorMsg.cleanError
-          return
-        }
-      })
-
-      console.log(cleanError)
-      if (cleanError) { return cleanError }
-
-      // The ErrorMsg Component maps through a list of errors msgs
-      // so error needs to be a list
-      return [error]
-    }
-
     const withLoadingAndErrors = async (fn, args) => {
       setIsLoading(true)
       // Error msg will not show if ErrorMsg is null
@@ -140,8 +139,6 @@ class App extends React.Component {
         await fn(args);
       } catch (error) {
         const cleanError = cleanErrorMsg(error.message)
-        console.log(cleanError)
-        // console.log(cleanError)
         setErrorMsg(cleanError)
         // After an action, your always redirected to the next route. If an error occurs your redirected back
         // Ex. click checkout => routed to insert card => error => routed back to checkout

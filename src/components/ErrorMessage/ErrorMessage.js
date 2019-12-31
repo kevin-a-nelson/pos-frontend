@@ -5,7 +5,13 @@ import './ErrorMessage.css'
 import { Link } from "react-router-dom"
 
 
-const ErrorMessage = ({ errorMsgs, onClose }) => {
+const ErrorMessage = (props) => {
+
+  const {
+    errorMsgs,
+    onClose,
+    onReset,
+  } = props
 
   if (!errorMsgs) { return null }
 
@@ -18,7 +24,7 @@ const ErrorMessage = ({ errorMsgs, onClose }) => {
             <p>{errorMsg}</p>
           )
         }
-        <span>If all else fails <Link to="/reader" onClick={() => onClose(null)} >restart</Link></span>
+        <span>If all else fails <Link to="/" onClick={() => onReset()} >reset</Link></span>
         <div className="error-msg-close-container">
           <span className="close-link" onClick={() => onClose(null)}>Close</span>
         </div>

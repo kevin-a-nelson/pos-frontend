@@ -9,7 +9,8 @@ class Events extends React.Component {
         super(props);
 
         this.state = {
-            events: null
+            events: null,
+            cantConnectToAPI: false
         }
     }
 
@@ -17,15 +18,20 @@ class Events extends React.Component {
         axios.get("https://events.prephoops.com/event-list")
             .then(response => {
                 this.setState({ events: response.data })
-                console.log("WTF")
             })
-            .catch(error => () => console.log)
+            .catch(error => {
+                this.setState({ cantConnectToAPI: true })
+            })
     }
 
     render() {
 
-        const { events } = this.state
+        const { events, cantConnectToAPI } = this.state
         const { onSelect } = this.props
+
+        if (cantConnectToAPI) {
+            return <Redirect to="/input-event" />
+        }
 
         return (
             <div className="events">
@@ -35,10 +41,7 @@ class Events extends React.Component {
                             <Event
                                 key={index}
                                 event={event}
-                                title={event.title}
                                 image={"https://via.placeholder.com/250x150"}
-                                state={event.location_state}
-                                city={event.location_address_line_2}
                                 onSelect={onSelect}
                             />)
                         : null
@@ -47,42 +50,6 @@ class Events extends React.Component {
         )
     }
 }
-
-// const Events = ({ setEvent }) => {
-//     const [events, setEvents] = useState(null)
-
-//     useEffect(() => {
-//         axios.get("https://events.prephoops.com/event-list")
-//             .then(response => {
-//                 setEvents(response.data)
-//                 console.log(response.data)
-//             })
-//             .catch(error => () => console.log)
-//     }, [])
-
-//     if (!events || events.length === 0) {
-//         // Redirect if events API is down
-//         console.log("redirected")
-//         return <Redirect to="/input-event" />
-//     }
-
-//     return (
-//         <div>
-//             {
-//                 events.map((event, index) =>
-//                     <Event
-//                         key={index}
-//                         event={event}
-//                         title={event.title}
-//                         image={"https://via.placeholder.com/250x150"}
-//                         state={event.location_state}
-//                         city={event.location_address_line_2}
-//                         setEvent={setEvent}
-//                     />)
-//             }
-//         </div>
-//     )
-// }
 
 export default Events
 

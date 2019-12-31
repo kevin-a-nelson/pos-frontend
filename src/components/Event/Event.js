@@ -1,25 +1,20 @@
-import React, { useState } from 'react'
+import React from 'react'
 import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
-import { Redirect } from 'react-router-dom'
 
 const Event = (props) => {
     const {
-        title,
         event,
-        image,
-        state,
-        city,
         onSelect,
     } = props
 
     return (
         <Card className="event">
-            <Card.Img variant="top" src={image} />
+            <Card.Img variant="top" src={`https://events.prephoops.com/${event.images[0].image_path}`} />
             <Card.Body>
-                <Card.Title className="event-title">{title}</Card.Title>
+                <Card.Title className="event-title">{event.title}</Card.Title>
                 <Card.Text>
-                    {state}, {city}
+                    {event.location_state}, {event.location_address_line_2}
                 </Card.Text>
                 <Button variant="primary" onClick={() => onSelect(event)}>Select Event</Button>
             </Card.Body>

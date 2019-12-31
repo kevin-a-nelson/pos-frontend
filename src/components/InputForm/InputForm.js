@@ -44,6 +44,7 @@ const InputForm = (props) => {
         <Form.Group controlId="registerReader">
           <Form.Label>{label}</Form.Label>
           <Form.Control
+            size="lg"
             onKeyPress={handleKeyPress}
             onChange={handleChange}
             placeholder={placeholder}

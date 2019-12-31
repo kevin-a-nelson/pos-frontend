@@ -295,6 +295,9 @@ class App extends React.Component {
     const collectPayment = async () => {
       const paymentIntent = createPaymentIntent()
       const processedPaymentIntent = await this.client.processPaymentIntent(paymentIntent);
+
+      // MAKE POST REQUEST
+
       const payment = await this.terminal.collectPaymentMethod(processedPaymentIntent.secret);
       const processedPayment = await this.terminal.processPayment(payment.paymentIntent);
       const captureResult = await this.client.capturePaymentIntent({ paymentIntentId: processedPayment.paymentIntent.id });
@@ -432,16 +435,16 @@ class App extends React.Component {
     }
 
     const collect = {
-      header: "Collect",
+      header: "Purchase",
       img: DollarSign,
       btns: [
         {
-          text: "Collect Payment",
+          text: "Confirm Purchase",
           onClick: onCollectPayment,
           block: true,
         },
         {
-          text: "Cancel Order",
+          text: "Cancel Purchase",
           variant: "outline-primary",
           onClick: onCancelOrder,
           block: true,
@@ -462,6 +465,11 @@ class App extends React.Component {
       ]
     }
 
+    const onReset = () => {
+      setErrorMsg(null)
+      this.terminal.clearReaderDisplay()
+    }
+
     if (isLoading) {
       return <Loader loading={isLoading} />
     }
@@ -471,12 +479,13 @@ class App extends React.Component {
         {
           // If a user refreshes page they will be disconnected from the reader.
           // When this happens they are redirected back home
-          // !isConnected ? <Redirect to="/" /> : null
+          !isConnected ? <Redirect to="/" /> : null
         }
         {/* ErrorMsgs show if errorMsg !== null */}
         <ErrorMessage
           errorMsgs={errorMsg}
           onClose={setErrorMsg}
+          onReset={onReset}
         />
         <Switch>
           <Route path="/register">

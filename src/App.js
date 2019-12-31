@@ -67,7 +67,7 @@ class App extends React.Component {
       cart: Products,
       readerRegistered: false,
       currency: "usd",
-      day: getDayStr()
+      currentDay: getDayStr()
     }
     // Communicates with API
     this.client = new Client(BackendUrl)
@@ -85,7 +85,8 @@ class App extends React.Component {
       errorMsg,
       cart,
       isConnected,
-      currency
+      currency,
+      currentDay
     } = this.state
 
     const {
@@ -162,7 +163,16 @@ class App extends React.Component {
     const onRegister = (registrationCode) => {
       withLoadingAndErrors(registerAndConnectReader, registrationCode)
       setIsConnected(true)
-      history.push("/input-event")
+      history.push("/events")
+    }
+
+    //////////////
+    // Register //
+    //////////////
+
+    const onSelectEvent = (event) => {
+      setEvent(event)
+      history.push("/checkout")
     }
 
     //////////////
@@ -190,10 +200,28 @@ class App extends React.Component {
       setChargeAmount(totalCharge)
     }
 
+    const replaceSubStrInLabel = (item) => {
+      let subStrToReplace = item.replaceLabel.replace;
+      let subStrToReplaceWith = item.replaceLabel.replaceWith;
+
+      if (subStrToReplaceWith === "CURRENT_DAY") {
+        subStrToReplaceWith = currentDay
+      }
+
+      item.label = item.label.replace(subStrToReplace, subStrToReplaceWith)
+
+      return item
+    }
+
     // Return hash of items in cart with qty > 0
     const collectLineItems = () => {
       let lineItems = []
       cart.forEach((item) => {
+
+        if (item.replaceLabel) {
+          item = replaceSubStrInLabel(item)
+        }
+
         if (item.quantity > 0) {
           let displayItem = {
             "description": item.label,
@@ -462,7 +490,9 @@ class App extends React.Component {
             {/* Events API is currently down: https://events.prephoops.com/event-list 
               * This route is not being used at all
               */}
-            <Events />
+            <Events
+              onSelect={onSelectEvent}
+            />
           </Route>
           <Route path="/input-event">
             <InputForm

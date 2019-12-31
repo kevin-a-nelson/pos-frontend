@@ -3,17 +3,15 @@ import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
 import { Redirect } from 'react-router-dom'
 
-const Event = ({ title, event, image, state, city, setEvent }) => {
-    const [eventSelected, setEventSelected] = useState(false)
-
-    const handleEventSelect = () => {
-        setEvent({ event })
-        setEventSelected(true)
-    }
-
-    if (eventSelected) {
-        return <Redirect to="/checkout" />
-    }
+const Event = (props) => {
+    const {
+        title,
+        event,
+        image,
+        state,
+        city,
+        onSelect,
+    } = props
 
     return (
         <Card className="event">
@@ -23,7 +21,7 @@ const Event = ({ title, event, image, state, city, setEvent }) => {
                 <Card.Text>
                     {state}, {city}
                 </Card.Text>
-                <Button variant="primary" onClick={() => handleEventSelect()}>Select Event</Button>
+                <Button variant="primary" onClick={() => onSelect(event)}>Select Event</Button>
             </Card.Body>
         </Card>
     )

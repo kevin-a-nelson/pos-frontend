@@ -1,21 +1,22 @@
-import React, { useState } from 'react'
+import React from 'react'
 import Alert from 'react-bootstrap/Alert'
 import './ErrorMessage.css'
-import { Link, Redirect } from 'react-router-dom'
 
-const ErrorMessage = ({ errorMsg, onClose }) => {
+const ErrorMessage = ({ errorMsgs, onClose }) => {
 
-  if (errorMsg === null) {
-    return null
-  }
+  if (!errorMsgs) { return null }
 
   return (
-    <div>
+    <div className="error-msg-container">
       <Alert className="error-msg" variant="danger">
-        {errorMsg}
-        <br />
+        <div className="top-space"></div>
+        {
+          errorMsgs.map((errorMsg) =>
+            <p>{errorMsg}</p>
+          )
+        }
         <div className="error-msg-close-container">
-          <Link onClick={() => onClose(null)}>Close</Link>
+          <span className="close-link" onClick={() => onClose(null)}>Close</span>
         </div>
       </Alert>
     </div>

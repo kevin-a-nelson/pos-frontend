@@ -18,16 +18,19 @@ import ErrorMessage from './components/ErrorMessage/ErrorMessage.jsx';
 import Loader from './components/Loader/Loader.jsx'
 import Instruction from "./components/Instruction/Instruction"
 import InputForm from "./components/InputForm/InputForm"
+import Events from "./components/Events/Events"
 
 // Images
 import ReaderImg from "./assets/reader-large.png"
 import BlueCheck from "./assets/blueCheck3.png"
 import InsertCard from "./assets/creditCard2.png"
 import DollarSign from "./assets/dollarSign.png"
+import wifiImg from "./assets/wifi.png"
 
 // Static Data
 import Products from './static/Products';
 import BackendUrl from './static/BackendUrl';
+import ErrorMsgs from "./static/ErrorMsgs";
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import "./index.css"
@@ -87,6 +90,23 @@ class App extends React.Component {
     * 
     * Ex. withLoadingAndErrors(collectPayment)
     */
+
+    const cleanErrorMsg = (error) => {
+      let cleanError = null
+
+      ErrorMsgs.forEach((errorMsg) => {
+        if (error.includes(errorMsg.subStr)) {
+          cleanError = errorMsg.cleanError
+          return
+        }
+      })
+
+      console.log(cleanError)
+      if (cleanError) { return cleanError }
+
+      return error
+    }
+
     const withLoadingAndErrors = async (fn, args) => {
       setIsLoading(true)
       // Error msg will not show if ErrorMsg is null
@@ -94,7 +114,10 @@ class App extends React.Component {
       try {
         await fn(args);
       } catch (error) {
-        setErrorMsg(`${error}`)
+        const cleanError = cleanErrorMsg(error.message)
+        console.log(cleanError)
+        // console.log(cleanError)
+        setErrorMsg(cleanError)
         // After an action, your always redirected to the next route. If an error occurs your redirected back
         // Ex. click checkout => routed to insert card => error => routed back to checkout
         history.goBack()
@@ -123,7 +146,7 @@ class App extends React.Component {
     const onRegister = (registrationCode) => {
       withLoadingAndErrors(registerAndConnectReader, registrationCode)
       setIsConnected(true)
-      history.push("/checkout")
+      history.push("/events")
     }
 
     //////////////
@@ -284,18 +307,72 @@ class App extends React.Component {
         {
           text: "Next",
           variant: "primary",
-          onClick: goToRegister,
+          onClick: () => history.push("/register"),
+          size: "md",
+          block: true
+        },
+        {
+          text: "Back",
+          variant: "outline-primary",
+          size: "md",
+          onClick: () => history.push("/"),
           block: true
         },
       ]
     }
 
-    const Registration = {
-      placeholder: "Ex. Sepia-cerulean-orynx",
-      label: "Registration Code",
+    const wifi = {
+      className: "wifi",
+      header: "Requirements",
+      img: wifiImg,
+      lines: [
+        { text: "1. The wifi is working" },
+        { text: "2. The wifi is password protected" },
+        { text: "3. The Reader and Tablet are connected to the same wifi" },
+      ],
       btns: [
-        { text: "Submit", variant: "primary", onClick: onRegister },
-        { text: "Back", variant: "outline-primary", onClick: () => history.push("/") },
+        {
+          text: "Next",
+          variant: "primary",
+          onClick: () => history.push("/reader"),
+          block: true
+        },
+      ]
+    }
+
+
+
+    const Registration = {
+      label: "Registration Code",
+      placeholder: "Ex. Sepia-cerulean-orynx",
+      btns: [
+        {
+          text: "Submit",
+          variant: "primary",
+          onClick: onRegister
+        },
+        {
+          text: "Back",
+          variant: "outline-primary",
+          onClick: () => history.push("/reader")
+        },
+      ]
+    }
+
+    const onSubmitEvent = (event) => {
+      setEvent(event)
+      history.push("/checkout")
+    }
+
+    const inputEvent = {
+      label: "Your Event",
+      placeholder: "Ex. Show Down",
+      btns: [
+        {
+          text: "Submit",
+          variant: "primary",
+          onClick: onSubmitEvent
+        }
       ]
     }
 
@@ -349,22 +426,17 @@ class App extends React.Component {
       ]
     }
 
-    // if (true) {
-    //   return <Loader loading={true} />
-    // }
-
     if (isLoading) {
       return <Loader loading={isLoading} />
     }
 
     return (
       <div className="app">
-        {/* Redirect use to landing page if not connected to reader */}
         {
-          // !isConnected ? <Redirect to="/" /> : null
+          !isConnected ? <Redirect to="/reader" /> : null
         }
         <ErrorMessage
-          errorMsg={errorMsg}
+          errorMsgs={errorMsg}
           onClose={setErrorMsg}
         />
         <Switch>
@@ -373,6 +445,16 @@ class App extends React.Component {
               label={Registration.label}
               placeholder={Registration.placeholder}
               btns={Registration.btns}
+            />
+          </Route>
+          <Route path="/events">
+            <Events />
+          </Route>
+          <Route path="/input-event">
+            <InputForm
+              label={inputEvent.label}
+              placeholder={inputEvent.placeholder}
+              btns={inputEvent.btns}
             />
           </Route>
           <Route path="/checkout">
@@ -409,13 +491,21 @@ class App extends React.Component {
             >
             </Instruction>
           </Route>
-          <Route path="/">
+          <Route path="/reader">
             <Instruction
               className={landing.className}
               header={landing.header}
               img={landing.img}
               lines={landing.lines}
               btns={landing.btns}
+            />
+          </Route>
+          <Route path="/">
+            <Instruction
+              className={wifi.className}
+              lines={wifi.lines}
+              img={wifi.img}
+              btns={wifi.btns}
             />
           </Route>
         </Switch>

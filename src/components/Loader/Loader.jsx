@@ -8,7 +8,7 @@ const Loader = ({ loading }) => {
 
   return (
     <div className="lds-grid-container">
-      <div class="lds-grid">
+      <div className="lds-grid">
         <div></div>
         <div></div>
         <div></div>

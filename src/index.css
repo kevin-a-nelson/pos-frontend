@@ -9,9 +9,10 @@
 } */
 
 /* @import url('https://fonts.googleapis.com/css?family=Josefin+Sans'); */
-@import url('https://fonts.googleapis.com/css?family=Lora');
+@import url('https://fonts.googleapis.com/css?family=B612');
 
 .app {
-  font-family: Lora;
+  /* font-family: Lora; */
+  font-family: B612;
 }
 

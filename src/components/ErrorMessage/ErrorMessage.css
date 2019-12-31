@@ -1,10 +1,19 @@
+
+.top-space {
+  height: 10px;
+}
+
 .error-msg {
-  margin-bottom: 10px;
+  display: block;
   text-align: center;
+  line-height: 20px;
   font-size: 16px;
 }
 
+.close-link {
+  color: #007bff;
+}
 
-.error-msg-close-container {
-  padding-top: 10px;
+.close-link:hover {
+  text-decoration: underline;
 }

@@ -3,19 +3,17 @@ import axios from 'axios';
 import Event from '../Event/Event.jsx'
 import { Redirect } from 'react-router-dom';
 
-const EventSelector = ({ setEvent }) => {
+const Events = ({ setEvent }) => {
     const [events, setEvents] = useState(null)
 
     useEffect(() => {
         axios.get("https://events.prephoops.com/event-list")
-            .then(response => {
-                setEvents(response.data)
-            })
-            .catch(error => console.log("There was an error loading the API"))
+            .then(response => { setEvents(response.data) })
+            .catch(error => () => console.log)
     }, [])
 
-    if (!events) {
-        return <Redirect to="/checkout" />
+    if (!events || events.length === 0) {
+        return <Redirect to="/input-event" />
     }
 
     return (
@@ -36,5 +34,5 @@ const EventSelector = ({ setEvent }) => {
     )
 }
 
-export default EventSelector
+export default Events
 

@@ -94,7 +94,7 @@ class App extends React.Component {
 
       // The ErrorMsg Component maps through a list of errors msgs
       // so error needs to be a list
-      return [error]
+      return [{ text: error }]
     }
 
     /**
@@ -220,6 +220,7 @@ class App extends React.Component {
 
     const onCheckout = () => {
       // Display items being bought and total charge on reader
+      window.scrollTo(0, 0)
       withLoadingAndErrors(setReaderDisplay)
       history.push("/insert")
     }
@@ -237,11 +238,23 @@ class App extends React.Component {
     // Collect Payment //
     ////////////////////
 
-    // Ex. Ouput: Prep Showdown - Shirts (2), Weekend Pass (1), Pants(3)
+    // Ex. Output: Prep Showdown - Shirts (2), Adult Whole Event (1), Kid/Senior Day (1)
     const createPaymentIntentDescription = () => {
       let lineItemsStr = ""
-      cart.forEach((lineItem) => { lineItemsStr += `${lineItem.label} (${lineItem.quantity}), ` })
+      cart.forEach((lineItem) => {
+        if (lineItem.quantity > 0) {
+          // Notice how stripeLabel is being used. not Label
+          // Currently labels that include DAY_OF_THE_WEEK are replaced with day
+          // ex. Adult Tuesday => Adult Day
+          lineItemsStr += `${lineItem.stripeLabel} (${lineItem.quantity}), `
+        }
+      })
+
+      // Remove ", " from the end of the string
+      lineItemsStr = lineItemsStr.slice(0, -2)
+
       const description = `${event.title} - ${lineItemsStr}`
+
       return description
     }
 
@@ -256,8 +269,8 @@ class App extends React.Component {
     // Run within withLoadingAndErrors() which handles errors
     const collectPayment = async () => {
       const paymentIntent = createPaymentIntent()
+      console.log(paymentIntent)
       const processedPaymentIntent = await this.client.processPaymentIntent(paymentIntent);
-      console.log(processedPaymentIntent)
       const payment = await this.terminal.collectPaymentMethod(processedPaymentIntent.secret);
       const processedPayment = await this.terminal.processPayment(payment.paymentIntent);
       const captureResult = await this.client.capturePaymentIntent({ paymentIntentId: processedPayment.paymentIntent.id });
@@ -312,6 +325,12 @@ class App extends React.Component {
           // Makes button 100% width
           block: true
         },
+      ],
+      help: [
+        {
+          text: "Nothing happens when card is inserted",
+
+        }
       ]
     }
 
@@ -444,7 +463,7 @@ class App extends React.Component {
         {/* ErrorMsgs show if errorMsg !== null */}
         <ErrorMessage
           errorMsgs={errorMsg}
-          onClose={setErrorMsg}
+          onClose={() => setErrorMsg()}
           onReset={onReset}
         />
         <Switch>

@@ -13,20 +13,23 @@ const ErrorMessage = (props) => {
     onReset,
   } = props
 
-  if (!errorMsgs) { return null }
+  if (!errorMsgs || errorMsgs.length === 0) { return null }
 
   return (
-    <div className="error-msg-container">
-      <Alert className="error-msg" variant="danger">
-        <div className="top-space"></div>
-        {
-          errorMsgs.map((errorMsg) =>
-            <p>{errorMsg}</p>
-          )
-        }
-        <span>If all else fails <Link to="/" onClick={() => onReset()} >reset</Link></span>
-        <div className="error-msg-close-container">
-          <span className="close-link" onClick={() => onClose(null)}>Close</span>
+    <div className="alert-container">
+      <Alert className="alert" variant="danger">
+        <div className="error-msg-container">
+          {
+            errorMsgs.map((errorMsg) => {
+              const msg = (<p className={errorMsg.className}>{errorMsg.text}</p>)
+
+              if (errorMsg.isLink) { return (<Link to={errorMsg.to}>{msg}</Link>) }
+
+              if (errorMsg.isClose) { return (<Link to={errorMsg.to} onClick={onClose}>{msg}</Link>) }
+
+              return msg
+            })
+          }
         </div>
       </Alert>
     </div>

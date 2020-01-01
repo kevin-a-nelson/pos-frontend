@@ -1,26 +1,63 @@
 export default [
   {
+    subStr: "Failed to fetch",
+    cleanError: [
+      {
+        text: "No Internet",
+        className: "error-msg-header",
+      },
+      {
+        text: "Make sure that your wifi is still up",
+      },
+      {
+        text: "close",
+        isClose: true,
+      }
+    ]
+  },
+  {
     subStr: "Invalid registration code tokens",
     cleanError: [
-      "Invalid registration code. Make sure that ... ",
-      "1. The Registration code was typed correctly",
-      "2. The Reader and tablet are connected to the same wifi",
-      "3. The wifi is working",
+      {
+        text: "Invalid registration code",
+        className: "error-msg-header"
+      },
+      { text: "You Either" },
+      { text: "1. Typed the code incorrectly" },
+      { text: "or" },
+      { text: "2. Are connecting to a different wifi from the reader" },
+      {
+        text: "try again",
+        isClose: true,
+      }
     ],
   },
   {
-    subStr: "No established connection to the Reader",
+    subStr: "established",
     cleanError: [
-      "No established connection to the Reader. Make sure that ... ",
-      "1. The Reader and tablet are connected to the same wifi",
-      "2. The Wifi is Working",
-    ],
+      {
+        text: "The Reader Unexpectedly Disconnected",
+        className: "error-msg-header"
+      },
+      { text: "If the reader is displaying items, unplug the reader and then plug it in again to clear it.", },
+      {
+        text: "Reconnect",
+        isLink: true,
+        to: "/",
+      },
+      {
+        text: "I understand how to clear the reader (close)",
+        isClose: true,
+      }
+    ]
   },
   {
     subStr: "Error creating PaymentIntent!",
-    cleanError: ["Error Collecting Payment. Make sure that ...",
-      "1. The Reader and tablet are connected to the same wifi",
-      "2. The Wifi is Working"
+    cleanError: ["Error Collecting Payment",
+      { text: "1. Click Cancel Purchase" },
+      { text: "2. If the reader is still displaying items. Unplug it and then plug it in again" },
+      { text: "3. If the reader resets, then try again" },
+      { text: "4. If you tried multiple times, their is something wrong with the card" },
     ],
   }
 ]

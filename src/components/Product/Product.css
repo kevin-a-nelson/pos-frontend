@@ -52,13 +52,27 @@
 
 .product-quantity-selector-amount {
   line-height: 38px;
+  font-size: 25px;
+  font-weight: 100;
+}
+
+.thin {
+  /* color: grey; */
+  opacity: 0.2;
 }
 
 
 /* Product Price */
 .product-price {
-line-height: 75px;
-text-align: center;
+  margin-left: 30px;
+  line-height: 75px;
+  font-size: 18px;
+  text-align: center;
+}
+
+.product-price-container {
+  padding-top: 45px;
+  line-height: 0px;
 }
 
 .quantity-btn {

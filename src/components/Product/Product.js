@@ -21,11 +21,18 @@ const Product = (props) => {
       </div>
       <div className="product-quantity-selector w-25per">
         <button tabIndex="-1" className="quantity-btn" onClick={() => onQtyChange(1, index)}>+</button>
-        <span className="product-quantity-selector-amount">{item.quantity}</span>
+        {
+          item.quantity === 0 ?
+            <span className="product-quantity-selector-amount thin">{item.quantity}</span>
+            :
+            <span className="product-quantity-selector-amount bold">{item.quantity}</span>
+        }
         <button tabIndex="-1" className="quantity-btn" onClick={() => onQtyChange(-1, index)}>-</button>
       </div>
-      <div className="product-price w-25per">
-        <p>${item.price}</p>
+      <div className="product-price">
+        <div className="product-price-container">
+          <p>${item.price}</p>
+        </div>
       </div>
     </div>
   )

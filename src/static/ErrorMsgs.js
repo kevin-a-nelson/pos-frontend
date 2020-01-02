@@ -25,7 +25,7 @@ export default [
       { text: "You Either" },
       { text: "1. Typed the code incorrectly" },
       { text: "or" },
-      { text: "2. Are connecting to a different wifi from the reader" },
+      { text: "2. Are connected to a different wifi from the reader" },
       {
         text: "try again",
         isClose: true,
@@ -39,14 +39,29 @@ export default [
         text: "The Reader Unexpectedly Disconnected",
         className: "error-msg-header"
       },
-      { text: "If the reader is displaying items, unplug the reader and then plug it in again to clear it.", },
       {
-        text: "Reconnect",
+        text: "If the Reader is Displaying Items",
+        className: "error-msg-sub-header",
+      },
+      {
+        text: "• unplug the reader and then plug it in again to clear it.",
+      },
+      {
+        text: "• go home and reconnect",
         isLink: true,
         to: "/",
       },
       {
-        text: "I understand how to clear the reader (close)",
+        text: "If the reader is not displaying Items",
+        className: "error-msg-sub-header",
+      },
+      {
+        text: "• go home and reconnect",
+        isLink: true,
+        to: "/",
+      },
+      {
+        text: "close",
         isClose: true,
       }
     ]
@@ -54,10 +69,34 @@ export default [
   {
     subStr: "Error creating PaymentIntent!",
     cleanError: ["Error Collecting Payment",
-      { text: "1. Click Cancel Purchase" },
-      { text: "2. If the reader is still displaying items. Unplug it and then plug it in again" },
-      { text: "3. If the reader resets, then try again" },
-      { text: "4. If you tried multiple times, their is something wrong with the card" },
+      {
+        text: "Error Creating Payment",
+        className: "error-msg-header",
+      },
+      { text: "• Press Cancel Purchase" },
+      { text: "• Wait 10 seconds" },
+      { text: "• Continue Below" },
+      {
+        text: "If the Reader is Displaying Items",
+        className: "error-msg-sub-header",
+      },
+      {
+        text: "• Unplug it and then plug it in again to reset.",
+      },
+      {
+        text: "• go home and reconnect",
+        isLink: true,
+        to: "/",
+      },
+      {
+        text: "If the Reader is not displaying items",
+        className: "error-msg-sub-header",
+      },
+      { text: "• Try Checkouting Out Again" },
+      {
+        text: "close",
+        isClose: true,
+      },
     ],
   }
 ]

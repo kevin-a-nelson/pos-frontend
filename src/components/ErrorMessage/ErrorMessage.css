@@ -1,8 +1,14 @@
 .error-msg-header {
   font-size: 20px;
   font-weight: 900;
-  text-align: center;
   margin-bottom: 30px;
+}
+
+.error-msg-sub-header {
+  font-size: 17px;
+  text-decoration: underline;
+  font-weight: 600;
+  margin: 30px 0;
 }
 
 .top-space {

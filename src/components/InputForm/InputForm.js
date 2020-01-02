@@ -15,12 +15,13 @@ const InputForm = (props) => {
 
   let formRef = React.createRef();
 
-
   const handleChange = () => {
     setFormValue(formRef.current.value)
+    // localStorage.setItem(label, formValue)
   }
 
   const handleKeyPress = (target) => {
+    localStorage.setItem(label, formValue)
     if (target.key === "Enter") {
       btns[0].onClick(formValue)
     }
@@ -30,7 +31,7 @@ const InputForm = (props) => {
     return (
       btns.map((btn, index) => {
         return (
-          <Button key={index} className={`btn${index + 1}`} variant={btn.variant} onClick={() => btn.onClick(formValue)}>
+          <Button disabled={!formValue} key={index} className={`btn${index + 1}`} variant={btn.variant} onClick={() => btn.onClick(formValue)}>
             {btn.text}
           </Button>
         )

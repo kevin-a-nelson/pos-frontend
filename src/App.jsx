@@ -26,7 +26,7 @@ import DollarSign from "./assets/dollarSign.png"
 import wifiImg from "./assets/wifi.png"
 
 // Static Data
-import Cart from './static/Cart';
+import Products from './static/Products';
 import BackendUrl from './static/BackendUrl';
 import ErrorMsgs from "./static/ErrorMsgs";
 
@@ -40,21 +40,18 @@ class App extends React.Component {
       chargeAmount: 0,
       taxAmount: 0,
       isLoading: false,
-      event: { title: "Event" },
+      event: "",
       errorOccured: false,
       errorMsg: null,
-      cart: Cart,
+      cart: Products,
       readerRegistered: false,
       currency: "usd",
     }
-    this.client = new Client(BackendUrl) // Communicates with API 
-
-    this.terminal = this.client.initTerminal() // Communicates with Reader
+    // Communicates with API
+    this.client = new Client(BackendUrl)
+    // Communicates with Reader
+    this.terminal = this.client.initTerminal()
   }
-
-  // componentDidMount() {
-  //   let eventTitle = localStorage.getItem("Event Name")
-  // }
 
   render() {
 
@@ -114,7 +111,8 @@ class App extends React.Component {
 
     const withLoadingAndErrors = async (fn, args) => {
       setIsLoading(true)
-      setErrorMsg(null) // Error msg will not show if ErrorMsg is null
+      // Error msg will not show if ErrorMsg is null
+      setErrorMsg(null)
       try {
         await fn(args);
       } catch (error) {
@@ -133,8 +131,10 @@ class App extends React.Component {
     //////////////
 
     const registerAndConnectReader = async (registrationCode) => {
-      const reader = await this.client.registerReader({ registrationCode }); // post Request to stripe
-      await this.terminal.connectReader(reader); // connect to reader
+      // post Request to stripe
+      const reader = await this.client.registerReader({ registrationCode });
+      // connect to reader
+      await this.terminal.connectReader(reader);
     };
 
     const onRegister = (registrationCode) => {
@@ -202,7 +202,8 @@ class App extends React.Component {
         cart: {
           line_items: lineItems,
           tax: taxAmount,
-          total: chargeAmount * 100 + taxAmount, // Reader displays 100 as 1.00 so everything needs to be mult by 100
+          // Reader displays 100 as 1.00 so everything needs to be mult by 100
+          total: chargeAmount * 100 + taxAmount,
           currency: currency,
         },
       }
@@ -216,7 +217,8 @@ class App extends React.Component {
     };
 
     const onCheckout = () => {
-      window.scrollTo(0, 0) // scroll to top so user see's error msg
+      // Display items being bought and total charge on reader
+      window.scrollTo(0, 0)
       withLoadingAndErrors(setReaderDisplay)
       history.push("/insert")
     }
@@ -240,11 +242,14 @@ class App extends React.Component {
       cart.forEach((lineItem) => {
         if (lineItem.quantity > 0) {
           // Notice how stripeLabel is being used. not Label
+          // Currently labels that include DAY_OF_THE_WEEK are replaced with day
+          // ex. Adult Tuesday => Adult Day
           lineItemsStr += `${lineItem.stripeLabel} (${lineItem.quantity}), `
         }
       })
 
-      lineItemsStr = lineItemsStr.slice(0, -2) // Remove ", " from the end of the string
+      // Remove ", " from the end of the string
+      lineItemsStr = lineItemsStr.slice(0, -2)
 
       const description = `${event.title} - ${lineItemsStr}`
 
@@ -253,7 +258,8 @@ class App extends React.Component {
 
     const createPaymentIntent = () => {
       const description = createPaymentIntentDescription()
-      const amount = chargeAmount * 100 + taxAmount // 100 is read as $1 on reader so must mult by 100
+      // 100 is read as $1 on reader so must mult by 100
+      const amount = chargeAmount * 100 + taxAmount
       const paymentIntent = { amount, currency, description }
       return paymentIntent
     }
@@ -448,11 +454,11 @@ class App extends React.Component {
     return (
       <div className="app">
         {
-          // If a user refreshes page disconnected from the reader.
+          // If a user refreshes page they will be disconnected from the reader.
           // When this happens they are redirected back home
           // !isConnected ? <Redirect to="/" /> : null
         }
-        {/* ErrorMsgs show if errorMsg !== null} */}
+        {/* ErrorMsgs show if errorMsg !== null */}
         <ErrorMessage
           errorMsgs={errorMsg}
           onClose={() => setErrorMsg()}

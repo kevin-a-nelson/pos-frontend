@@ -1,88 +1,78 @@
 
-import DAY_OF_THE_WEEK from "../Utils/dayOfTheWeek"
+// import DAY_OF_THE_WEEK from "../Utils/dayOfTheWeek"
 
 export default [
   {
     id: 1,
-    price: 5,
+    price: 12,
     // label show on the screen and the reader
     label: "Socks",
     // label shown on the stripe website where payments are looked at
     stripeLabel: "Socks",
-    replaceLabel: null,
-    dayInLabel: false,
     weekDayOnly: false,
     lines: 1,
     quantity: 0,
-    image: "https://s7d5.scene7.com/is/image/UrbanOutfitters/36672103_031_b?$xlarge$&hei=900&qlt=80&fit=constrain"
+    image: "https://thumbs.dreamstime.com/t/pair-socks-pair-socks-silhouette-isolated-white-background-118952582.jpg"
   },
   {
     id: 1,
     price: 25,
     label: "Shirt",
     stripeLabel: "Shirt",
-    replaceLabel: null,
-    dayInLabel: false,
     weekDayOnly: false,
     lines: 1,
     quantity: 0,
-    image: "http://sportsteam.com/pub/media/catalog/product//9/1/91285.jpg"
-  },
-  {
-    id: 1,
-    price: 40,
-    label: "Jacket",
-    stripeLabel: "Jacket",
-    replaceLabel: null,
-    dayInLabel: false,
-    weekDayOnly: false,
-    lines: 1,
-    quantity: 0,
-    image: "https://cdn.shopify.com/s/files/1/0665/2971/products/LifesTooShort-Crewneck-White_400x@2x.progressive.png.jpg?v=1575000922"
+    image: "https://cdn.pixabay.com/photo/2017/09/25/18/16/t-shirt-2786105_960_720.png"
   },
   {
     id: 7,
-    price: 60,
-    label: `Adult ${DAY_OF_THE_WEEK}`,
+    price: 8,
+    label: `Adult Day Pass`,
     stripeLabel: "Adult Day",
     weekDayOnly: false,
     lines: 2,
     quantity: 0,
-    image: "https://previews.123rf.com/images/victor85/victor851711/victor85171100330/90448657-man-icon-black-icon-isolated-on-white-background-man-simple-silhouette-web-site-page-and-mobile-app-.jpg"
+    image: "https://media.istockphoto.com/vectors/man-silhouette-icon-vector-icon-simple-element-illustration-man-vector-id1011132134?k=6&m=1011132134&s=170667a&w=0&h=Xzw1b2nu8OnB3pljC2W58Jf2su0-KevtP31E9eWRWRg="
   },
   {
     id: 8,
-    price: 120,
-    label: "Adult Whole Event",
-    stripeLabel: "Adult Whole Event",
-    replaceLabel: null,
+    price: 15,
+    label: "Adult Weekend Pass",
+    stripeLabel: "Adult Weekend Pass",
     weekDayOnly: true,
     lines: 2,
     quantity: 0,
-    image: "https://previews.123rf.com/images/victor85/victor851711/victor85171100330/90448657-man-icon-black-icon-isolated-on-white-background-man-simple-silhouette-web-site-page-and-mobile-app-.jpg"
+    image: "https://media.istockphoto.com/vectors/man-silhouette-icon-vector-icon-simple-element-illustration-man-vector-id1011132134?k=6&m=1011132134&s=170667a&w=0&h=Xzw1b2nu8OnB3pljC2W58Jf2su0-KevtP31E9eWRWRg="
   },
   {
     id: 6,
-    price: 60,
-    label: `Kid/Senior ${DAY_OF_THE_WEEK}`,
-    stripeLabel: "Kid/Senior Day",
+    price: 6,
+    label: `Student/Senior Day Pass`,
+    stripeLabel: "Student/Senior Day",
     weekDayOnly: false,
     lines: 2,
     quantity: 0,
-    image: "https://image.shutterstock.com/image-vector/old-man-child-icon-family-600w-748985377.jpg"
+    image: "https://us.123rf.com/450wm/aliyevs002/aliyevs0021802/aliyevs002180200338/95258927-stock-vector-old-man-with-child-icon-family-icon-simple-black-family-icon-can-be-used-as-web-element-family-desig.jpg?ver=6"
   },
   {
     id: 9,
-    price: 120,
-    label: "Kid/Senior Whole Event",
+    price: 10,
+    label: "Student/Senior Weekend Pass",
     stripeLabel: "Adult Whole Event",
-    replaceLabel: null,
-    dayInLabel: false,
     weekDayOnly: true,
     lines: 2,
     quantity: 0,
-    image: "https://image.shutterstock.com/image-vector/old-man-child-icon-family-600w-748985377.jpg"
+    image: "https://us.123rf.com/450wm/aliyevs002/aliyevs0021802/aliyevs002180200338/95258927-stock-vector-old-man-with-child-icon-family-icon-simple-black-family-icon-can-be-used-as-web-element-family-desig.jpg?ver=6"
   },
+  {
+    id: 10,
+    price: 0,
+    label: "Children 8 and Under",
+    stripeLabel: "Child Day",
+    lines: 2,
+    quantity: 0,
+    image: "https://cdn.clipart.email/1ce8a325245d501fd3da288df37abaaa_baby-silhouette-clip-art-at-clkercom-vector-clip-art-online-_962-768.svg"
+  }
 ];
 
 

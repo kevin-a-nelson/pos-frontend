@@ -1,7 +1,8 @@
 
 
 .checkout {
-  max-width: 400px;
+  max-width: 100%;
+  max-width: 500px;
   margin: 50px auto 100px auto;
   padding: 0 10px;
 }

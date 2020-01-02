@@ -12,9 +12,7 @@ const Product = (props) => {
   const marginTop = item.lines === 1 ? "mt-8per" : "mt-6per";
 
   return (
-    <div
-      className="product"
-    >
+    <div className="product">
       <div className="product-img-container w-25per">
         <img className="product-img" src={item.image} alt={item.label} />
       </div>

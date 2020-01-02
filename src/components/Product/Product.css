@@ -29,23 +29,24 @@
 }
 
 .mt-6per {
-  margin-top: 6%;
+  margin-top: 15px;
+  text-align: center;
 }
 
 .mt-8per {
-  margin-top: 8%;
+  margin-top: 25px;
 }
 
 /* Product Label */
 .product-label {
-  padding-right: 30px;
   text-align: center;
+  padding-right: 35px;
 }
 
 /* Product Quantity Selector */
 .product-quantity-selector {
   max-width: 100px;
-  padding-top: 25px;
+  padding-top: 16px;
   justify-content: space-evenly;
   display: flex;
 }
@@ -71,7 +72,7 @@
 }
 
 .product-price-container {
-  padding-top: 45px;
+  padding-top: 35px;
   line-height: 0px;
 }
 

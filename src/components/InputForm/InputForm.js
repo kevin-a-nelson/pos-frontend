@@ -31,7 +31,7 @@ const InputForm = (props) => {
     return (
       btns.map((btn, index) => {
         return (
-          <Button disabled={!formValue} key={index} className={`btn${index + 1}`} variant={btn.variant} onClick={() => btn.onClick(formValue)}>
+          <Button key={index} className={`btn${index + 1}`} variant={btn.variant} onClick={() => btn.onClick(formValue)}>
             {btn.text}
           </Button>
         )
@@ -49,7 +49,8 @@ const InputForm = (props) => {
             onKeyPress={handleKeyPress}
             onChange={handleChange}
             placeholder={placeholder}
-            ref={formRef} />
+            ref={formRef}
+          />
         </Form.Group>
         <Btns />
       </Form>

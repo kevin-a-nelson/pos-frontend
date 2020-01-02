@@ -49,12 +49,28 @@ class App extends React.Component {
     }
     this.client = new Client(BackendUrl) // Communicates with API 
 
-    this.terminal = this.client.initTerminal() // Communicates with Reader
-  }
+    this.onUnexpectedReaderDisconnect = (error) => {
+      console.log(error)
+    }
 
-  // componentDidMount() {
-  //   let eventTitle = localStorage.getItem("Event Name")
-  // }
+    this.onConnectionStatusChange = (status) => {
+      console.log(status)
+    }
+
+    this.initTerminal = () => {
+      const terminal = window.StripeTerminal.create({
+        onFetchConnectionToken: async () => {
+          let connectionTokenResult = await this.client.createConnectionToken();
+          return connectionTokenResult.secret;
+        },
+        onUnexpectedReaderDisconnect: this.onUnexpectedReaderDisconnect,
+        onConnectionStatusChange: this.onConnectionStatusChange,
+      });
+      return terminal
+    }
+
+    this.terminal = this.initTerminal() // Communicates with Reader
+  }
 
   render() {
 
@@ -340,8 +356,7 @@ class App extends React.Component {
           text: "Next",
           variant: "primary",
           onClick: () => history.push("/register"),
-          // makes buttons stack vertically and 100% width
-          block: true
+          block: true // makes buttons stack vertically and 100% width
         },
         {
           text: "Back",
@@ -369,7 +384,8 @@ class App extends React.Component {
       ]
     }
 
-    const onSubmitEvent = (event) => {
+    const onSubmitEvent = (eventTitle) => {
+      const event = { title: eventTitle }
       setEvent(event)
       history.push("/checkout")
     }

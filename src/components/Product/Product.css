@@ -51,7 +51,7 @@
 }
 
 .product-quantity-selector-amount {
-  line-height: 40px;
+  line-height: 38px;
 }
 
 
@@ -62,9 +62,12 @@ text-align: center;
 }
 
 .quantity-btn {
+  font-weight: 900;
+  font-size: 20px;
+  box-shadow: none;
   background: white;
   margin: 0 10px;
-  padding: 20px;
+  padding: 17px;
   line-height: 0px;
   height: 30px;
   border-radius: 5px;

@@ -46,7 +46,7 @@ export default [
     label: `Adult ${DAY_OF_THE_WEEK}`,
     stripeLabel: "Adult Day",
     weekDayOnly: false,
-    lines: 1,
+    lines: 2,
     quantity: 0,
     image: "https://previews.123rf.com/images/victor85/victor851711/victor85171100330/90448657-man-icon-black-icon-isolated-on-white-background-man-simple-silhouette-web-site-page-and-mobile-app-.jpg"
   },

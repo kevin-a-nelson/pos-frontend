@@ -38,7 +38,7 @@
 
 /* Product Label */
 .product-label {
-  padding: 0 5px;
+  padding-right: 30px;
   text-align: center;
 }
 
@@ -62,11 +62,11 @@ text-align: center;
 }
 
 .quantity-btn {
-  font-weight: 900;
-  font-size: 20px;
+  font-weight: 500;
+  font-size: 25px;
   box-shadow: none;
   background: white;
-  margin: 0 10px;
+  margin: 0 17px;
   padding: 17px;
   line-height: 0px;
   height: 30px;

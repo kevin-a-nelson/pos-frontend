@@ -73,7 +73,7 @@ export default [
         text: "Error Creating Payment",
         className: "error-msg-header",
       },
-      { text: "• Press Cancel Purchase" },
+      { text: "• Press the Cancel Purchase button down below" },
       { text: "• Wait 10 seconds" },
       { text: "• Continue Below" },
       {

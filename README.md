@@ -11,3 +11,4 @@ npm install
 npm run start
 ```
 
+# POS-frontend

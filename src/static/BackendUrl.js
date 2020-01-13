@@ -1,1 +1,1 @@
-export default "https://prepnetworkpos-backend.herokuapp.com/"
+export default "https://pos-backend-test.herokuapp.com/"

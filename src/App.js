@@ -129,10 +129,11 @@ class App extends React.Component {
     */
 
     const withLoadingAndErrors = async (fn, args) => {
+      let result = ""
       setIsLoading(true)
       setErrorMsg(null) // Error msg will not show if ErrorMsg is null
       try {
-        await fn(args);
+        let result = await fn(args);
       } catch (error) {
         const cleanError = cleanErrorMsg(error.message)
         setErrorMsg(cleanError)
@@ -142,6 +143,7 @@ class App extends React.Component {
       } finally {
         setIsLoading(false)
       }
+      return result
     };
 
     //////////////
@@ -277,11 +279,15 @@ class App extends React.Component {
     // Run within withLoadingAndErrors() which handles errors
     const collectPayment = async () => {
       const paymentIntent = createPaymentIntent()
-      console.log(paymentIntent)
+      console.log("Payment Intent", paymentIntent)
       const processedPaymentIntent = await this.client.processPaymentIntent(paymentIntent);
+      console.log("processedPaymentIntent", processedPaymentIntent)
       const payment = await this.terminal.collectPaymentMethod(processedPaymentIntent.secret);
+      console.log("payment", payment)
       const processedPayment = await this.terminal.processPayment(payment.paymentIntent);
+      console.log("processedPayment", processedPayment)
       const captureResult = await this.client.capturePaymentIntent({ paymentIntentId: processedPayment.paymentIntent.id });
+      console.log("captureResult", captureResult)
       return captureResult;
     };
 
@@ -466,7 +472,7 @@ class App extends React.Component {
         {
           // If a user refreshes page disconnected from the reader.
           // When this happens they are redirected back home
-          // !isConnected ? <Redirect to="/" /> : null
+          !isConnected ? <Redirect to="/" /> : null
         }
         {/* ErrorMsgs show if errorMsg !== null} */}
         <ErrorMessage

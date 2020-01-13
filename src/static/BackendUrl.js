@@ -1,1 +1,1 @@
-export default "https://prepnetwork-stripe.herokuapp.com"
+export default "https://prepnetworkpos-backend.herokuapp.com/"

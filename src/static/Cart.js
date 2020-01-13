@@ -15,7 +15,7 @@ export default [
     image: "https://thumbs.dreamstime.com/t/pair-socks-pair-socks-silhouette-isolated-white-background-118952582.jpg"
   },
   {
-    id: 1,
+    id: 2,
     price: 25,
     label: "Shirt",
     stripeLabel: "Shirt",

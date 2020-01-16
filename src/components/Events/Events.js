@@ -15,7 +15,7 @@ class Events extends React.Component {
     }
 
     componentDidMount() {
-        axios.get("https://events.prephoops.com/event-list")
+        axios.get("https://events-staging.prephoops.com/event-list")
             .then(response => {
                 this.setState({ events: response.data })
             })

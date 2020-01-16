@@ -239,6 +239,10 @@ class App extends React.Component {
       history.push("/insert")
     }
 
+    const onPayWithCash = () => {
+      emptyCart();
+    }
+
     /////////////////
     // Insert Card //
     /////////////////
@@ -279,15 +283,10 @@ class App extends React.Component {
     // Run within withLoadingAndErrors() which handles errors
     const collectPayment = async () => {
       const paymentIntent = createPaymentIntent()
-      console.log("Payment Intent", paymentIntent)
       const processedPaymentIntent = await this.client.processPaymentIntent(paymentIntent);
-      console.log("processedPaymentIntent", processedPaymentIntent)
       const payment = await this.terminal.collectPaymentMethod(processedPaymentIntent.secret);
-      console.log("payment", payment)
       const processedPayment = await this.terminal.processPayment(payment.paymentIntent);
-      console.log("processedPayment", processedPayment)
       const captureResult = await this.client.capturePaymentIntent({ paymentIntentId: processedPayment.paymentIntent.id });
-      console.log("captureResult", captureResult)
       return captureResult;
     };
 
@@ -472,7 +471,7 @@ class App extends React.Component {
         {
           // If a user refreshes page disconnected from the reader.
           // When this happens they are redirected back home
-          !isConnected ? <Redirect to="/" /> : null
+          // !isConnected ? <Redirect to="/" /> : null
         }
         {/* ErrorMsgs show if errorMsg !== null} */}
         <ErrorMessage
@@ -495,6 +494,11 @@ class App extends React.Component {
             <Events
               onSelect={onSelectEvent}
             />
+            <InputForm
+              label={inputEvent.label}
+              placeholder={inputEvent.placeholder}
+              btns={inputEvent.btns}
+            />
           </Route>
           <Route path="/input-event">
             <InputForm
@@ -509,6 +513,7 @@ class App extends React.Component {
               chargeAmount={chargeAmount}
               onQtyChange={onQtyChange}
               onCheckout={onCheckout}
+              onPayWithCash={onPayWithCash}
             />
           </Route>
           <Route path="/insert">

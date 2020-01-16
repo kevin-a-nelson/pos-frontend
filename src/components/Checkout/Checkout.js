@@ -10,11 +10,15 @@ const Checkout = (props) => {
     cart,
     chargeAmount,
     onCheckout,
-    onQtyChange
+    onQtyChange,
+    onPayWithCash
   } = props
 
   return (
     <div className="checkout">
+      <div className="pay-cash-btn-container">
+        <Button onClick={() => onPayWithCash()} variant="primary" size="lg" disabled={chargeAmount === 0} className="pay-cash-btn" block>Pay With Cash</Button>
+      </div>
       <div className="checkout-header">
         <div id="total-container">
           <span id="total">Total</span>

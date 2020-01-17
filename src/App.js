@@ -289,6 +289,7 @@ class App extends React.Component {
       const processedPaymentIntent = await this.client.processPaymentIntent(paymentIntent);
       const payment = await this.terminal.collectPaymentMethod(processedPaymentIntent.secret);
       const processedPayment = await this.terminal.processPayment(payment.paymentIntent);
+      console.log(processedPayment)
       const captureResult = await this.client.capturePaymentIntent({ paymentIntentId: processedPayment.paymentIntent.id });
       return captureResult;
     };

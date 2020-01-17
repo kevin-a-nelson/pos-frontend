@@ -30,6 +30,9 @@ import Cart from './static/Cart';
 import BackendUrl from './static/BackendUrl';
 import ErrorMsgs from "./static/ErrorMsgs";
 
+//
+import axios from 'axios'
+
 import 'bootstrap/dist/css/bootstrap.min.css';
 import "./index.css"
 
@@ -473,7 +476,6 @@ class App extends React.Component {
           // When this happens they are redirected back home
           // !isConnected ? <Redirect to="/" /> : null
         }
-        {/* ErrorMsgs show if errorMsg !== null} */}
         <ErrorMessage
           errorMsgs={errorMsg}
           onClose={() => setErrorMsg()}
@@ -488,19 +490,10 @@ class App extends React.Component {
             />
           </Route>
           <Route path="/events">
-            {/* Events API is currently down: https://events.prephoops.com/event-list 
-              * This route is not being used at all
-              */}
             <Events
               onSelect={onSelectEvent}
+              setIsLoading={setIsLoading}
             />
-            <InputForm
-              label={inputEvent.label}
-              placeholder={inputEvent.placeholder}
-              btns={inputEvent.btns}
-            />
-          </Route>
-          <Route path="/input-event">
             <InputForm
               label={inputEvent.label}
               placeholder={inputEvent.placeholder}
@@ -560,7 +553,7 @@ class App extends React.Component {
             />
           </Route>
         </Switch>
-      </div>
+      </div >
     )
   }
 }

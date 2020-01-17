@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import Event from '../Event/Event'
+import Loader from '../Loader/Loader'
 import { Redirect } from 'react-router-dom';
 import "./Events.css"
 
@@ -10,27 +11,29 @@ class Events extends React.Component {
 
         this.state = {
             events: null,
-            cantConnectToAPI: false
+            cantConnectToAPI: false,
+            isLoading: true,
         }
     }
 
     componentDidMount() {
-        axios.get("https://events-staging.prephoops.com/event-list")
+        axios.get("https://events.prephoops.com/api/event-list")
             .then(response => {
+                this.setState({ isLoading: false })
+                console.log(response.data)
                 this.setState({ events: response.data })
             })
             .catch(error => {
-                this.setState({ cantConnectToAPI: true })
+                this.setState({ isLoading: false })
             })
     }
 
     render() {
-
-        const { events, cantConnectToAPI } = this.state
+        const { events, cantConnectToAPI, isLoading } = this.state
         const { onSelect } = this.props
 
-        if (cantConnectToAPI) {
-            return <Redirect to="/input-event" />
+        if (isLoading) {
+            return <Loader loading={isLoading} />
         }
 
         return (

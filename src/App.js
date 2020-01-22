@@ -246,25 +246,27 @@ class App extends React.Component {
         .then(res => {
           order_id = res.data.id;
         })
-        .then(err => {
+        .catch(err => {
           console.log(err);
         })
 
-      const orderProductParams = {
-        order_id: order_id,
-        product_id: 10,
-        quantity: 10,
-      }
 
-      console.log(orderProductParams)
+      purchasedProducts.forEach(function (product) {
+        const orderProductParams = {
+          order_id: order_id,
+          product_id: product.id,
+          quantity: product.quantity,
+        }
 
-      await axios.post('http://localhost:8000/api/order-products', orderProductParams)
-        .then(res => {
-          console.log(res.data)
-        })
-        .catch(error => {
-          console.log(error)
-        })
+        axios.post('http://localhost:8000/api/order-products', orderProductParams)
+          .then(res => {
+            console.log(res.data)
+          })
+          .catch(error => {
+            console.log(error)
+          })
+
+      });
 
       emptyCart();
     }

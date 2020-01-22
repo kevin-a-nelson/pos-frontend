@@ -1,4 +1,16 @@
 
+
+.vertically-align-container {
+  height: 50px;
+  line-height: 65px;
+  text-align: center;
+}
+.vertically-align-span {
+  display: inline-block;
+  vertical-align: middle;
+  line-height: normal;
+}
+
 .quantity-btn {
   height: 30px;
   border-radius: 5px;
@@ -40,7 +52,8 @@
 /* Product Label */
 .product-label {
   text-align: center;
-  padding-right: 35px;
+  width: 140px;
+  padding-right: 50px;
 }
 
 /* Product Quantity Selector */

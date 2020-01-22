@@ -9,7 +9,6 @@ let cart = [
     label: "Socks",
     // label shown on the stripe website where payments are looked at
     stripeLabel: "Socks",
-    weekDayOnly: false,
     lines: 1,
     quantity: 0,
     image: "https://thumbs.dreamstime.com/t/pair-socks-pair-socks-silhouette-isolated-white-background-118952582.jpg"
@@ -19,7 +18,6 @@ let cart = [
     price: 25,
     label: "Shirt",
     stripeLabel: "Shirt",
-    weekDayOnly: false,
     lines: 1,
     quantity: 0,
     image: "https://cdn.pixabay.com/photo/2017/09/25/18/16/t-shirt-2786105_960_720.png"
@@ -29,7 +27,6 @@ let cart = [
     price: 8,
     label: `Adult ${DAY_OF_THE_WEEK}`,
     stripeLabel: "Adult Day",
-    weekDayOnly: false,
     lines: 2,
     quantity: 0,
     image: "https://media.istockphoto.com/vectors/man-silhouette-icon-vector-icon-simple-element-illustration-man-vector-id1011132134?k=6&m=1011132134&s=170667a&w=0&h=Xzw1b2nu8OnB3pljC2W58Jf2su0-KevtP31E9eWRWRg="
@@ -39,7 +36,6 @@ let cart = [
     price: 28,
     label: "Adult Weekend Pass",
     stripeLabel: "Adult Weekend Pass",
-    weekDayOnly: true,
     lines: 2,
     quantity: 0,
     image: "https://media.istockphoto.com/vectors/man-silhouette-icon-vector-icon-simple-element-illustration-man-vector-id1011132134?k=6&m=1011132134&s=170667a&w=0&h=Xzw1b2nu8OnB3pljC2W58Jf2su0-KevtP31E9eWRWRg="
@@ -49,7 +45,6 @@ let cart = [
     price: 6,
     label: `Student/Senior ${DAY_OF_THE_WEEK}`,
     stripeLabel: "Student/Senior Day",
-    weekDayOnly: false,
     lines: 2,
     quantity: 0,
     image: "https://us.123rf.com/450wm/aliyevs002/aliyevs0021802/aliyevs002180200338/95258927-stock-vector-old-man-with-child-icon-family-icon-simple-black-family-icon-can-be-used-as-web-element-family-desig.jpg?ver=6"
@@ -59,7 +54,6 @@ let cart = [
     price: 10,
     label: "Student/Senior Weekend Pass",
     stripeLabel: "Adult Whole Event",
-    weekDayOnly: true,
     lines: 2,
     quantity: 0,
     image: "https://us.123rf.com/450wm/aliyevs002/aliyevs0021802/aliyevs002180200338/95258927-stock-vector-old-man-with-child-icon-family-icon-simple-black-family-icon-can-be-used-as-web-element-family-desig.jpg?ver=6"
@@ -83,7 +77,6 @@ let weekendCart = [
     label: "Socks",
     // label shown on the stripe website where payments are looked at
     stripeLabel: "Socks",
-    weekDayOnly: false,
     lines: 1,
     quantity: 0,
     image: "https://thumbs.dreamstime.com/t/pair-socks-pair-socks-silhouette-isolated-white-background-118952582.jpg"
@@ -93,7 +86,6 @@ let weekendCart = [
     price: 25,
     label: "Shirt",
     stripeLabel: "Shirt",
-    weekDayOnly: false,
     lines: 1,
     quantity: 0,
     image: "https://cdn.pixabay.com/photo/2017/09/25/18/16/t-shirt-2786105_960_720.png"
@@ -103,7 +95,6 @@ let weekendCart = [
     price: 12,
     label: `Adult ${DAY_OF_THE_WEEK}`,
     stripeLabel: "Adult Day",
-    weekDayOnly: false,
     lines: 2,
     quantity: 0,
     image: "https://media.istockphoto.com/vectors/man-silhouette-icon-vector-icon-simple-element-illustration-man-vector-id1011132134?k=6&m=1011132134&s=170667a&w=0&h=Xzw1b2nu8OnB3pljC2W58Jf2su0-KevtP31E9eWRWRg="
@@ -113,7 +104,6 @@ let weekendCart = [
     price: 8,
     label: `Student/Senior ${DAY_OF_THE_WEEK}`,
     stripeLabel: "Student/Senior Day",
-    weekDayOnly: false,
     lines: 2,
     quantity: 0,
     image: "https://us.123rf.com/450wm/aliyevs002/aliyevs0021802/aliyevs002180200338/95258927-stock-vector-old-man-with-child-icon-family-icon-simple-black-family-icon-can-be-used-as-web-element-family-desig.jpg?ver=6"

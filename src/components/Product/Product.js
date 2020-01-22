@@ -9,15 +9,19 @@ const Product = (props) => {
     onQtyChange
   } = props
 
-  const marginTop = item.lines === 1 ? "mt-8per" : "mt-6per";
-
   return (
     <div className="product">
       <div className="product-img-container w-25per">
         <img className="product-img" src={item.image} alt={item.label} />
       </div>
-      <div className={`product-label w-25per ${marginTop}`}>
-        <p>{item.label} </p>
+      <div className={`product-label`}>
+        <div className="vertically-align-container">
+          <span className="vertically-align-span">
+            <div>
+              {item.displayName}
+            </div>
+          </span>
+        </div>
       </div>
       <div className="product-quantity-selector w-25per">
         <button tabIndex="-1" className="quantity-btn" onClick={() => onQtyChange(1, index)}>+</button>

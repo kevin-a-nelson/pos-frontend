@@ -354,11 +354,7 @@ class App extends React.Component {
       const processedPaymentIntent = await this.client.processPaymentIntent(paymentIntent);
       const payment = await this.terminal.collectPaymentMethod(processedPaymentIntent.secret);
       const processedPayment = await this.terminal.processPayment(payment.paymentIntent);
-      console.log(processedPayment)
       const captureResult = await this.client.capturePaymentIntent({ paymentIntentId: processedPayment.paymentIntent.id });
-
-      createPurchaseInDB()
-
       return captureResult;
     };
 
@@ -376,10 +372,11 @@ class App extends React.Component {
       emptyCart()
     }
 
-    const onCollectPayment = () => {
-      withLoadingAndErrors(collectPayment)
-      history.push("/success")
-      emptyCart()
+    const onCollectPayment = async () => {
+      await withLoadingAndErrors(collectPayment)
+      await history.push("/success")
+      await createPurchaseInDB()
+      await emptyCart()
     }
 
     /////////////////////

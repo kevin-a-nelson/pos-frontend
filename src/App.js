@@ -43,7 +43,7 @@ class App extends React.Component {
       chargeAmount: 0,
       taxAmount: 0,
       isLoading: false,
-      event: { title: "Event" },
+      event: { id: 1000, title: "Event" },
       errorOccured: false,
       errorMsg: null,
       cart: Cart,
@@ -73,6 +73,16 @@ class App extends React.Component {
     }
 
     this.terminal = this.initTerminal() // Communicates with Reader
+  }
+
+  componentDidMount() {
+    axios.get('http://localhost:8000/api/products')
+      .then(res => {
+        this.setState({ cart: res.data });
+      })
+      .catch(error => {
+        console.log(error)
+      })
   }
 
   render() {
@@ -173,9 +183,22 @@ class App extends React.Component {
       history.push("/checkout")
     }
 
-    //////////////
-    // Checkout //
-    //////////////
+    // Return hash of items in cart with qty > 0
+    const collectLineItems = () => {
+      let lineItems = []
+      cart.forEach((item) => {
+
+        if (item.quantity > 0) {
+          let displayItem = {
+            "description": item.name,
+            "amount": item.price * 100,
+            "quantity": item.quantity
+          }
+          lineItems.push(displayItem)
+        }
+      })
+      return lineItems
+    }
 
     const calculateTotalCharge = () => {
       let total = 0;
@@ -183,7 +206,6 @@ class App extends React.Component {
       return total
     }
 
-    // increase qty of item in cart by -1 or 1 if qty > 0
     const changeQuantity = (change, index) => {
       if (cart[index].quantity + change < 0) { return }
       const newCart = cart
@@ -198,28 +220,60 @@ class App extends React.Component {
       setChargeAmount(totalCharge)
     }
 
-    // Return hash of items in cart with qty > 0
-    const collectLineItems = () => {
-      let lineItems = []
-      cart.forEach((item) => {
+    const emptyCart = () => {
+      const newCart = cart
+      newCart.forEach((item) => item.quantity = 0)
+      setCart(newCart)
+      setChargeAmount(0)
+    }
 
-        if (item.quantity > 0) {
-          let displayItem = {
-            "description": item.label,
-            "amount": item.price * 100,
-            "quantity": item.quantity
-          }
-          lineItems.push(displayItem)
-        }
-      })
-      return lineItems
+    const onPayWithCash = async () => {
+      // Filter out products with 0 quantity (not bought)
+
+      let purchasedProducts = cart.filter(product => product.quantity > 0);
+
+      let event_id = event.id
+
+      const params = {
+        event_id: event_id,
+        total: 100,
+        transaction_id: 10000,
+      }
+
+      let order_id = 0;
+
+      await axios.post('http://localhost:8000/api/orders', params)
+        .then(res => {
+          order_id = res.data.id;
+        })
+        .then(err => {
+          console.log(err);
+        })
+
+      const orderProductParams = {
+        order_id: order_id,
+        product_id: 10,
+        quantity: 10,
+      }
+
+      console.log(orderProductParams)
+
+      await axios.post('http://localhost:8000/api/order-products', orderProductParams)
+        .then(res => {
+          console.log(res.data)
+        })
+        .catch(error => {
+          console.log(error)
+        })
+
+      emptyCart();
     }
 
     // Add Additional info to purchase
     const createReaderDisplay = () => {
       const lineItems = collectLineItems()
       const readerDisplay = {
-        type: 'cart',
+        type: "cart",
         cart: {
           line_items: lineItems,
           tax: taxAmount,
@@ -242,28 +296,6 @@ class App extends React.Component {
       history.push("/insert")
     }
 
-    const onPayWithCash = () => {
-      // Filter out products with 0 quantity (not bought)
-
-      let purchasedProducts = cart.filter(product => product.quantity > 0);
-
-      const params = {
-        event_id: 10,
-        total: 100,
-        transaction_id: 10000,
-      }
-
-      axios.post('http://localhost:8000/api/orders', params)
-        .then(res => {
-          console.log(res);
-        })
-        .then(err => {
-          console.log(err);
-        })
-
-      emptyCart();
-    }
-
     /////////////////
     // Insert Card //
     /////////////////
@@ -283,7 +315,7 @@ class App extends React.Component {
       cart.forEach((lineItem) => {
         if (lineItem.quantity > 0) {
           // Notice how stripeLabel is being used. not Label
-          lineItemsStr += `${lineItem.stripeLabel} (${lineItem.quantity}), `
+          lineItemsStr += `${lineItem.name} (${lineItem.quantity}), `
         }
       })
 
@@ -301,6 +333,23 @@ class App extends React.Component {
       return paymentIntent
     }
 
+    const trackInventory = () => {
+
+      const params = {
+        event_id: 1,
+        total: 5,
+        transaction_id: 2,
+      }
+
+      axios.post("http://127.0.0.1:8000/api/orders", params)
+        .then(res => {
+          console.log(res)
+        })
+        .catch(error => {
+          console.log(error);
+        })
+    }
+
     // Run within withLoadingAndErrors() which handles errors
     const collectPayment = async () => {
       const paymentIntent = createPaymentIntent()
@@ -309,15 +358,11 @@ class App extends React.Component {
       const processedPayment = await this.terminal.processPayment(payment.paymentIntent);
       console.log(processedPayment)
       const captureResult = await this.client.capturePaymentIntent({ paymentIntentId: processedPayment.paymentIntent.id });
+
+      trackInventory()
+
       return captureResult;
     };
-
-    const emptyCart = () => {
-      const newCart = cart
-      newCart.forEach((item) => item.quantity = 0)
-      setCart(newCart)
-      setChargeAmount(0)
-    }
 
     // this fn cancels PENDING payments. Currently this is not being used
     // instead users can choose to cancel order before paying
@@ -521,10 +566,11 @@ class App extends React.Component {
           </Route>
           <Route path="/checkout">
             <Checkout
+              cart={cart}
               chargeAmount={chargeAmount}
-              onQtyChange={onQtyChange}
               onCheckout={onCheckout}
               onPayWithCash={onPayWithCash}
+              onQtyChange={onQtyChange}
             />
           </Route>
           <Route path="/insert">

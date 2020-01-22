@@ -7,24 +7,13 @@ import axios from 'axios';
 
 const Checkout = (props) => {
 
-  const [cart, setCart] = useState(0);
-
   const {
+    cart,
     chargeAmount,
     onCheckout,
+    onPayWithCash,
     onQtyChange,
-    onPayWithCash
   } = props
-
-  useEffect(() => {
-    axios.get('http://localhost:8000/api/products')
-      .then(res => {
-        setCart(res.data);
-      })
-      .catch(error => {
-        console.log(error)
-      })
-  }, []);
 
   return (
     <div className="checkout">

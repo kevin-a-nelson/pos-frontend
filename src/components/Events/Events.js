@@ -20,7 +20,6 @@ class Events extends React.Component {
         axios.get("https://events.prephoops.com/api/event-list")
             .then(response => {
                 this.setState({ isLoading: false })
-                console.log(response.data)
                 this.setState({ events: response.data })
             })
             .catch(error => {

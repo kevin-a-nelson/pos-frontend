@@ -10,6 +10,9 @@ import {
 // Static Classes
 import Client from './client';
 
+// Fetch API's
+import axios from 'axios'
+
 // Components
 import Checkout from './components/Checkout/Checkout';
 import ErrorMessage from './components/ErrorMessage/ErrorMessage';
@@ -29,9 +32,6 @@ import wifiImg from "./assets/wifi.png"
 import Cart from './static/Cart';
 import BackendUrl from './static/BackendUrl';
 import ErrorMsgs from "./static/ErrorMsgs";
-
-//
-import axios from 'axios'
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import "./index.css"
@@ -243,6 +243,24 @@ class App extends React.Component {
     }
 
     const onPayWithCash = () => {
+      // Filter out products with 0 quantity (not bought)
+
+      let purchasedProducts = cart.filter(product => product.quantity > 0);
+
+      const params = {
+        event_id: 10,
+        total: 100,
+        transaction_id: 10000,
+      }
+
+      axios.post('http://localhost:8000/api/orders', params)
+        .then(res => {
+          console.log(res);
+        })
+        .then(err => {
+          console.log(err);
+        })
+
       emptyCart();
     }
 

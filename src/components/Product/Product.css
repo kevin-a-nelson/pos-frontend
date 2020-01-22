@@ -51,9 +51,10 @@
 
 /* Product Label */
 .product-label {
-  text-align: center;
-  width: 140px;
-  padding-right: 50px;
+  text-align: left;
+  width: 120px;
+  padding-right: 10px;
+  margin-right: 30px;
 }
 
 /* Product Quantity Selector */

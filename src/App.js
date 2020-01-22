@@ -521,7 +521,6 @@ class App extends React.Component {
           </Route>
           <Route path="/checkout">
             <Checkout
-              cart={cart}
               chargeAmount={chargeAmount}
               onQtyChange={onQtyChange}
               onCheckout={onCheckout}

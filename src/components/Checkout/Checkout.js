@@ -1,18 +1,30 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Products from '../Products/Products.jsx'
 import Button from 'react-bootstrap/Button';
 import Alert from 'react-bootstrap/Alert'
 import './Checkout.css'
+import axios from 'axios';
 
 const Checkout = (props) => {
 
+  const [cart, setCart] = useState(0);
+
   const {
-    cart,
     chargeAmount,
     onCheckout,
     onQtyChange,
     onPayWithCash
   } = props
+
+  useEffect(() => {
+    axios.get('http://localhost:8000/api/products')
+      .then(res => {
+        setCart(res.data);
+      })
+      .catch(error => {
+        console.log(error)
+      })
+  }, []);
 
   return (
     <div className="checkout">

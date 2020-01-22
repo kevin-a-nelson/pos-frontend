@@ -220,6 +220,11 @@ class App extends React.Component {
       setChargeAmount(totalCharge)
     }
 
+
+    //////////////////////
+    // On Pay with Cash //
+    //////////////////////
+
     const emptyCart = () => {
       const newCart = cart
       newCart.forEach((item) => item.quantity = 0)
@@ -227,11 +232,7 @@ class App extends React.Component {
       setChargeAmount(0)
     }
 
-    const onPayWithCash = async () => {
-      // Filter out products with 0 quantity (not bought)
-
-      let purchasedProducts = cart.filter(product => product.quantity > 0);
-
+    const createOrder = async () => {
       let event_id = event.id
 
       const params = {
@@ -249,7 +250,12 @@ class App extends React.Component {
         .catch(err => {
           console.log(err);
         })
+      return order_id
+    }
 
+    const createOrderProducts = (order_id) => {
+
+      let purchasedProducts = cart.filter(product => product.quantity > 0);
 
       purchasedProducts.forEach(function (product) {
         const orderProductParams = {
@@ -265,9 +271,16 @@ class App extends React.Component {
           .catch(error => {
             console.log(error)
           })
+      })
+    }
 
-      });
+    const createPurchaseInDB = async () => {
+      let order_id = await createOrder();
+      createOrderProducts(order_id);
+    }
 
+    const onPayWithCash = async () => {
+      await createPurchaseInDB();
       emptyCart();
     }
 
@@ -335,23 +348,6 @@ class App extends React.Component {
       return paymentIntent
     }
 
-    const trackInventory = () => {
-
-      const params = {
-        event_id: 1,
-        total: 5,
-        transaction_id: 2,
-      }
-
-      axios.post("http://127.0.0.1:8000/api/orders", params)
-        .then(res => {
-          console.log(res)
-        })
-        .catch(error => {
-          console.log(error);
-        })
-    }
-
     // Run within withLoadingAndErrors() which handles errors
     const collectPayment = async () => {
       const paymentIntent = createPaymentIntent()
@@ -361,7 +357,7 @@ class App extends React.Component {
       console.log(processedPayment)
       const captureResult = await this.client.capturePaymentIntent({ paymentIntentId: processedPayment.paymentIntent.id });
 
-      trackInventory()
+      createPurchaseInDB()
 
       return captureResult;
     };

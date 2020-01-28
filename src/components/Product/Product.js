@@ -18,7 +18,7 @@ const Product = (props) => {
         <div className="vertically-align-container">
           <span className="vertically-align-span">
             <div>
-              {item.displayName}
+              {item.display_name || item.name}
             </div>
           </span>
         </div>

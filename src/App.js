@@ -76,7 +76,7 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-    axios.get('http://localhost:8000/api/products')
+    axios.get('http://localhost:8000/api/pos-products')
       .then(res => {
         this.setState({ cart: res.data });
       })
@@ -243,7 +243,7 @@ class App extends React.Component {
 
       let order_id = 0;
 
-      await axios.post('http://localhost:8000/api/orders', params)
+      await axios.post('http://localhost:8000/api/pos-orders', params)
         .then(res => {
           order_id = res.data.id;
         })
@@ -259,12 +259,12 @@ class App extends React.Component {
 
       purchasedProducts.forEach(function (product) {
         const orderProductParams = {
-          order_id: order_id,
-          product_id: product.id,
+          pos_order_id: order_id,
+          pos_product_id: product.id,
           quantity: product.quantity,
         }
 
-        axios.post('http://localhost:8000/api/order-products', orderProductParams)
+        axios.post('http://localhost:8000/api/pos-order-pos-products', orderProductParams)
           .then(res => {
             console.log(res.data)
           })

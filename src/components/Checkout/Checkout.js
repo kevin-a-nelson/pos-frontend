@@ -17,9 +17,27 @@ const Checkout = (props) => {
 
   return (
     <div className="checkout">
-      <div className="pay-cash-btn-container">
-        <Button onClick={() => onPayWithCash()} variant="primary" size="lg" disabled={chargeAmount === 0} className="pay-cash-btn" block>Pay With Cash</Button>
-      </div>
+      <Button
+        id="cash-btn"
+        className="extra-btn"
+        variant="success"
+        onClick={() => onPayWithCash()}
+        size="lg"
+        disabled={chargeAmount === 0}
+        block
+      >
+        Pay With Cash
+      </Button>
+      <Button
+        id="coach-btn"
+        className="extra-btn"
+        variant="warning"
+        onClick={() => onPayWithCash()}
+        size="lg"
+        block
+      >
+        Buy Coaches Packet
+      </Button>
       <div className="checkout-header">
         <div id="total-container">
           <span id="total">Total</span>

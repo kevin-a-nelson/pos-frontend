@@ -246,6 +246,7 @@ class App extends React.Component {
       await axios.post('http://localhost:8000/api/pos-orders', params)
         .then(res => {
           order_id = res.data.id;
+          console.log(res);
         })
         .catch(err => {
           console.log(err);

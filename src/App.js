@@ -43,12 +43,14 @@ class App extends React.Component {
       chargeAmount: 0,
       taxAmount: 0,
       isLoading: false,
-      event: { id: 1000, title: "Event" },
+      event: { id: -1, title: "Unknown Event" },
       errorOccured: false,
       errorMsg: null,
       cart: Cart,
       readerRegistered: false,
       currency: "usd",
+      prevChargeAmount: null,
+      orderId: null,
     }
     this.client = new Client(BackendUrl) // Communicates with API 
 
@@ -95,7 +97,9 @@ class App extends React.Component {
       errorMsg,
       cart,
       isConnected,
+      prevChargeAmount,
       currency,
+      orderId,
     } = this.state
 
     const {
@@ -109,6 +113,8 @@ class App extends React.Component {
     const setErrorMsg = (errorMsg) => { this.setState({ errorMsg }) }
     const setCart = (cart) => { this.setState({ cart }) }
     const setIsConnected = (isConnected) => { this.setState({ isConnected }) }
+    const setPrevChargeAmount = (prevChargeAmount) => { this.setState({ prevChargeAmount }) }
+    const setOrderId = (orderId) => { this.setState({ orderId }) }
 
     const cleanErrorMsg = (error) => {
       let cleanError = null
@@ -229,6 +235,7 @@ class App extends React.Component {
       const newCart = cart
       newCart.forEach((item) => item.quantity = 0)
       setCart(newCart)
+      setPrevChargeAmount(chargeAmount)
       setChargeAmount(0)
     }
 
@@ -246,7 +253,7 @@ class App extends React.Component {
       await axios.post('http://localhost:8000/api/pos-orders', params)
         .then(res => {
           order_id = res.data.id;
-          console.log(res);
+          console.log(res.data);
         })
         .catch(err => {
           console.log(err);
@@ -276,7 +283,9 @@ class App extends React.Component {
     }
 
     const createPurchaseInDB = async () => {
+      setOrderId(-1);
       let order_id = await createOrder();
+      setOrderId(order_id);
       createOrderProducts(order_id);
     }
 
@@ -470,6 +479,37 @@ class App extends React.Component {
       ]
     }
 
+    const emailReceipt = () => {
+
+      const orderParams = {
+        email: "thomas"
+      }
+
+      axios.put(`http://localhost:8000/api/pos-orders/${orderId}`, orderParams)
+        .then(res => {
+          console.log(res.data);
+        })
+        .catch(error => {
+          console.log(error);
+        })
+
+      setPrevChargeAmount(null)
+      history.push("/checkout")
+      console.log("receipt emailed!")
+    }
+
+    const inputEmail = {
+      label: "Email",
+      placeholder: "Ex. bob@gmail.com",
+      btns: [
+        {
+          text: "Submit",
+          variant: "primary",
+          onClick: emailReceipt,
+        }
+      ]
+    }
+
     const insert = {
       header: "Insert Card",
       img: InsertCard,
@@ -560,12 +600,21 @@ class App extends React.Component {
               btns={inputEvent.btns}
             />
           </Route>
+          <Route path="/email-receipt">
+            <InputForm
+              label={inputEmail.label}
+              placeholder={inputEmail.placeholder}
+              btns={inputEmail.btns}
+            />
+          </Route>
           <Route path="/checkout">
             <Checkout
               cart={cart}
               chargeAmount={chargeAmount}
+              prevChargeAmount={prevChargeAmount}
               onCheckout={onCheckout}
               onPayWithCash={onPayWithCash}
+              onEmailReceipt={() => history.push("/email-receipt")}
               onQtyChange={onQtyChange}
             />
           </Route>

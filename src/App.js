@@ -11,7 +11,7 @@ import {
 import Client from './client';
 
 // Fetch API's
-import axios from 'axios'
+import axios from './axiosConfig';
 
 // Components
 import Checkout from './components/Checkout/Checkout';
@@ -78,7 +78,7 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-    axios.get('http://localhost:8000/api/pos-products')
+    axios.get('/api/pos-products')
       .then(res => {
         this.setState({ cart: res.data });
       })
@@ -239,18 +239,19 @@ class App extends React.Component {
       setChargeAmount(0)
     }
 
-    const createOrder = async () => {
+    const createOrder = async (paymentMethod) => {
       let event_id = event.id
 
       const params = {
         event_id: event_id,
         total_charge: 0,
         transaction_id: 10000,
+        payment_method: paymentMethod,
       }
 
       let order_id = 0;
 
-      await axios.post('http://localhost:8000/api/pos-orders', params)
+      await axios.post('/api/pos-orders', params)
         .then(res => {
           order_id = res.data.id;
           console.log(res.data);
@@ -272,7 +273,7 @@ class App extends React.Component {
           quantity: product.quantity,
         }
 
-        axios.post('http://localhost:8000/api/pos-order-pos-products', orderProductParams)
+        axios.post('/api/pos-order-pos-products', orderProductParams)
           .then(res => {
             console.log(res.data)
           })
@@ -282,15 +283,17 @@ class App extends React.Component {
       })
     }
 
-    const createPurchaseInDB = async () => {
+    const createPurchaseInDB = async (paymentMethod) => {
       setOrderId(-1);
-      let order_id = await createOrder();
+      let order_id = await createOrder(paymentMethod);
+      // Save order_id so that we can update email attribute of order ( /pos-orders/order_id )
+      // after purchase is complete. If "Email Reciept" button is pressed.
       setOrderId(order_id);
       createOrderProducts(order_id);
     }
 
     const onPayWithCash = async () => {
-      await createPurchaseInDB();
+      await createPurchaseInDB("cash");
       emptyCart();
     }
 
@@ -385,7 +388,7 @@ class App extends React.Component {
     const onCollectPayment = async () => {
       await withLoadingAndErrors(collectPayment)
       await history.push("/success")
-      await createPurchaseInDB()
+      await createPurchaseInDB("card")
       await emptyCart()
     }
 
@@ -483,7 +486,7 @@ class App extends React.Component {
 
       const orderParams = { email }
 
-      axios.put(`http://localhost:8000/api/pos-orders/${orderId}`, orderParams)
+      axios.put(`/api/pos-orders/${orderId}`, orderParams)
         .then(res => {
           console.log(res.data);
         })

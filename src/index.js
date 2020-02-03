@@ -6,6 +6,10 @@ import { BrowserRouter as Router } from "react-router-dom"
 
 import { injectGlobal } from "emotion";
 
+import axios from 'axios';
+
+axios.defaults.baseURL = 'http://localhost:8000';
+
 
 injectGlobal({
   html: {

@@ -244,7 +244,7 @@ class App extends React.Component {
 
       const params = {
         event_id: event_id,
-        total: 100,
+        total_charge: 0,
         transaction_id: 10000,
       }
 

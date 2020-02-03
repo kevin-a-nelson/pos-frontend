@@ -479,11 +479,9 @@ class App extends React.Component {
       ]
     }
 
-    const emailReceipt = () => {
+    const emailReceipt = (email) => {
 
-      const orderParams = {
-        email: "thomas"
-      }
+      const orderParams = { email }
 
       axios.put(`http://localhost:8000/api/pos-orders/${orderId}`, orderParams)
         .then(res => {

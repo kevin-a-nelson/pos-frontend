@@ -3,15 +3,8 @@ export default [
     subStr: "Failed to fetch",
     cleanError: [
       {
-        text: "No Internet",
+        text: "No Internet Connection",
         className: "error-msg-header",
-      },
-      {
-        text: "Make sure that your wifi is still up",
-      },
-      {
-        text: "close",
-        isClose: true,
       }
     ]
   },
@@ -19,30 +12,24 @@ export default [
     subStr: "Invalid registration code tokens",
     cleanError: [
       {
-        text: "Invalid registration code",
+        text: "Error",
         className: "error-msg-header"
       },
-      { text: "You Either" },
-      { text: "1. Typed the code incorrectly" },
-      { text: "or" },
-      { text: "2. Are connected to a different wifi from the reader" },
       {
-        text: "try again",
-        isClose: true,
-      }
+        text: "Mistyped registration code or veriphone is connected to a different wifi",
+      },
     ],
   },
   {
     subStr: "established",
     cleanError: [
       {
-        text: "The Reader Unexpectedly Disconnected",
+        text: "The Veriphone Unexpectedly Disconnected",
         className: "error-msg-header"
       },
       {
         text: "go home and reconnect",
         isLink: true,
-        isClose: true,
         to: "/"
       },
     ]
@@ -54,29 +41,10 @@ export default [
         text: "Error Creating Payment",
         className: "error-msg-header",
       },
-      { text: "• Press the Cancel Purchase button down below" },
-      { text: "• Wait 10 seconds" },
-      { text: "• Continue Below" },
       {
-        text: "If the Reader is Displaying Items",
-        className: "error-msg-sub-header",
-      },
-      {
-        text: "• Unplug it and then plug it in again to reset.",
-      },
-      {
-        text: "• go home and reconnect",
+        text: "Return to Checkout",
         isLink: true,
-        to: "/",
-      },
-      {
-        text: "If the Reader is not displaying items",
-        className: "error-msg-sub-header",
-      },
-      { text: "• Try Checkouting Out Again" },
-      {
-        text: "close",
-        isClose: true,
+        to: "/checkout"
       },
     ],
   }

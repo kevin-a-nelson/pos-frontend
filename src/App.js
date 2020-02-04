@@ -23,6 +23,7 @@ import Events from "./components/Events/Events"
 
 // Images
 import ReaderImg from "./assets/reader-large.png"
+import VeriphoneGif from "./assets/veriphone.gif"
 import BlueCheck from "./assets/blueCheck3.png"
 import InsertCard from "./assets/creditCard2.png"
 import DollarSign from "./assets/dollarSign.png"
@@ -294,11 +295,12 @@ class App extends React.Component {
     }
 
     const itemBought = (itemName) => {
-      return cart.find(item => item.name === itemName);
+      return cart.find(item => item.name === itemName && item.quantity > 0);
     }
 
     const onPayWithCash = async () => {
 
+      setAskForReceipt(false)
       try {
         await createPurchaseInDB("cash");
         if (itemBought("Coaches Packet")) {
@@ -399,8 +401,10 @@ class App extends React.Component {
     }
 
     const onCollectPayment = async () => {
-      await withLoadingAndErrors(collectPayment)
       history.push("/success")
+      await withLoadingAndErrors(collectPayment)
+
+      setAskForReceipt(false)
 
       try {
         await createPurchaseInDB("card")
@@ -425,7 +429,7 @@ class App extends React.Component {
       lines: [
         { text: "1. The wifi is working" },
         { text: "2. The wifi is password protected" },
-        { text: "3. The Reader and Tablet are connected to the same wifi" },
+        { text: "3. This Device and the Veriphone are connected to the same wifi" },
       ],
       btns: [
         {
@@ -447,11 +451,11 @@ class App extends React.Component {
     const enter07139 = {
       className: "enter07139",
       header: null,
-      img: ReaderImg,
+      img: VeriphoneGif,
       lines: [
-        { text: "Enter" },
-        { text: "0 7 1 3 9" },
-        { text: "Into the reader" },
+        // { text: "Enter" },
+        { text: "Enter 0 7 1 3 9" },
+        // { text: "Into the reader" },
       ],
       btns: [
         {

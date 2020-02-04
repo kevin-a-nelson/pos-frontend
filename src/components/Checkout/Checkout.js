@@ -38,10 +38,9 @@ const Checkout = (props) => {
           variant="warning"
           onClick={onEmailReceipt}
           size="lg"
-          disabled={!prevChargeAmount}
           block
         >
-          {prevChargeAmount ? `Email Receipt ($${prevChargeAmount} order)` : "Email Receipt"}
+          Get Email Address ( Coach Reimburshment )
         </Button>
         :
         null

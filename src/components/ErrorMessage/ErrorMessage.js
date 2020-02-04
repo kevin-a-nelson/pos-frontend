@@ -25,10 +25,17 @@ const ErrorMessage = (props) => {
             errorMsgs.map((errorMsg) => {
               const msg = (<p className={errorMsg.className}>{errorMsg.text}</p>)
 
-              if (errorMsg.isLink) { return (<Link to={errorMsg.to}>{msg}</Link>) }
+              if (errorMsg.isLink) {
+                return (
+                  <div className="reconnect-link-container">
+                    <Link className="reconnect-link" to={errorMsg.to}>
+                      {msg}
+                    </Link>
+                  </div>
+                )
+              }
 
               if (errorMsg.isClose) { return (<Link to={errorMsg.to} onClick={onClose}>{msg}</Link>) }
-
 
               return msg
             })

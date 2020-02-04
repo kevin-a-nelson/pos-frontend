@@ -304,9 +304,10 @@ class App extends React.Component {
         if (itemBought("Coaches Packet")) {
           setAskForReceipt(true);
         }
-        emptyCart();
       } catch {
+
       }
+      emptyCart();
     }
 
     // Add Additional info to purchase

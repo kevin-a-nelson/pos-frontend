@@ -40,9 +40,11 @@ export default [
         className: "error-msg-header"
       },
       {
-        text: "close",
+        text: "go home and reconnect",
+        isLink: true,
         isClose: true,
-      }
+        to: "/"
+      },
     ]
   },
   {

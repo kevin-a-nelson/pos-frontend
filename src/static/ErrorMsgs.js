@@ -40,27 +40,6 @@ export default [
         className: "error-msg-header"
       },
       {
-        text: "If the Reader is Displaying Items",
-        className: "error-msg-sub-header",
-      },
-      {
-        text: "• unplug the reader and then plug it in again to clear it.",
-      },
-      {
-        text: "• go home and reconnect",
-        isLink: true,
-        to: "/",
-      },
-      {
-        text: "If the reader is not displaying Items",
-        className: "error-msg-sub-header",
-      },
-      {
-        text: "• go home and reconnect",
-        isLink: true,
-        to: "/",
-      },
-      {
         text: "close",
         isClose: true,
       }

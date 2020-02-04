@@ -257,7 +257,7 @@ class App extends React.Component {
           console.log(res.data);
         })
         .catch(err => {
-          console.log(err);
+          throw err
         })
       return order_id
     }
@@ -286,6 +286,7 @@ class App extends React.Component {
     const createPurchaseInDB = async (paymentMethod) => {
       setOrderId(-1);
       let order_id = await createOrder(paymentMethod);
+      console.log(order_id);
       // Save order_id so that we can update email attribute of order ( /pos-orders/order_id )
       // after purchase is complete. If "Email Reciept" button is pressed.
       setOrderId(order_id);
@@ -297,13 +298,15 @@ class App extends React.Component {
     }
 
     const onPayWithCash = async () => {
-      await createPurchaseInDB("cash");
 
-      if (itemBought("Coaches Packet")) {
-        setAskForReceipt(true);
+      try {
+        await createPurchaseInDB("cash");
+        if (itemBought("Coaches Packet")) {
+          setAskForReceipt(true);
+        }
+        emptyCart();
+      } catch {
       }
-
-      emptyCart();
     }
 
     // Add Additional info to purchase
@@ -396,9 +399,18 @@ class App extends React.Component {
 
     const onCollectPayment = async () => {
       await withLoadingAndErrors(collectPayment)
-      await history.push("/success")
-      await createPurchaseInDB("card")
-      await emptyCart()
+      history.push("/success")
+
+      try {
+        await createPurchaseInDB("card")
+        if (itemBought("Coaches Packet")) {
+          setAskForReceipt(true);
+        }
+      } catch {
+
+      }
+
+      emptyCart()
     }
 
     /////////////////////

@@ -51,6 +51,7 @@ class App extends React.Component {
       currency: "usd",
       prevChargeAmount: null,
       orderId: null,
+      askForReceipt: false,
     }
     this.client = new Client(BackendUrl) // Communicates with API 
 
@@ -100,12 +101,10 @@ class App extends React.Component {
       prevChargeAmount,
       currency,
       orderId,
+      askForReceipt
     } = this.state
 
-    const {
-      history,
-      location
-    } = this.props;
+    const { history } = this.props;
 
     const setChargeAmount = (chargeAmount) => { this.setState({ chargeAmount }) }
     const setIsLoading = (isLoading) => { this.setState({ isLoading }) }
@@ -115,6 +114,7 @@ class App extends React.Component {
     const setIsConnected = (isConnected) => { this.setState({ isConnected }) }
     const setPrevChargeAmount = (prevChargeAmount) => { this.setState({ prevChargeAmount }) }
     const setOrderId = (orderId) => { this.setState({ orderId }) }
+    const setAskForReceipt = (askForReceipt) => { this.setState({ askForReceipt }) }
 
     const cleanErrorMsg = (error) => {
       let cleanError = null
@@ -292,8 +292,17 @@ class App extends React.Component {
       createOrderProducts(order_id);
     }
 
+    const itemBought = (itemName) => {
+      return cart.find(item => item.name === itemName);
+    }
+
     const onPayWithCash = async () => {
       await createPurchaseInDB("cash");
+
+      if (itemBought("Coaches Packet")) {
+        setAskForReceipt(true);
+      }
+
       emptyCart();
     }
 
@@ -495,6 +504,7 @@ class App extends React.Component {
         })
 
       setPrevChargeAmount(null)
+      setAskForReceipt(false)
       history.push("/checkout")
       console.log("receipt emailed!")
     }
@@ -612,6 +622,7 @@ class App extends React.Component {
             <Checkout
               cart={cart}
               chargeAmount={chargeAmount}
+              askForReceipt={askForReceipt}
               prevChargeAmount={prevChargeAmount}
               onCheckout={onCheckout}
               onPayWithCash={onPayWithCash}

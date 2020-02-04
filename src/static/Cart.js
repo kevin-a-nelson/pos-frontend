@@ -66,7 +66,16 @@ let cart = [
     lines: 2,
     quantity: 0,
     image: "https://cdn.clipart.email/1ce8a325245d501fd3da288df37abaaa_baby-silhouette-clip-art-at-clkercom-vector-clip-art-online-_962-768.svg"
-  }
+  },
+  {
+    id: 11,
+    price: 25,
+    name: "Coaches Packet",
+    stripeName: "Child Day",
+    lines: 2,
+    quantity: 0,
+    image: "https://cdn.clipart.email/1ce8a325245d501fd3da288df37abaaa_baby-silhouette-clip-art-at-clkercom-vector-clip-art-online-_962-768.svg"
+  },
 ];
 
 let weekendCart = [
@@ -116,7 +125,16 @@ let weekendCart = [
     lines: 2,
     quantity: 0,
     image: "https://cdn.clipart.email/1ce8a325245d501fd3da288df37abaaa_baby-silhouette-clip-art-at-clkercom-vector-clip-art-online-_962-768.svg"
-  }
+  },
+  {
+    id: 10,
+    price: 25,
+    name: "Coaches Packet",
+    stripeName: "Child Day",
+    lines: 2,
+    quantity: 0,
+    image: "https://cdn.clipart.email/1ce8a325245d501fd3da288df37abaaa_baby-silhouette-clip-art-at-clkercom-vector-clip-art-online-_962-768.svg"
+  },
 ];
 
 if (DAY_OF_THE_WEEK === "Saturday" || DAY_OF_THE_WEEK === "Sunday") {

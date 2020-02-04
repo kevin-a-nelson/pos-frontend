@@ -14,7 +14,8 @@ const Checkout = (props) => {
     onPayWithCash,
     onQtyChange,
     prevChargeAmount,
-    onEmailReceipt
+    onEmailReceipt,
+    askForReceipt
   } = props
 
   return (
@@ -30,17 +31,21 @@ const Checkout = (props) => {
       >
         Pay With Cash
       </Button>
-      <Button
-        id="cash-btn"
-        className="extra-btn"
-        variant="warning"
-        onClick={onEmailReceipt}
-        size="lg"
-        disabled={!prevChargeAmount}
-        block
-      >
-        {prevChargeAmount ? `Email Receipt ($${prevChargeAmount} order)` : "Email Receipt"}
-      </Button>
+      {askForReceipt ?
+        <Button
+          id="cash-btn"
+          className="extra-btn"
+          variant="warning"
+          onClick={onEmailReceipt}
+          size="lg"
+          disabled={!prevChargeAmount}
+          block
+        >
+          {prevChargeAmount ? `Email Receipt ($${prevChargeAmount} order)` : "Email Receipt"}
+        </Button>
+        :
+        null
+      }
       <div className="checkout-header">
         <div id="total-container">
           <span id="total">Total</span>

@@ -20,6 +20,8 @@ import Loader from './components/Loader/Loader'
 import Instruction from "./components/Instruction/Instruction"
 import InputForm from "./components/InputForm/InputForm"
 import Events from "./components/Events/Events"
+import SelectOptions from './components/SelectOptions/SelectOptions'
+import Facilities from './components/Facilities/Facilities'
 
 // Images
 import ReaderImg from "./assets/reader-large.png"
@@ -53,6 +55,7 @@ class App extends React.Component {
       prevChargeAmount: null,
       orderId: null,
       askForReceipt: false,
+      facility: { id: -1, title: "Unknown Facility" }
     }
     this.client = new Client(BackendUrl) // Communicates with API 
 
@@ -102,7 +105,8 @@ class App extends React.Component {
       prevChargeAmount,
       currency,
       orderId,
-      askForReceipt
+      askForReceipt,
+      facility
     } = this.state
 
     const { history } = this.props;
@@ -116,6 +120,7 @@ class App extends React.Component {
     const setPrevChargeAmount = (prevChargeAmount) => { this.setState({ prevChargeAmount }) }
     const setOrderId = (orderId) => { this.setState({ orderId }) }
     const setAskForReceipt = (askForReceipt) => { this.setState({ askForReceipt }) }
+    const setFacility = (facility) => { this.setState({ facility }) }
 
     const cleanErrorMsg = (error) => {
       let cleanError = null
@@ -187,7 +192,13 @@ class App extends React.Component {
 
     const onSelectEvent = (event) => {
       setEvent(event)
-      history.push("/checkout")
+      history.push("/facilities")
+    }
+
+    const onSelectFacility = (facility) => {
+      setFacility(facility)
+      console.log(facility)
+      history.push("/checkout");
     }
 
     // Return hash of items in cart with qty > 0
@@ -244,7 +255,8 @@ class App extends React.Component {
       let event_id = event.id
 
       const params = {
-        event_id: event_id,
+        event_id: event.id,
+        facility_id: facility.id,
         total_charge: 0,
         transaction_id: 10000,
         payment_method: paymentMethod,
@@ -443,7 +455,6 @@ class App extends React.Component {
       help: [
         {
           text: "Nothing happens when card is inserted",
-
         }
       ]
     }
@@ -499,6 +510,18 @@ class App extends React.Component {
     const inputEvent = {
       label: "Event Name",
       placeholder: "Ex. Prep Hoops Circuit",
+      btns: [
+        {
+          text: "Submit",
+          variant: "primary",
+          onClick: onSubmitEvent
+        }
+      ]
+    }
+
+    const inputFacility = {
+      label: "Facility Name",
+      placeholder: "Ex. MN, Roseville",
       btns: [
         {
           text: "Submit",
@@ -626,6 +649,18 @@ class App extends React.Component {
               label={inputEvent.label}
               placeholder={inputEvent.placeholder}
               btns={inputEvent.btns}
+            />
+          </Route>
+          <Route path="/facilities">
+            <Facilities
+              onSelect={onSelectFacility}
+              setIsLoading={setIsLoading}
+              event_id={event.id}
+            />
+            <InputForm
+              label={inputFacility.label}
+              placeholder={inputFacility.placeholder}
+              btns={inputFacility.btns}
             />
           </Route>
           <Route path="/email-receipt">

@@ -3,7 +3,10 @@ import axios from 'axios';
 import Event from '../Event/Event'
 import Loader from '../Loader/Loader'
 import { Redirect } from 'react-router-dom';
-import "./Events.css"
+
+import SelectOption from './SelectOption';
+
+import "../Events/Events.css"
 
 class Events extends React.Component {
     constructor(props) {
@@ -17,7 +20,7 @@ class Events extends React.Component {
     }
 
     componentDidMount() {
-        axios.get("https://events.prephoops.com/api/event-list")
+        axios.get(this.props.api)
             .then(response => {
                 this.setState({ isLoading: false })
                 this.setState({ events: response.data })
@@ -29,7 +32,7 @@ class Events extends React.Component {
 
     render() {
         const { events, isLoading } = this.state
-        const { onSelect } = this.props
+        const { onSelect, titleKey, subTitleKey } = this.props
 
         if (isLoading) {
             return <Loader loading={isLoading} />
@@ -40,11 +43,17 @@ class Events extends React.Component {
                 {
                     events ?
                         events.map((event, index) =>
-                            <Event
-                                key={index}
-                                event={event}
-                                onSelect={onSelect}
-                            />)
+                            <div>
+                                <SelectOption
+                                    event={event}
+                                    title={event[titleKey]}
+                                    key={index}
+                                    onSelect={onSelect}
+                                    img={null}
+                                    subTitle={event[subTitleKey]}
+                                />
+                            </div>
+                        )
                         : null
                 }
             </div>

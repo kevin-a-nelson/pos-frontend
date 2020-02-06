@@ -1,26 +1,26 @@
-import React, { useState } from 'react';
+import React from 'react';
 import axios from 'axios';
-import Event from '../Event/Event'
+import Facility from '../Facility/Facility'
 import Loader from '../Loader/Loader'
-import { Redirect } from 'react-router-dom';
-import "./Events.css"
 
-class Events extends React.Component {
+import "./Facilities.css"
+
+class Facilities extends React.Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            events: null,
+            facilities: null,
             cantConnectToAPI: false,
             isLoading: true,
         }
     }
 
     componentDidMount() {
-        axios.get("https://events.prephoops.com/api/event-list")
+        axios.get(`http://localhost:8000/api/events/${this.props.event_id}/facilities`)
             .then(response => {
                 this.setState({ isLoading: false })
-                this.setState({ events: response.data })
+                this.setState({ facilities: response.data })
             })
             .catch(error => {
                 this.setState({ isLoading: false })
@@ -28,7 +28,7 @@ class Events extends React.Component {
     }
 
     render() {
-        const { events, isLoading } = this.state
+        const { facilities, isLoading } = this.state
         const { onSelect } = this.props
 
         if (isLoading) {
@@ -36,13 +36,13 @@ class Events extends React.Component {
         }
 
         return (
-            <div className="events">
+            <div className="facilities">
                 {
-                    events ?
-                        events.map((event, index) =>
-                            <Event
+                    facilities ?
+                        facilities.map((facility, index) =>
+                            <Facility
                                 key={index}
-                                event={event}
+                                facility={facility}
                                 onSelect={onSelect}
                             />)
                         : null
@@ -52,5 +52,5 @@ class Events extends React.Component {
     }
 }
 
-export default Events
+export default Facilities
 

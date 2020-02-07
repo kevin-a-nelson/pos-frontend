@@ -194,12 +194,18 @@ class App extends React.Component {
 
     const onSelectEvent = (event) => {
       setEvent(event)
+      axios.get(`http://localhost:8000/api/events/${event.id}/pos-products`)
+        .then(res => {
+          setCart(res.data)
+        })
+        .catch(err => {
+
+        })
       history.push("/facilities")
     }
 
     const onSelectFacility = (facility) => {
       setFacility(facility)
-      console.log(facility)
       history.push("/checkout");
     }
 
@@ -254,7 +260,6 @@ class App extends React.Component {
     }
 
     const createOrder = async (paymentMethod) => {
-      let event_id = event.id
 
       const params = {
         event_id: event.id,
@@ -627,7 +632,7 @@ class App extends React.Component {
         {
           // If a user refreshes page disconnected from the reader.
           // When this happens they are redirected back home
-          !isConnected ? <Redirect to="/" /> : null
+          // !isConnected ? <Redirect to="/" /> : null
         }
         <ErrorMessage
           errorMsgs={errorMsg}

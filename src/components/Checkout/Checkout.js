@@ -21,6 +21,7 @@ const Checkout = (props) => {
   } = props
 
   useEffect(() => {
+    // Clear Cart on mount
     onMount();
   }, []);
 

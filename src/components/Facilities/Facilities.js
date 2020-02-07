@@ -18,8 +18,7 @@ class Facilities extends React.Component {
     }
 
     componentDidMount() {
-        // axios.get(`http://localhost:8000/api/events/${this.props.event_id}/facilities`)
-        axios.get(`RANDOM DOES NOT WORK API`)
+        axios.get(`http://localhost:8000/api/events/${this.props.event_id}/facilities`)
             .then(response => {
                 this.setState({ isLoading: false })
                 this.setState({ facilities: response.data })

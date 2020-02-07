@@ -245,12 +245,12 @@ class App extends React.Component {
     // On Pay with Cash //
     //////////////////////
 
-    const emptyCart = () => {
+    const emptyCart = async () => {
       const newCart = cart
-      newCart.forEach((item) => item.quantity = 0)
-      setCart(newCart)
-      setPrevChargeAmount(chargeAmount)
-      setChargeAmount(0)
+      await newCart.forEach((item) => item.quantity = 0)
+      await setCart(newCart)
+      await setPrevChargeAmount(chargeAmount)
+      await setChargeAmount(0)
     }
 
     const createOrder = async (paymentMethod) => {

@@ -247,10 +247,10 @@ class App extends React.Component {
 
     const emptyCart = async () => {
       const newCart = cart
-      await newCart.forEach((item) => item.quantity = 0)
-      await setCart(newCart)
-      await setPrevChargeAmount(chargeAmount)
-      await setChargeAmount(0)
+      newCart.forEach((item) => item.quantity = 0)
+      setCart(newCart)
+      setPrevChargeAmount(chargeAmount)
+      setChargeAmount(0)
     }
 
     const createOrder = async (paymentMethod) => {
@@ -667,6 +667,8 @@ class App extends React.Component {
           <Route path="/checkout">
             <Checkout
               cart={cart}
+              setCart={setCart}
+              onMount={emptyCart}
               chargeAmount={chargeAmount}
               askForReceipt={askForReceipt}
               prevChargeAmount={prevChargeAmount}

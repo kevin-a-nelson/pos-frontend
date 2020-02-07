@@ -15,8 +15,14 @@ const Checkout = (props) => {
     onQtyChange,
     prevChargeAmount,
     onEmailReceipt,
-    askForReceipt
+    askForReceipt,
+    onMount,
+    setCart
   } = props
+
+  useEffect(() => {
+    onMount();
+  }, []);
 
   return (
     <div className="checkout">

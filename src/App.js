@@ -26,6 +26,7 @@ import Button from 'react-bootstrap/Button'
 
 // Images
 import ReaderImg from "./assets/reader-large.png"
+import CardsImg from "./assets/cards2.png"
 import VeriphoneGif from "./assets/veriphone.gif"
 import BlueCheck from "./assets/blueCheck3.png"
 import InsertCard from "./assets/creditCard2.png"
@@ -493,17 +494,18 @@ class App extends React.Component {
     }
 
     const mode = {
-      lines: [
-        { text: "Pick a Mode" },
-        { text: "Production Mode accepts REAL credit cards" },
-        { text: "Test Mode accepts the TEST credit card" },
-      ],
+      className: "mode",
+      header: "Pick a Mode",
+      img: CardsImg,
       btns: [
         {
-          text: "Production Mode"
+          text: "Real Credit Card Mode",
+          block: true
         },
         {
-          text: "Test Mode"
+          text: "Test Credit Card Mode",
+          variant: "outline-primary",
+          block: true
         }
       ]
     }
@@ -737,11 +739,11 @@ class App extends React.Component {
           </Route>
           <Route path="/mode">
             <Instruction
-              // className={mo.className}
-              header={enter07139.header}
-              img={enter07139.img}
-              lines={enter07139.lines}
-              btns={enter07139.btns}
+              className={mode.className}
+              header={mode.header}
+              img={mode.img}
+              lines={mode.lines}
+              btns={mode.btns}
             />
           </Route>
           <Route path="/">

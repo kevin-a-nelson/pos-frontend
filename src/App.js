@@ -60,29 +60,9 @@ class App extends React.Component {
       facility: { id: -1, title: "Unknown Facility" }
     }
 
-    this.client = new Client(BackendUrls) // Communicates with API 
+    this.client = null
 
-    this.onUnexpectedReaderDisconnect = (error) => {
-      console.log(error)
-    }
-
-    this.onConnectionStatusChange = (status) => {
-      console.log(status)
-    }
-
-    this.initTerminal = () => {
-      const terminal = window.StripeTerminal.create({
-        onFetchConnectionToken: async () => {
-          let connectionTokenResult = await this.client.createConnectionToken();
-          return connectionTokenResult.secret;
-        },
-        onUnexpectedReaderDisconnect: this.onUnexpectedReaderDisconnect,
-        onConnectionStatusChange: this.onConnectionStatusChange,
-      });
-      return terminal
-    }
-
-    this.terminal = this.initTerminal() // Communicates with Reader
+    this.terminal = null
   }
 
   componentDidMount() {
@@ -456,7 +436,7 @@ class App extends React.Component {
         {
           text: "Next",
           variant: "primary",
-          onClick: () => history.push("/enter07139"),
+          onClick: () => history.push("/mode"),
           // Makes button 100% width
           block: true
         },
@@ -487,10 +467,38 @@ class App extends React.Component {
         {
           text: "Back",
           variant: "outline-primary",
-          onClick: () => history.push("/"),
+          onClick: () => history.push("/mode"),
           block: true
         },
       ]
+    }
+
+    const createClient = (url) => {
+
+      this.client = new Client(url) // Communicates with API 
+
+      this.onUnexpectedReaderDisconnect = (error) => {
+        console.log(error)
+      }
+
+      this.onConnectionStatusChange = (status) => {
+        console.log(status)
+      }
+
+      this.initTerminal = () => {
+        const terminal = window.StripeTerminal.create({
+          onFetchConnectionToken: async () => {
+            let connectionTokenResult = await this.client.createConnectionToken();
+            return connectionTokenResult.secret;
+          },
+          onUnexpectedReaderDisconnect: this.onUnexpectedReaderDisconnect,
+          onConnectionStatusChange: this.onConnectionStatusChange,
+        });
+        return terminal
+      }
+
+      this.terminal = this.initTerminal() // Communicates with Reader
+      history.push("/enter07139")
     }
 
     const mode = {
@@ -500,13 +508,21 @@ class App extends React.Component {
       btns: [
         {
           text: "Real Credit Card Mode",
-          block: true
+          block: true,
+          onClick: () => createClient(BackendUrls.production)
         },
         {
           text: "Test Credit Card Mode",
+          variant: "primary",
+          block: true,
+          onClick: () => createClient(BackendUrls.test)
+        },
+        {
+          text: "Back",
           variant: "outline-primary",
-          block: true
-        }
+          block: true,
+          onClick: () => history.push("/")
+        },
       ]
     }
 
@@ -651,7 +667,7 @@ class App extends React.Component {
         {
           // If a user refreshes page disconnected from the reader.
           // When this happens they are redirected back home
-          // !isConnected ? <Redirect to="/" /> : null
+          !isConnected ? <Redirect to="/" /> : null
         }
         <ErrorMessage
           errorMsgs={errorMsg}

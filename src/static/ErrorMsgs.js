@@ -47,5 +47,24 @@ export default [
         to: "/checkout"
       },
     ],
+  },
+  {
+    subStr: "Cannot read property 'id' of undefined",
+    cleanError: [
+      {
+        text: "Invalid Card",
+        className: "error-msg-header",
+      },
+      {
+        text: "Either ...",
+        className: "error-msg-header",
+      },
+      {
+        text: "1. The Card is invalid"
+      },
+      {
+        text: "2. Your in the wrong mode (refresh page)",
+      },
+    ]
   }
 ]

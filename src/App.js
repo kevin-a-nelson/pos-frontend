@@ -443,6 +443,7 @@ class App extends React.Component {
 
     const wifi = {
       className: "wifi",
+      header: "Requirements",
       img: wifiImg,
       // Each elem = new line
       lines: [
@@ -488,6 +489,22 @@ class App extends React.Component {
           onClick: () => history.push("/"),
           block: true
         },
+      ]
+    }
+
+    const mode = {
+      lines: [
+        { text: "Pick a Mode" },
+        { text: "Production Mode accepts REAL credit cards" },
+        { text: "Test Mode accepts the TEST credit card" },
+      ],
+      btns: [
+        {
+          text: "Production Mode"
+        },
+        {
+          text: "Test Mode"
+        }
       ]
     }
 
@@ -718,8 +735,18 @@ class App extends React.Component {
               btns={enter07139.btns}
             />
           </Route>
+          <Route path="/mode">
+            <Instruction
+              // className={mo.className}
+              header={enter07139.header}
+              img={enter07139.img}
+              lines={enter07139.lines}
+              btns={enter07139.btns}
+            />
+          </Route>
           <Route path="/">
             <Instruction
+              header={wifi.header}
               className={wifi.className}
               lines={wifi.lines}
               img={wifi.img}

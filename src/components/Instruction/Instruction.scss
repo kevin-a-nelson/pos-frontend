@@ -33,7 +33,7 @@
 // Custom Instruction Styling
 .enter07139 {
   // Makes wifi next btn and enter07139 next btn on the same y cord
-  padding-top: 40px;
+  padding-top: 80px;
   max-width: 250px;
 
   .img-container {
@@ -51,6 +51,12 @@
 }
 
 .wifi {
+
+  h1 {
+    text-align: center;
+    margin-bottom: 0px;
+  }
+
   text-align: left;
 }
 

@@ -18,12 +18,28 @@ class Facilities extends React.Component {
     }
 
     componentDidMount() {
-        axios.get(`http://localhost:8000/api/events/${this.props.event_id}/facilities`)
+        axios.get(`http://localhost:8000/api/events/${this.props.event_id}/facilitie`)
             .then(response => {
                 this.setState({ isLoading: false })
                 this.setState({ facilities: response.data })
             })
             .catch(error => {
+                this.setState({
+                    facilities: [
+                        {
+                            id: 1,
+                            title: "Solid Rock Basketball"
+                        },
+                        {
+                            id: 2,
+                            title: "Santa Fe Family Center"
+                        },
+                        {
+                            id: 3,
+                            title: "The Hive"
+                        }
+                    ]
+                })
                 this.setState({ isLoading: false })
             })
     }

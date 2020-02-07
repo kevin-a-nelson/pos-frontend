@@ -33,7 +33,7 @@ import wifiImg from "./assets/wifi.png"
 
 // Static Data
 import Cart from './static/Cart';
-import BackendUrl from './static/BackendUrl';
+import BackendUrls from './static/BackendUrl';
 import ErrorMsgs from "./static/ErrorMsgs";
 
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -57,7 +57,8 @@ class App extends React.Component {
       askForReceipt: false,
       facility: { id: -1, title: "Unknown Facility" }
     }
-    this.client = new Client(BackendUrl) // Communicates with API 
+
+    this.client = new Client(BackendUrls) // Communicates with API 
 
     this.onUnexpectedReaderDisconnect = (error) => {
       console.log(error)
@@ -625,7 +626,7 @@ class App extends React.Component {
         {
           // If a user refreshes page disconnected from the reader.
           // When this happens they are redirected back home
-          // !isConnected ? <Redirect to="/" /> : null
+          !isConnected ? <Redirect to="/" /> : null
         }
         <ErrorMessage
           errorMsgs={errorMsg}

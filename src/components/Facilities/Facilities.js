@@ -2,6 +2,7 @@ import React from 'react';
 import axios from 'axios';
 import Facility from '../Facility/Facility'
 import Loader from '../Loader/Loader'
+import Button from 'react-bootstrap/Button'
 
 import "./Facilities.css"
 
@@ -47,6 +48,7 @@ class Facilities extends React.Component {
                             />)
                         : null
                 }
+                <Button onClick={() => this.props.history.push("/checkout")} block>Proceed to Checkout</Button>
             </div>
         )
     }

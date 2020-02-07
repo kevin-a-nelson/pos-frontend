@@ -22,6 +22,7 @@ import InputForm from "./components/InputForm/InputForm"
 import Events from "./components/Events/Events"
 import SelectOptions from './components/SelectOptions/SelectOptions'
 import Facilities from './components/Facilities/Facilities'
+import Button from 'react-bootstrap/Button'
 
 // Images
 import ReaderImg from "./assets/reader-large.png"
@@ -626,7 +627,7 @@ class App extends React.Component {
         {
           // If a user refreshes page disconnected from the reader.
           // When this happens they are redirected back home
-          !isConnected ? <Redirect to="/" /> : null
+          // !isConnected ? <Redirect to="/" /> : null
         }
         <ErrorMessage
           errorMsgs={errorMsg}
@@ -645,11 +646,7 @@ class App extends React.Component {
             <Events
               onSelect={onSelectEvent}
               setIsLoading={setIsLoading}
-            />
-            <InputForm
-              label={inputEvent.label}
-              placeholder={inputEvent.placeholder}
-              btns={inputEvent.btns}
+              history={history}
             />
           </Route>
           <Route path="/facilities">
@@ -657,11 +654,7 @@ class App extends React.Component {
               onSelect={onSelectFacility}
               setIsLoading={setIsLoading}
               event_id={event.id}
-            />
-            <InputForm
-              label={inputFacility.label}
-              placeholder={inputFacility.placeholder}
-              btns={inputFacility.btns}
+              history={history}
             />
           </Route>
           <Route path="/email-receipt">

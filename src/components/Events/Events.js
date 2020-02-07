@@ -3,6 +3,7 @@ import axios from 'axios';
 import Event from '../Event/Event'
 import Loader from '../Loader/Loader'
 import { Redirect } from 'react-router-dom';
+import Button from 'react-bootstrap/Button'
 import "./Events.css"
 
 class Events extends React.Component {
@@ -47,6 +48,7 @@ class Events extends React.Component {
                             />)
                         : null
                 }
+                <Button onClick={() => this.props.history.push("/checkout")} block>Proceed to Checkout</Button>
             </div>
         )
     }

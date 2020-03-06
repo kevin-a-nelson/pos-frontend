@@ -646,7 +646,7 @@ class App extends React.Component {
         {
           // If a user refreshes page disconnected from the reader.
           // When this happens they are redirected back home
-          // !isConnected ? <Redirect to="/" /> : null
+          !isConnected ? <Redirect to="/" /> : null
         }
         <ErrorMessage
           errorMsgs={errorMsg}

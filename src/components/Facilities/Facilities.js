@@ -24,28 +24,13 @@ class Facilities extends React.Component {
                 this.setState({ facilities: response.data })
             })
             .catch(error => {
-                this.setState({
-                    facilities: [
-                        {
-                            id: 1,
-                            title: "Solid Rock Basketball"
-                        },
-                        {
-                            id: 2,
-                            title: "Santa Fe Family Center"
-                        },
-                        {
-                            id: 3,
-                            title: "The Hive"
-                        }
-                    ]
-                })
+                this.setState({ cantConnectToAPI: true })
                 this.setState({ isLoading: false })
             })
     }
 
     render() {
-        const { facilities, isLoading } = this.state
+        const { facilities, isLoading, cantConnectToAPI } = this.state
         const { onSelect } = this.props
 
         if (isLoading) {
@@ -64,7 +49,12 @@ class Facilities extends React.Component {
                             />)
                         : null
                 }
-                <Button onClick={() => this.props.history.push("/checkout")} block>Proceed to Checkout</Button>
+                {
+                    cantConnectToAPI ?
+                        <Button onClick={() => this.props.history.push("/checkout")} block>Proceed to Checkout</Button>
+                        :
+                        null
+                }
             </div>
         )
     }

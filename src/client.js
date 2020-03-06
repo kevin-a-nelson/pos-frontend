@@ -23,11 +23,9 @@ class Client {
     return terminal
   }
 
-  registerReader({ label, registrationCode }) {
+  registerReader({ registrationCode }) {
     const formData = new URLSearchParams();
-    formData.append("label", label);
     formData.append("registration_code", registrationCode);
-    window.localStorage.setItem("label", label)
     window.localStorage.setItem("registration_code", registrationCode)
     return this.postRequest(this.url + "/register_reader", formData);
   }
@@ -57,6 +55,7 @@ class Client {
   }
 
   async postRequest(url, body) {
+
     let response = await fetch(url, {
       method: "post",
       body: body

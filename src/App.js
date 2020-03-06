@@ -144,6 +144,7 @@ class App extends React.Component {
         let result = await fn(args);
       } catch (error) {
         const cleanError = cleanErrorMsg(error.message)
+        console.log(error)
         setErrorMsg(cleanError)
         // After an action, your always redirected to the next route. If an error occurs your redirected back
         // Ex. click checkout => routed to insert card => error => routed back to checkout
@@ -474,30 +475,8 @@ class App extends React.Component {
     }
 
     const createClient = (url) => {
-
       this.client = new Client(url) // Communicates with API 
-
-      this.onUnexpectedReaderDisconnect = (error) => {
-        console.log(error)
-      }
-
-      this.onConnectionStatusChange = (status) => {
-        console.log(status)
-      }
-
-      this.initTerminal = () => {
-        const terminal = window.StripeTerminal.create({
-          onFetchConnectionToken: async () => {
-            let connectionTokenResult = await this.client.createConnectionToken();
-            return connectionTokenResult.secret;
-          },
-          onUnexpectedReaderDisconnect: this.onUnexpectedReaderDisconnect,
-          onConnectionStatusChange: this.onConnectionStatusChange,
-        });
-        return terminal
-      }
-
-      this.terminal = this.initTerminal() // Communicates with Reader
+      this.terminal = this.client.initTerminal()
       history.push("/enter07139")
     }
 
@@ -667,7 +646,7 @@ class App extends React.Component {
         {
           // If a user refreshes page disconnected from the reader.
           // When this happens they are redirected back home
-          !isConnected ? <Redirect to="/" /> : null
+          // !isConnected ? <Redirect to="/" /> : null
         }
         <ErrorMessage
           errorMsgs={errorMsg}

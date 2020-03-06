@@ -25,11 +25,12 @@ class Events extends React.Component {
             })
             .catch(error => {
                 this.setState({ isLoading: false })
+                this.setState({ cantConnectToAPI: true })
             })
     }
 
     render() {
-        const { events, isLoading } = this.state
+        const { events, isLoading, cantConnectToAPI } = this.state
         const { onSelect } = this.props
 
         if (isLoading) {
@@ -48,7 +49,12 @@ class Events extends React.Component {
                             />)
                         : null
                 }
-                <Button onClick={() => this.props.history.push("/checkout")} block>Proceed to Checkout</Button>
+                {
+                    cantConnectToAPI ?
+                        <Button onClick={() => this.props.history.push("/checkout")} block>Proceed to Checkout</Button>
+                        :
+                        null
+                }
             </div>
         )
     }

@@ -349,6 +349,16 @@ class App extends React.Component {
       history.push("/checkout")
     }
 
+    const getWebsite = (event) => {
+      const websiteId = event.websiteId
+      const websiteIdToName = {
+        1: "Prep Hoops",
+        2: "Prep Dig",
+        3: "PGH"
+      }
+      return websiteIdToName[websiteId]
+    }
+
     /////////////////////
     // Collect Payment //
     ////////////////////
@@ -365,7 +375,9 @@ class App extends React.Component {
 
       lineItemsStr = lineItemsStr.slice(0, -2) // Remove ", " from the end of the string
 
-      const description = `${event.title} - ${lineItemsStr}`
+      const website = getWebsite(event);
+
+      const description = `${website} - ${event.title} - ${lineItemsStr}`
 
       return description
     }

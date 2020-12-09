@@ -12,7 +12,6 @@
   }
 
   .img-container {
-    max-height: 300px;
     height: 300px;
 
     img {
@@ -26,6 +25,8 @@
   }
 
   .btn-container {
+    margin: 0px auto;
+    width: 100px;
     margin-top: 30px;
   }
 }
@@ -48,10 +49,10 @@
     font-size: 30px;
     font-weight: 600;
   }
+
 }
 
 .wifi {
-
   h1 {
     text-align: center;
     margin-bottom: 0px;
@@ -59,24 +60,3 @@
 
   text-align: left;
 }
-
-.mode {
-
-  margin-top: 247px;
-
-  .img-container {
-    height: 230px;
-    border-radius: 5px;
-    overflow: hidden;
-
-    img {
-      height: 100%;
-      width: auto;
-    }
-  }
-
-  .btn2 {
-    margin-bottom: 15px;
-  }
-}
-

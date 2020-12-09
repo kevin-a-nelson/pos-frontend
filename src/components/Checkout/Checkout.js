@@ -1,12 +1,11 @@
-import React, { useEffect, useState } from 'react'
-import Products from '../Products/Products.jsx'
-import Button from 'react-bootstrap/Button';
-import Alert from 'react-bootstrap/Alert'
-import './Checkout.css'
-import axios from 'axios';
+import React, { useEffect, useState } from "react";
+import Products from "../Products/Products.jsx";
+import Button from "react-bootstrap/Button";
+import Alert from "react-bootstrap/Alert";
+import "./Checkout.css";
+import axios from "axios";
 
 const Checkout = (props) => {
-
   const {
     cart,
     chargeAmount,
@@ -17,8 +16,8 @@ const Checkout = (props) => {
     onEmailReceipt,
     askForReceipt,
     onMount,
-    setCart
-  } = props
+    setCart,
+  } = props;
 
   useEffect(() => {
     // Clear Cart on mount
@@ -38,7 +37,7 @@ const Checkout = (props) => {
       >
         Pay With Cash
       </Button>
-      {askForReceipt ?
+      {askForReceipt ? (
         <Button
           id="cash-btn"
           className="extra-btn"
@@ -49,9 +48,7 @@ const Checkout = (props) => {
         >
           Get Email Address ( Coach Reimburshment )
         </Button>
-        :
-        null
-      }
+      ) : null}
       <div className="checkout-header">
         <div id="total-container">
           <span id="total">Total</span>
@@ -60,13 +57,18 @@ const Checkout = (props) => {
           <span id="amount">${chargeAmount}</span>
         </div>
       </div>
-      <Products
-        cart={cart}
-        onQtyChange={onQtyChange}
-      />
-      <Button size="lg" className="checkout-btn" disabled={chargeAmount === 0} onClick={() => onCheckout()} block>Checkout</Button>
+      <Products cart={cart} onQtyChange={onQtyChange} />
+      <Button
+        size="lg"
+        className="checkout-btn"
+        disabled={chargeAmount === 0}
+        onClick={() => onCheckout()}
+        block
+      >
+        Checkout
+      </Button>
     </div>
-  )
-}
+  );
+};
 
 export default Checkout;

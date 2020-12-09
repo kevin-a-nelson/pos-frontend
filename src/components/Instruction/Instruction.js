@@ -1,38 +1,28 @@
-import React from 'react'
-import Button from 'react-bootstrap/Button'
+import React from "react";
+import Button from "react-bootstrap/Button";
 
-import "./Instruction.scss"
+import "./Instruction.scss";
 
 const Instruction = (props) => {
-  const {
-    className,
-    header,
-    img,
-    btns,
-    lines,
-  } = props
+  const { className, header, img, btns, lines } = props;
 
   const Lines = () => {
-
     if (!lines || lines.length === 0) {
-      return null
+      return null;
     }
 
     return lines.map((line, index) => {
       return (
-        <p
-          key={index}
-          className={`line${index + 1}`}>
+        <p key={index} className={`line${index + 1}`}>
           {line.text}
         </p>
-      )
-    })
-  }
+      );
+    });
+  };
 
   const Buttons = () => {
-
     if (!btns || btns.length === 0) {
-      return null
+      return null;
     }
 
     return btns.map((btn, index) => {
@@ -46,10 +36,10 @@ const Instruction = (props) => {
           size={btn.size || "lg"}
         >
           {btn.text}
-        </Button >
-      )
-    })
-  }
+        </Button>
+      );
+    });
+  };
 
   return (
     <div className={`generic ${className}`}>
@@ -63,8 +53,8 @@ const Instruction = (props) => {
       <div className="btn-container">
         <Buttons />
       </div>
-    </div >
-  )
-}
+    </div>
+  );
+};
 
 export default Instruction;

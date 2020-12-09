@@ -1,43 +1,42 @@
-import React, { useState } from 'react'
-import Button from "react-bootstrap/Button"
-import Form from "react-bootstrap/Form"
+import React, { useState } from "react";
+import Button from "react-bootstrap/Button";
+import Form from "react-bootstrap/Form";
 
-import "./InputForm.scss"
+import "./InputForm.scss";
 
 const InputForm = (props) => {
-  const [formValue, setFormValue] = useState()
+  const [formValue, setFormValue] = useState();
 
-  const {
-    label,
-    placeholder,
-    btns,
-  } = props
+  const { label, placeholder, btns } = props;
 
   let formRef = React.createRef();
 
   const handleChange = () => {
-    setFormValue(formRef.current.value)
+    setFormValue(formRef.current.value);
     // localStorage.setItem(label, formValue)
-  }
+  };
 
   const handleKeyPress = (target) => {
-    localStorage.setItem(label, formValue)
+    localStorage.setItem(label, formValue);
     if (target.key === "Enter") {
-      btns[0].onClick(formValue)
+      btns[0].onClick(formValue);
     }
-  }
+  };
 
   const Btns = () => {
-    return (
-      btns.map((btn, index) => {
-        return (
-          <Button key={index} className={`btn${index + 1}`} variant={btn.variant} onClick={() => btn.onClick(formValue)}>
-            {btn.text}
-          </Button>
-        )
-      })
-    )
-  }
+    return btns.map((btn, index) => {
+      return (
+        <Button
+          key={index}
+          className={`btn${index + 1}`}
+          variant={btn.variant}
+          onClick={() => btn.onClick(formValue)}
+        >
+          {btn.text}
+        </Button>
+      );
+    });
+  };
 
   return (
     <div className="input-form">
@@ -54,8 +53,8 @@ const InputForm = (props) => {
         </Form.Group>
         <Btns />
       </Form>
-    </div >
-  )
-}
+    </div>
+  );
+};
 
-export default InputForm
+export default InputForm;

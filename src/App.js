@@ -18,7 +18,8 @@ import Events from "./components/Events/Events";
 import SelectOptions from "./components/SelectOptions/SelectOptions";
 import Facilities from "./components/Facilities/Facilities";
 import Button from "react-bootstrap/Button";
-import SelectScannerOrPOS from "./components/selectScannerOrPOS/selectScannerOrPOS";
+import SelectScannerOrPOS from "./components/SelectScannerOrPOS/selectScannerOrPOS";
+import Scanner from "./components/Scanner/Scanner";
 
 // Images
 import ReaderImg from "./assets/reader-large.png";
@@ -201,7 +202,7 @@ class App extends React.Component {
         .then((res) => {
           setCart(res.data);
         })
-        .catch((err) => {});
+        .catch((err) => { });
       history.push("/facilities");
     };
 
@@ -288,7 +289,7 @@ class App extends React.Component {
     const createOrderProducts = (order_id) => {
       let purchasedProducts = cart.filter((product) => product.quantity > 0);
 
-      purchasedProducts.forEach(function(product) {
+      purchasedProducts.forEach(function (product) {
         const orderProductParams = {
           pos_order_id: order_id,
           pos_product_id: product.id,
@@ -327,7 +328,7 @@ class App extends React.Component {
         if (itemBought("Coaches Packet")) {
           setAskForReceipt(true);
         }
-      } catch {}
+      } catch { }
       emptyCart();
     };
 
@@ -450,7 +451,7 @@ class App extends React.Component {
         if (itemBought("Coaches Packet")) {
           setAskForReceipt(true);
         }
-      } catch {}
+      } catch { }
 
       emptyCart();
     };
@@ -501,7 +502,7 @@ class App extends React.Component {
         {
           text: "Next",
           variant: "primary",
-          onClick: () => history.push("/register"),
+          onClick: () => history.push("/select-scanner-or-POS"),
           block: true, // makes buttons stack vertically and 100% width
         },
         {
@@ -677,6 +678,11 @@ class App extends React.Component {
           </Route>
           <Route path="/select-scanner-or-POS">
             <SelectScannerOrPOS history={history} />
+          </Route>
+          <Route path="/scanner">
+            <Scanner
+              history={history}
+            />
           </Route>
           <Route path="/events">
             <Events

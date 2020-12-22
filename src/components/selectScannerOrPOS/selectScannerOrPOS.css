@@ -1,0 +1,26 @@
+
+.select-scanner-or-pos {
+    margin: 0px auto;
+    margin-top: 20px;
+    width: 100%;
+    max-width: 300px;
+}
+
+.selectBtn {
+    width: 250px;
+    height: 250px;
+    border: 1px solid grey;
+    border-radius: 5px;
+    text-align: center;
+    font-size: 40px;
+    line-height: 255px;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.back {
+    text-align: center;
+    width: 250px;
+    font-size: 25px;
+    color: blue;
+}

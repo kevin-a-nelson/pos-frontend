@@ -1,0 +1,14 @@
+
+.qr-reader {
+    padding-top: 100px;
+    width: 100%;
+    max-width: 400px;
+    margin: 0px auto;
+}
+
+.back-btn {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 20px;
+    color: blue;
+}

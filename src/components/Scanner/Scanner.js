@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import QrReader from "react-qr-reader";
 import axios from 'axios';
 
+import "./Scanner.css"
+
 export default class Scanner extends Component {
   state = {
     result: "No result",
@@ -31,14 +33,19 @@ export default class Scanner extends Component {
 
   render() {
     return (
-      <div>
+      <div class="qr-reader">
         <QrReader
           delay={300}
           onError={this.handleError}
           onScan={this.handleScan}
-          style={{ width: "100%", maxWidth: '400px' }}
+          style={{ width: "100%" }}
         />
-        <p>{this.state.result}</p>
+        <p
+          class="back-btn"
+          onClick={() => this.props.history.push("/select-scanner-or-POS")}
+        >
+          Back
+        </p>
       </div>
     );
   }

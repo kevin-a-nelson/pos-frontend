@@ -676,9 +676,6 @@ class App extends React.Component {
               btns={Registration.btns}
             />
           </Route>
-          <Route path="/select-scanner-or-POS">
-            <SelectScannerOrPOS history={history} />
-          </Route>
           <Route path="/scanner">
             <Scanner
               history={history}
@@ -747,15 +744,17 @@ class App extends React.Component {
           </Route>
           <Route path="/claim-ticket-success">
             <div onClick={() => history.goBack()}>
-              Yay the ticket was successfully claimed!
+              Success! The Ticket was valid and has now been claimed
             </div>
+            <Button onClick={() => history.goBack()}>Back</Button>
           </Route>
           <Route path="/claim-ticket-fail">
             <div onClick={() => history.goBack()}>
-              oh no, this ticket's already been claimed!
+              Error! This Ticket was already claimed
             </div>
+            <Button onClick={() => history.goBack()}>Back</Button>
           </Route>
-          <Route path="/">
+          <Route path="/register-reader">
             <Instruction
               className={enter07139.className}
               header={enter07139.header}
@@ -763,6 +762,9 @@ class App extends React.Component {
               lines={enter07139.lines}
               btns={enter07139.btns}
             />
+          </Route>
+          <Route path="/">
+            <SelectScannerOrPOS history={history} />
           </Route>
         </Switch>
       </div>

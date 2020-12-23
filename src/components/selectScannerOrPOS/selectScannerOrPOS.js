@@ -14,13 +14,10 @@ const SelectScannerOrPOS = (props) => {
       </div>
       <div
         class="selectBtn"
-        onClick={() => props.history.push("/checkout")}
+        onClick={() => props.history.push("/register-reader")}
       >
         POS
       </div>
-      <p class="back">
-        Back
-      </p>
     </div>
   );
 };

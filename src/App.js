@@ -745,6 +745,16 @@ class App extends React.Component {
               btns={success.btns}
             />
           </Route>
+          <Route path="/claim-ticket-success">
+            <div onClick={() => history.goBack()}>
+              Yay the ticket was successfully claimed!
+            </div>
+          </Route>
+          <Route path="/claim-ticket-fail">
+            <div onClick={() => history.goBack()}>
+              oh no, this ticket's already been claimed!
+            </div>
+          </Route>
           <Route path="/">
             <Instruction
               className={enter07139.className}

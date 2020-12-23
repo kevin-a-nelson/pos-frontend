@@ -16,12 +16,12 @@ export default class Scanner extends Component {
       });
 
       axios
-        .post(`http://localhost:8000/api/claim-ticket/${1}`)
+        .post(`https://ticketing-payments-backend.herokuapp.com/api/claim-ticket-payment/4`)
         .then((res) => {
           if (res.data.alreadyClaimed) {
             this.props.history.push('/claim-ticket-fail')
           } else {
-            this.props.history.push('/claim-tickets-success')
+            this.props.history.push('/claim-ticket-success')
           }
         })
     }

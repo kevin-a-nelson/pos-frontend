@@ -6,29 +6,28 @@ import "./Scanner.css"
 
 export default class Scanner extends Component {
   state = {
-    result: "No result",
+    result: "Route to ticket id",
   };
 
   handleScan = (data) => {
     if (data) {
 
-      this.setState({
-        result: data,
-      });
-
       data = JSON.parse(data)
-
       let ticketId = data.ticket_id
 
-      // axios
-      //   .post(`https://ticketing-payments-backend.herokuapp.com/api/claim-ticket-payment/${ticketId}`)
-      //   .then((res) => {
-      //     if (res.data.alreadyClaimed) {
-      //       this.props.history.push('/claim-ticket-fail')
-      //     } else {
-      //       this.props.history.push('/claim-ticket-success')
-      //     }
-      //   })
+      this.setState({
+        result: ticketId,
+      });
+
+      axios
+        .post(`https://ticketing-payments-backend.herokuapp.com/api/claim-ticket-payment/${ticketId}`)
+        .then((res) => {
+          if (res.data.alreadyClaimed) {
+            this.props.history.push('/claim-ticket-fail')
+          } else {
+            this.props.history.push('/claim-ticket-success')
+          }
+        })
     }
   };
 

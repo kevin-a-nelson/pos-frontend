@@ -11,19 +11,24 @@ export default class Scanner extends Component {
 
   handleScan = (data) => {
     if (data) {
+
       this.setState({
         result: data,
       });
 
-      axios
-        .post(`https://ticketing-payments-backend.herokuapp.com/api/claim-ticket-payment/4`)
-        .then((res) => {
-          if (res.data.alreadyClaimed) {
-            this.props.history.push('/claim-ticket-fail')
-          } else {
-            this.props.history.push('/claim-ticket-success')
-          }
-        })
+      data = JSON.parse(data)
+
+      let ticketId = data.ticket_id
+
+      // axios
+      //   .post(`https://ticketing-payments-backend.herokuapp.com/api/claim-ticket-payment/${ticketId}`)
+      //   .then((res) => {
+      //     if (res.data.alreadyClaimed) {
+      //       this.props.history.push('/claim-ticket-fail')
+      //     } else {
+      //       this.props.history.push('/claim-ticket-success')
+      //     }
+      //   })
     }
   };
 
@@ -46,6 +51,7 @@ export default class Scanner extends Component {
         >
           Back
         </p>
+        {this.state.result}
       </div>
     );
   }
